@@ -1,0 +1,493 @@
+.card {
+  width: 350px;
+  border: 3px solid;
+  border-radius: 8px;
+  overflow: visible;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  color: white;
+  position: relative;
+}
+
+.card-title-section {
+  flex: 1;
+}
+
+.card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+.card-header h3:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-title-input {
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: white;
+  color: #333;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.card-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 2px 10px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-body {
+  padding: 16px;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  min-height: 20px;
+}
+
+.card-subtitle:hover {
+  background-color: #f5f5f5;
+}
+
+.card-subtitle-input {
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 16px;
+}
+
+.card-placeholder {
+  color: #999;
+  font-style: italic;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Element Menu */
+.element-menu {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  background: white;
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  min-width: 250px;
+}
+
+.element-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  background-color: #f8f8f8;
+  border-radius: 6px 6px 0 0;
+}
+
+.element-menu-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.element-menu-header button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  line-height: 1;
+}
+
+.element-menu-options {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.element-menu-options button {
+  text-align: left;
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.element-menu-options button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Card Elements */
+.card-elements {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-element {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.card-element.locked {
+  border: none;
+  background-color: transparent;
+  padding: 8px 0;
+}
+
+.element-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.element-header h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #c53030;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.element-delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.element-delete-btn:hover {
+  color: #c53030;
+}
+
+.element-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+}
+
+.card-element.locked .element-input {
+  border: none;
+  padding: 2px 0;
+  background: transparent;
+}
+
+.element-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  background: white;
+}
+
+.card-element.locked .element-textarea {
+  border: none;
+  padding: 2px 0;
+  background: transparent;
+}
+
+/* Aspects */
+.aspect-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.aspect-bullet {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.add-item-btn {
+  width: 100%;
+  padding: 8px;
+  background: white;
+  border: 1px dashed #999;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #666;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.add-item-btn:hover {
+  border-color: #666;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* Skills */
+.skill-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.skill-rating {
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: white;
+  color: #666;
+  font-weight: 600;
+  min-width: 130px;
+}
+
+.card-element.locked .skill-rating {
+  border: none;
+  padding: 2px 4px;
+  background: transparent;
+}
+
+.skill-name-select {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+  color: #333;
+}
+
+.skill-name-select:focus {
+  outline: none;
+  border-color: #2c5282;
+}
+
+.card-element.locked .skill-name-select {
+  border: none;
+  padding: 2px 4px;
+  background: transparent;
+}
+
+.skill-delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.skill-delete-btn:hover {
+  color: #c53030;
+}
+
+/* Stress Tracks */
+.stress-track {
+  margin-bottom: 12px;
+}
+
+.stress-track:last-child {
+  margin-bottom: 0;
+}
+
+.stress-track label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.stress-boxes {
+  display: flex;
+  gap: 8px;
+}
+
+.stress-box {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #333;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: white;
+  transition: all 0.2s;
+}
+
+.stress-box:hover {
+  background-color: #f0f0f0;
+}
+
+.stress-box.checked {
+  background-color: #333;
+  color: white;
+}
+
+.stress-box.locked {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.stress-box.locked:hover {
+  background-color: white;
+}
+
+.stress-box.locked.checked:hover {
+  background-color: #333;
+}
+
+/* Consequences */
+.consequence-item {
+  margin-bottom: 10px;
+}
+
+.consequence-item:last-child {
+  margin-bottom: 0;
+}
+
+.consequence-item label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+/* Fate Points */
+.fate-points {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.fate-point {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.fate-point.filled {
+  color: #333;
+}
+
+.fate-point.empty {
+  color: #ddd;
+}
+
+.fate-points-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.fate-points-controls button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.fate-points-controls button:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+.fate-points-controls span {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Disabled/Locked States */
+.element-input:disabled,
+.element-textarea:disabled,
+.skill-rating:disabled {
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: default;
+  opacity: 1;
+}
+
+.card-element.locked .element-input:disabled,
+.card-element.locked .element-textarea:disabled,
+.card-element.locked .skill-rating:disabled {
+  background-color: transparent;
+  color: #333;
+}
+
+.card-header h3 {
+  user-select: none;
+}
