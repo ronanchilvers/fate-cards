@@ -17,14 +17,16 @@ function App() {
   const [newCategoryName, setNewCategoryName] = useState('')
   const [showSkillsAdmin, setShowSkillsAdmin] = useState(false)
   const [newSkillName, setNewSkillName] = useState('')
+  const [darkMode, setDarkMode] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const fileInputRef = useRef(null)
 
-  // Load cards, categories, and skills from localStorage on mount
+  // Load cards, categories, skills, and dark mode from localStorage on mount
   useEffect(() => {
     const savedCards = localStorage.getItem('fate-cards')
     const savedCategories = localStorage.getItem('fate-categories')
     const savedSkills = localStorage.getItem('fate-skills')
+    const savedDarkMode = localStorage.getItem('fate-darkmode')
     
     if (savedCards) {
       setCards(JSON.parse(savedCards))
@@ -101,6 +103,10 @@ function App() {
       setSkills(JSON.parse(savedSkills))
     }
     
+    if (savedDarkMode !== null) {
+      setDarkMode(savedDarkMode === 'true')
+    }
+    
     setIsLoaded(true)
   }, [])
 
@@ -124,6 +130,13 @@ function App() {
       localStorage.setItem('fate-skills', JSON.stringify(skills))
     }
   }, [skills, isLoaded])
+
+  // Save dark mode to localStorage whenever it changes (but only after initial load)
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('fate-darkmode', darkMode.toString())
+    }
+  }, [darkMode, isLoaded])
 
   const addCard = (category) => {
     const newCard = {
@@ -410,10 +423,17 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>Fate RPG Cards</h1>
         <div className="app-actions">
+          <button 
+            onClick={() => setDarkMode(!darkMode)} 
+            className="action-btn darkmode-btn"
+            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
           <button onClick={openTemplateMenu} className="action-btn add-card-header">
             ➕ Add Card
           </button>
