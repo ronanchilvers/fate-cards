@@ -277,6 +277,22 @@
   flex-shrink: 0;
 }
 
+.aspect-delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.aspect-delete-btn:hover {
+  color: #c53030;
+}
+
 .add-item-btn {
   width: 100%;
   padding: 8px;
@@ -367,12 +383,96 @@
   margin-bottom: 0;
 }
 
+.stress-track-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
 .stress-track label {
   display: block;
   font-size: 0.85rem;
   color: #666;
-  margin-bottom: 6px;
   font-weight: 500;
+}
+
+.stress-track-name-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: white;
+  color: #666;
+  font-weight: 500;
+}
+
+.stress-track-name-input:focus {
+  outline: none;
+  border-color: #999;
+}
+
+.stress-track-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.stress-control-btn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #666;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stress-control-btn:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+.stress-control-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stress-delete-btn {
+  color: #c53030;
+}
+
+.stress-delete-btn:hover:not(:disabled) {
+  background-color: #fff5f5;
+  border-color: #c53030;
+}
+
+.add-stress-track-btn {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-stress-track-btn:hover {
+  background-color: #f7fafc;
+  border-color: #999;
+  color: #333;
 }
 
 .stress-boxes {
@@ -405,16 +505,42 @@
 }
 
 .stress-box.locked {
-  cursor: not-allowed;
-  opacity: 0.6;
+  cursor: pointer;
 }
 
 .stress-box.locked:hover {
-  background-color: white;
+  background-color: #f0f0f0;
 }
 
 .stress-box.locked.checked:hover {
   background-color: #333;
+}
+
+.stress-box-value {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: inherit;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+
+.stress-box-value::-webkit-outer-spin-button,
+.stress-box-value::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stress-box-value:focus {
+  outline: none;
+}
+
+.stress-box.checked .stress-box-value {
+  color: white;
 }
 
 /* Consequences */

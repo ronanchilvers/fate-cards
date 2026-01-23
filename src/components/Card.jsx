@@ -114,8 +114,20 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
       'stress-tracks': {
         id,
         type: 'stress-tracks',
-        physical: [false, false, false, false],
-        mental: [false, false, false, false]
+        tracks: [
+          { name: 'Physical Stress', boxes: [
+            { checked: false, value: 1 },
+            { checked: false, value: 2 },
+            { checked: false, value: 3 },
+            { checked: false, value: 4 }
+          ]},
+          { name: 'Mental Stress', boxes: [
+            { checked: false, value: 1 },
+            { checked: false, value: 2 },
+            { checked: false, value: 3 },
+            { checked: false, value: 4 }
+          ]}
+        ]
       },
       'consequences': {
         id,
@@ -238,6 +250,17 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
                   className="element-input"
                   disabled={isLocked}
                 />
+                {!isLocked && (
+                  <button
+                    onClick={() => {
+                      const newItems = element.items.filter((_, i) => i !== index)
+                      updateElement(element.id, { items: newItems })
+                    }}
+                    className="aspect-delete-btn"
+                  >
+                    ×
+                  </button>
+                )}
               </div>
             ))}
             {!isLocked && (
@@ -339,46 +362,126 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
                 </button>
               )}
             </div>
-            <div className="stress-track">
-              <label>Physical Stress</label>
-              <div className="stress-boxes">
-                {element.physical.map((checked, index) => (
-                  <div 
-                    key={index}
-                    className={`stress-box ${checked ? 'checked' : ''} ${isLocked ? 'locked' : ''}`}
-                    onClick={() => {
-                      if (!isLocked) {
-                        const newPhysical = [...element.physical]
-                        newPhysical[index] = !newPhysical[index]
-                        updateElement(element.id, { physical: newPhysical })
-                      }
-                    }}
-                  >
-                    {index + 1}
-                  </div>
-                ))}
+            {element.tracks.map((track, trackIndex) => (
+              <div key={trackIndex} className="stress-track">
+                <div className="stress-track-header">
+                  {!isLocked ? (
+                    <input
+                      type="text"
+                      value={track.name}
+                      onChange={(e) => {
+                        const newTracks = [...element.tracks]
+                        newTracks[trackIndex] = { ...track, name: e.target.value }
+                        updateElement(element.id, { tracks: newTracks })
+                      }}
+                      className="stress-track-name-input"
+                      placeholder="Track name"
+                    />
+                  ) : (
+                    <label>{track.name}</label>
+                  )}
+                  {!isLocked && (
+                    <div className="stress-track-controls">
+                      <button
+                        onClick={() => {
+                          const newTracks = [...element.tracks]
+                          newTracks[trackIndex] = { 
+                            ...track, 
+                            boxes: [...track.boxes, { checked: false, value: 1 }] 
+                          }
+                          updateElement(element.id, { tracks: newTracks })
+                        }}
+                        className="stress-control-btn"
+                        title="Add box"
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (track.boxes.length > 1) {
+                            const newTracks = [...element.tracks]
+                            newTracks[trackIndex] = { 
+                              ...track, 
+                              boxes: track.boxes.slice(0, -1) 
+                            }
+                            updateElement(element.id, { tracks: newTracks })
+                          }
+                        }}
+                        className="stress-control-btn"
+                        title="Remove box"
+                        disabled={track.boxes.length <= 1}
+                      >
+                        −
+                      </button>
+                      <button
+                        onClick={() => {
+                          const newTracks = element.tracks.filter((_, i) => i !== trackIndex)
+                          updateElement(element.id, { tracks: newTracks })
+                        }}
+                        className="stress-control-btn stress-delete-btn"
+                        title="Delete track"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div className="stress-boxes">
+                  {track.boxes.map((box, boxIndex) => (
+                    <div 
+                      key={boxIndex}
+                      className={`stress-box ${box.checked ? 'checked' : ''} ${isLocked ? 'locked' : ''}`}
+                      onClick={() => {
+                        const newTracks = [...element.tracks]
+                        const newBoxes = [...track.boxes]
+                        newBoxes[boxIndex] = { ...box, checked: !box.checked }
+                        newTracks[trackIndex] = { ...track, boxes: newBoxes }
+                        updateElement(element.id, { tracks: newTracks })
+                      }}
+                    >
+                      {!isLocked ? (
+                        <input
+                          type="number"
+                          min="1"
+                          max="99"
+                          value={box.value}
+                          onChange={(e) => {
+                            e.stopPropagation()
+                            const newTracks = [...element.tracks]
+                            const newBoxes = [...track.boxes]
+                            newBoxes[boxIndex] = { ...box, value: parseInt(e.target.value) || 1 }
+                            newTracks[trackIndex] = { ...track, boxes: newBoxes }
+                            updateElement(element.id, { tracks: newTracks })
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="stress-box-value"
+                        />
+                      ) : (
+                        <span>{box.value}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="stress-track">
-              <label>Mental Stress</label>
-              <div className="stress-boxes">
-                {element.mental.map((checked, index) => (
-                  <div 
-                    key={index}
-                    className={`stress-box ${checked ? 'checked' : ''} ${isLocked ? 'locked' : ''}`}
-                    onClick={() => {
-                      if (!isLocked) {
-                        const newMental = [...element.mental]
-                        newMental[index] = !newMental[index]
-                        updateElement(element.id, { mental: newMental })
-                      }
-                    }}
-                  >
-                    {index + 1}
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
+            {!isLocked && (
+              <button
+                onClick={() => {
+                  const newTracks = [...element.tracks, { 
+                    name: 'New Track', 
+                    boxes: [
+                      { checked: false, value: 1 },
+                      { checked: false, value: 2 },
+                      { checked: false, value: 3 }
+                    ] 
+                  }]
+                  updateElement(element.id, { tracks: newTracks })
+                }}
+                className="add-stress-track-btn"
+              >
+                + Add Track
+              </button>
+            )}
           </div>
         )
 
