@@ -1,15 +1,29 @@
 import { useState } from 'react'
 import './Card.css'
 
-function Card({ card, onUpdate, onDelete, onDuplicate, skills }) {
-  const [isEditingTitle, setIsEditingTitle] = useState(false)
-  const [isEditingSubtitle, setIsEditingSubtitle] = useState(false)
+function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [isLocked, setIsLocked] = useState(card.locked || false)
+  
+  // Settings form state
+  const [settingsTitle, setSettingsTitle] = useState(card.title)
+  const [settingsSubtitle, setSettingsSubtitle] = useState(card.subtitle)
+  const [settingsColor, setSettingsColor] = useState(card.color)
+  const [settingsCategory, setSettingsCategory] = useState(card.category)
+  const [settingsLayout, setSettingsLayout] = useState(card.layout || 'auto')
 
   const updateCard = (updates) => {
     onUpdate(card.id, { ...card, ...updates })
   }
+
+  // Color palette for card settings
+  const colorPalette = [
+    '#c53030', '#9c1c8f', '#5b21b6', '#3730a3', '#1e40af', '#1e3a8a', 
+    '#0369a1', '#0e7490', '#115e59', '#166534', '#15803d', '#4d7c0f',
+    '#ca8a04', '#ea580c', '#f97316', '#dc2626', '#991b1b', '#451a03',
+    '#1f2937', '#374151'
+  ]
 
   // Convert hex color to pale background color
   const getPaleBackground = (hexColor) => {
@@ -26,10 +40,44 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills }) {
     return `rgb(${paleR}, ${paleG}, ${paleB})`
   }
 
+  // Get mid-tone color between title bar and card background (50/50 mix)
+  const getMidToneBackground = (hexColor) => {
+    const r = parseInt(hexColor.slice(1, 3), 16)
+    const g = parseInt(hexColor.slice(3, 5), 16)
+    const b = parseInt(hexColor.slice(5, 7), 16)
+    
+    // Mix with white (50% white, 50% original color) for mid-tone
+    const midR = Math.round(r * 0.5 + 255 * 0.5)
+    const midG = Math.round(g * 0.5 + 255 * 0.5)
+    const midB = Math.round(b * 0.5 + 255 * 0.5)
+    
+    return `rgb(${midR}, ${midG}, ${midB})`
+  }
+
   const toggleLock = () => {
     const newLockedState = !isLocked
     setIsLocked(newLockedState)
     updateCard({ locked: newLockedState })
+  }
+
+  const openSettings = () => {
+    setSettingsTitle(card.title)
+    setSettingsSubtitle(card.subtitle)
+    setSettingsColor(card.color)
+    setSettingsCategory(card.category)
+    setSettingsLayout(card.layout || 'auto')
+    setShowSettings(true)
+  }
+
+  const saveSettings = () => {
+    updateCard({
+      title: settingsTitle,
+      subtitle: settingsSubtitle,
+      color: settingsColor,
+      category: settingsCategory,
+      layout: settingsLayout
+    })
+    setShowSettings(false)
   }
 
   const addElement = (elementType) => {
@@ -454,60 +502,58 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills }) {
   }
 
   return (
-    <div className="card" style={{ borderColor: card.color, backgroundColor: getPaleBackground(card.color) }}>
-      <div className="card-header" style={{ backgroundColor: card.color }}>
-        <div className="card-title-section">
-          {isEditingTitle && !isLocked ? (
-            <input
-              type="text"
-              value={card.title}
-              onChange={(e) => updateCard({ title: e.target.value })}
-              onBlur={() => setIsEditingTitle(false)}
-              onKeyDown={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
-              autoFocus
-              className="card-title-input"
-            />
-          ) : (
-            <h3 onClick={() => !isLocked && setIsEditingTitle(true)}>{card.title}</h3>
-          )}
+    <>
+      <div className={`card ${card.layout === '2-column' ? 'two-column' : card.layout === 'auto' ? 'auto-column' : ''}`} style={{ borderColor: card.color, backgroundColor: getPaleBackground(card.color) }}>
+        <div className="card-header" style={{ backgroundColor: card.color }}>
+          <div className="card-title-section">
+            <h3>{card.title}</h3>
+          </div>
+          <div className="card-header-actions">
+            <button 
+              onClick={toggleLock}
+              className="icon-btn"
+              title={isLocked ? "Unlock card" : "Lock card"}
+            >
+              {isLocked ? '🔒' : '🔓'}
+            </button>
+            {!isLocked && (
+              <button 
+                onClick={() => onDuplicate(card)}
+                className="icon-btn"
+                title="Duplicate card"
+              >
+                📋
+              </button>
+            )}
+            {!isLocked && (
+              <button 
+                onClick={openSettings}
+                className="icon-btn"
+                title="Card settings"
+              >
+                ⚙️
+              </button>
+            )}
+            {!isLocked && (
+              <button 
+                onClick={() => setShowElementMenu(!showElementMenu)}
+                className="icon-btn"
+                title="Add element"
+              >
+                +
+              </button>
+            )}
+            {!isLocked && (
+              <button 
+                onClick={() => onDelete(card.id)}
+                className="icon-btn"
+                title="Delete card"
+              >
+                ×
+              </button>
+            )}
+          </div>
         </div>
-        <div className="card-header-actions">
-          <button 
-            onClick={toggleLock}
-            className="icon-btn"
-            title={isLocked ? "Unlock card" : "Lock card"}
-          >
-            {isLocked ? '🔒' : '🔓'}
-          </button>
-          {!isLocked && (
-            <button 
-              onClick={() => onDuplicate(card)}
-              className="icon-btn"
-              title="Duplicate card"
-            >
-              📋
-            </button>
-          )}
-          {!isLocked && (
-            <button 
-              onClick={() => setShowElementMenu(!showElementMenu)}
-              className="icon-btn"
-              title="Add element"
-            >
-              +
-            </button>
-          )}
-          {!isLocked && (
-            <button 
-              onClick={() => onDelete(card.id)}
-              className="icon-btn"
-              title="Delete card"
-            >
-              ×
-            </button>
-          )}
-        </div>
-      </div>
 
       {showElementMenu && !isLocked && (
         <div className="element-menu">
@@ -528,38 +574,108 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills }) {
         </div>
       )}
 
-      <div className="card-body">
-        {isEditingSubtitle && !isLocked ? (
-          <input
-            type="text"
-            value={card.subtitle}
-            onChange={(e) => updateCard({ subtitle: e.target.value })}
-            onBlur={() => setIsEditingSubtitle(false)}
-            onKeyDown={(e) => e.key === 'Enter' && setIsEditingSubtitle(false)}
-            autoFocus
-            className="card-subtitle-input"
-            placeholder="Add subtitle..."
-          />
-        ) : (
-          <p 
-            className="card-subtitle" 
-            onClick={() => !isLocked && setIsEditingSubtitle(true)}
-          >
-            {card.subtitle || (!isLocked ? 'Click to add subtitle...' : '')}
-          </p>
+        {card.subtitle && (
+          <div className="card-subtitle-bar" style={{ backgroundColor: getMidToneBackground(card.color) }}>
+            {card.subtitle}
+          </div>
         )}
 
-        <div className="card-elements">
-          {card.elements.map(element => renderElement(element))}
+        <div className="card-body">
+          <div className="card-elements">
+            {card.elements.map(element => renderElement(element))}
+          </div>
+
+          {card.elements.length === 0 && !isLocked && (
+            <p className="card-placeholder">
+              Click the + button to add elements to this card
+            </p>
+          )}
         </div>
-
-        {card.elements.length === 0 && !isLocked && (
-          <p className="card-placeholder">
-            Click the + button to add elements to this card
-          </p>
-        )}
       </div>
-    </div>
+
+      {showSettings && (
+        <div className="modal-overlay" onClick={() => setShowSettings(false)}>
+          <div className="modal-content card-settings-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Card Properties</h3>
+              <button onClick={() => setShowSettings(false)} className="modal-close">×</button>
+            </div>
+            <div className="card-settings-body">
+              <div className="settings-field">
+                <label>Title</label>
+                <input
+                  type="text"
+                  value={settingsTitle}
+                  onChange={(e) => setSettingsTitle(e.target.value)}
+                  className="settings-input"
+                />
+              </div>
+
+              <div className="settings-field">
+                <label>Subtitle</label>
+                <input
+                  type="text"
+                  value={settingsSubtitle}
+                  onChange={(e) => setSettingsSubtitle(e.target.value)}
+                  className="settings-input"
+                  placeholder="Optional subtitle..."
+                />
+              </div>
+
+              <div className="settings-field">
+                <label>Color</label>
+                <div className="color-palette">
+                  {colorPalette.map(color => (
+                    <div
+                      key={color}
+                      className={`color-swatch ${settingsColor === color ? 'selected' : ''}`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => setSettingsColor(color)}
+                      title={color}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="settings-field">
+                <label>Layout</label>
+                <select
+                  value={settingsLayout}
+                  onChange={(e) => setSettingsLayout(e.target.value)}
+                  className="settings-select"
+                >
+                  <option value="auto">Auto</option>
+                  <option value="1-column">1 Column</option>
+                  <option value="2-column">2 Columns</option>
+                </select>
+              </div>
+
+              <div className="settings-field">
+                <label>Category</label>
+                <select
+                  value={settingsCategory}
+                  onChange={(e) => setSettingsCategory(e.target.value)}
+                  className="settings-select"
+                >
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="settings-actions">
+                <button onClick={() => setShowSettings(false)} className="cancel-btn">
+                  Cancel
+                </button>
+                <button onClick={saveSettings} className="confirm-btn">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

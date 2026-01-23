@@ -145,7 +145,8 @@ function App() {
       color: getCategoryColor(category),
       title: 'New Card',
       subtitle: '',
-      elements: []
+      elements: [],
+      layout: 'auto'
     }
     setCards([...cards, newCard])
   }
@@ -269,6 +270,7 @@ function App() {
       id: Date.now().toString(),
       category,
       color: getCategoryColor(category),
+      layout: 'auto',
       ...templateData
     }
     setCards([...cards, newCard])
@@ -488,6 +490,7 @@ function App() {
                     onDelete={deleteCard}
                     onDuplicate={duplicateCard}
                     skills={skills}
+                    categories={categories}
                   />
                 ))
             )}
