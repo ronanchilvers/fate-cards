@@ -465,7 +465,9 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
           <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
             <div className="element-header">
               <h4>Fate Points</h4>
-              {!isLocked && (
+              {isLocked ? (
+                <span className="refresh-label">Refresh {element.refresh}</span>
+              ) : (
                 <button 
                   onClick={() => deleteElement(element.id)}
                   className="element-delete-btn"
@@ -475,11 +477,28 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
               )}
             </div>
             <div className="fate-points">
-              {Array.from({ length: element.current }).map((_, i) => (
-                <div key={i} className="fate-point filled">●</div>
+              {Array.from({ length: Math.min(element.current, element.refresh) }).map((_, i) => (
+                <div 
+                  key={i} 
+                  className="fate-point filled"
+                  onClick={isLocked ? () => updateElement(element.id, { 
+                    current: Math.max(0, element.current - 1) 
+                  }) : undefined}
+                  style={isLocked ? { cursor: 'pointer' } : undefined}
+                >●</div>
               ))}
               {Array.from({ length: Math.max(0, element.refresh - element.current) }).map((_, i) => (
                 <div key={i + element.current} className="fate-point empty">○</div>
+              ))}
+              {element.current > element.refresh && Array.from({ length: element.current - element.refresh }).map((_, i) => (
+                <div 
+                  key={i + element.refresh} 
+                  className="fate-point filled"
+                  onClick={isLocked ? () => updateElement(element.id, { 
+                    current: Math.max(0, element.current - 1) 
+                  }) : undefined}
+                  style={isLocked ? { cursor: 'pointer' } : undefined}
+                >●</div>
               ))}
             </div>
             {!isLocked && (
@@ -487,9 +506,19 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
                 <button onClick={() => updateElement(element.id, { 
                   current: Math.max(0, element.current - 1) 
                 })}>-</button>
-                <span>{element.current} / {element.refresh}</span>
+                <span>{element.current} / </span>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  value={element.refresh}
+                  onChange={(e) => updateElement(element.id, { 
+                    refresh: Math.max(0, Math.min(10, parseInt(e.target.value) || 0))
+                  })}
+                  className="refresh-input"
+                />
                 <button onClick={() => updateElement(element.id, { 
-                  current: Math.min(10, element.current + 1) 
+                  current: element.current + 1
                 })}>+</button>
               </div>
             )}

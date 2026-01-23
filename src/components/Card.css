@@ -4,8 +4,7 @@
   border: 3px solid;
   border-radius: 8px;
   overflow: visible;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   position: relative;
   align-self: flex-start;
 }
@@ -46,10 +45,7 @@
   }
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+
 
 .card-header {
   display: flex;
@@ -441,13 +437,13 @@
 /* Fate Points */
 .fate-points {
   display: flex;
-  gap: 8px;
+  gap: 0;
   margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
 .fate-point {
-  font-size: 2rem;
+  font-size: 3rem;
   line-height: 1;
 }
 
@@ -487,6 +483,32 @@
   font-size: 0.9rem;
   color: #666;
   font-weight: 500;
+}
+
+.refresh-label {
+  font-size: 0.9rem;
+  color: #c53030;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.refresh-input {
+  width: 40px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+  background: white;
+  color: #333;
+  font-weight: 400;
+  transition: all 0.2s;
+}
+
+.refresh-input:focus {
+  outline: none;
+  border-color: #ddd;
+  background: white;
 }
 
 /* Disabled/Locked States */
