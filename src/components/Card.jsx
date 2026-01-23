@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './Card.css'
 
-function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
+function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [isLocked, setIsLocked] = useState(card.locked || false)
@@ -132,9 +132,11 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
       'consequences': {
         id,
         type: 'consequences',
-        mild: { slots: 2, text: '---' },
-        moderate: { slots: 4, text: '---' },
-        severe: { slots: 6, text: '---' }
+        items: [
+          { label: 'Mild (2)', text: '---' },
+          { label: 'Moderate (4)', text: '---' },
+          { label: 'Severe (6)', text: '---' }
+        ]
       },
       'note': {
         id,
@@ -275,75 +277,147 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
         )
 
       case 'skills':
+        // Use centralized skill levels with formatted labels
+        const allSkillLevels = skillLevels.map(level => ({
+          value: level.value,
+          label: `${level.label} (${level.value >= 0 ? '+' : ''}${level.value})`
+        }))
+
+        // Get unique rating levels that exist in items
+        const existingRatings = [...new Set(element.items.map(skill => skill.rating))].sort((a, b) => b - a)
+        const existingLevels = existingRatings.map(rating => 
+          allSkillLevels.find(level => level.value === rating)
+        ).filter(Boolean)
+
+        // Group skills by rating
+        const skillsByRating = {}
+        existingRatings.forEach(rating => {
+          skillsByRating[rating] = element.items.filter(skill => skill.rating === rating)
+        })
+
+        if (isLocked) {
+          // Locked view: compact grouped display
+          return (
+            <div key={element.id} className={`card-element locked`}>
+              <div className="element-header">
+                <h4>Skills</h4>
+              </div>
+              {existingLevels.map(level => {
+                const levelSkills = skillsByRating[level.value]
+                if (levelSkills.length === 0) return null
+                
+                return (
+                  <div key={level.value} className="skill-level-group">
+                    <span className="skill-level-label">{level.label}:</span>
+                    <span className="skill-level-list">
+                      {levelSkills.map(skill => skill.name).join(', ')}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        }
+
+        // Get available levels to add (not currently in use)
+        const availableLevels = allSkillLevels.filter(level => 
+          !existingRatings.includes(level.value)
+        )
+
+        // Unlocked view: organized by level sections
         return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
+          <div key={element.id} className={`card-element`}>
             <div className="element-header">
               <h4>Skills</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
+              <button 
+                onClick={() => deleteElement(element.id)}
+                className="element-delete-btn"
+              >
+                ×
+              </button>
             </div>
-            {element.items.map((skill, index) => (
-              <div key={index} className="skill-item">
+            {existingLevels.map(level => {
+              const levelSkills = skillsByRating[level.value]
+              
+              return (
+                <div key={level.value} className="skill-level-section">
+                  <div className="skill-level-header">
+                    <h5>{level.label}</h5>
+                    <button
+                      onClick={() => {
+                        // Remove all skills at this level
+                        const newItems = element.items.filter(skill => skill.rating !== level.value)
+                        updateElement(element.id, { items: newItems })
+                      }}
+                      className="remove-level-btn"
+                      title="Remove this level"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  {levelSkills.map((skill, skillIndex) => {
+                    const globalIndex = element.items.findIndex(s => s === skill)
+                    return (
+                      <div key={skillIndex} className="skill-item">
+                        <select
+                          value={skill.name}
+                          onChange={(e) => {
+                            const newItems = [...element.items]
+                            newItems[globalIndex].name = e.target.value
+                            updateElement(element.id, { items: newItems })
+                          }}
+                          className="skill-name-select"
+                        >
+                          <option value="">Select skill...</option>
+                          {skills.map(skillName => (
+                            <option key={skillName} value={skillName}>{skillName}</option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={() => {
+                            const newItems = element.items.filter((_, i) => i !== globalIndex)
+                            updateElement(element.id, { items: newItems })
+                          }}
+                          className="skill-delete-btn"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )
+                  })}
+                  <button 
+                    onClick={() => updateElement(element.id, { 
+                      items: [...element.items, { name: '', rating: level.value }] 
+                    })}
+                    className="add-skill-to-level-btn"
+                  >
+                    + Add Skill
+                  </button>
+                </div>
+              )
+            })}
+            {availableLevels.length > 0 && (
+              <div className="add-level-section">
                 <select
-                  value={skill.rating}
                   onChange={(e) => {
-                    const newItems = [...element.items]
-                    newItems[index].rating = parseInt(e.target.value)
-                    updateElement(element.id, { items: newItems })
+                    const rating = parseInt(e.target.value)
+                    if (!isNaN(rating)) {
+                      // Add a level by adding an empty skill at that rating
+                      updateElement(element.id, { 
+                        items: [...element.items, { name: '', rating }] 
+                      })
+                      e.target.value = '' // Reset dropdown
+                    }
                   }}
-                  className="skill-rating"
-                  disabled={isLocked}
+                  className="add-level-select"
+                  defaultValue=""
                 >
-                  <option value="5">Superb (+5)</option>
-                  <option value="4">Great (+4)</option>
-                  <option value="3">Good (+3)</option>
-                  <option value="2">Fair (+2)</option>
-                  <option value="1">Average (+1)</option>
-                  <option value="0">Mediocre (+0)</option>
-                </select>
-                <select
-                  value={skill.name}
-                  onChange={(e) => {
-                    const newItems = [...element.items]
-                    newItems[index].name = e.target.value
-                    updateElement(element.id, { items: newItems })
-                  }}
-                  className="skill-name-select"
-                  disabled={isLocked}
-                >
-                  <option value="">Select skill...</option>
-                  {skills.map(skillName => (
-                    <option key={skillName} value={skillName}>{skillName}</option>
+                  <option value="" disabled>+ Add Level</option>
+                  {availableLevels.map(level => (
+                    <option key={level.value} value={level.value}>{level.label}</option>
                   ))}
                 </select>
-                {!isLocked && (
-                  <button
-                    onClick={() => {
-                      const newItems = element.items.filter((_, i) => i !== index)
-                      updateElement(element.id, { items: newItems })
-                    }}
-                    className="skill-delete-btn"
-                  >
-                    ×
-                  </button>
-                )}
               </div>
-            ))}
-            {!isLocked && (
-              <button 
-                onClick={() => updateElement(element.id, { 
-                  items: [...element.items, { name: '', rating: 1 }] 
-                })}
-                className="add-item-btn"
-              >
-                + Add Skill
-              </button>
             )}
           </div>
         )
@@ -499,42 +573,60 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, categories }) {
                 </button>
               )}
             </div>
-            <div className="consequence-item">
-              <label>Mild ({element.mild.slots})</label>
-              <input
-                type="text"
-                value={element.mild.text}
-                onChange={(e) => updateElement(element.id, { 
-                  mild: { ...element.mild, text: e.target.value }
-                })}
-                className="element-input"
-                disabled={isLocked}
-              />
-            </div>
-            <div className="consequence-item">
-              <label>Moderate ({element.moderate.slots})</label>
-              <input
-                type="text"
-                value={element.moderate.text}
-                onChange={(e) => updateElement(element.id, { 
-                  moderate: { ...element.moderate, text: e.target.value }
-                })}
-                className="element-input"
-                disabled={isLocked}
-              />
-            </div>
-            <div className="consequence-item">
-              <label>Severe ({element.severe.slots})</label>
-              <input
-                type="text"
-                value={element.severe.text}
-                onChange={(e) => updateElement(element.id, { 
-                  severe: { ...element.severe, text: e.target.value }
-                })}
-                className="element-input"
-                disabled={isLocked}
-              />
-            </div>
+            {element.items.map((consequence, index) => (
+              <div key={index} className="consequence-item">
+                <div className="consequence-label-row">
+                  {!isLocked ? (
+                    <>
+                      <input
+                        type="text"
+                        value={consequence.label}
+                        onChange={(e) => {
+                          const newItems = [...element.items]
+                          newItems[index] = { ...consequence, label: e.target.value }
+                          updateElement(element.id, { items: newItems })
+                        }}
+                        className="consequence-label-input"
+                        placeholder="Label"
+                      />
+                      <button
+                        onClick={() => {
+                          const newItems = element.items.filter((_, i) => i !== index)
+                          updateElement(element.id, { items: newItems })
+                        }}
+                        className="consequence-delete-btn"
+                      >
+                        ×
+                      </button>
+                    </>
+                  ) : (
+                    <label>{consequence.label}</label>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  value={consequence.text}
+                  onChange={(e) => {
+                    const newItems = [...element.items]
+                    newItems[index] = { ...consequence, text: e.target.value }
+                    updateElement(element.id, { items: newItems })
+                  }}
+                  className="element-input"
+                  disabled={isLocked}
+                />
+              </div>
+            ))}
+            {!isLocked && (
+              <button
+                onClick={() => {
+                  const newItems = [...element.items, { label: 'New', text: '---' }]
+                  updateElement(element.id, { items: newItems })
+                }}
+                className="add-item-btn"
+              >
+                + Add Consequence
+              </button>
+            )}
           </div>
         )
 

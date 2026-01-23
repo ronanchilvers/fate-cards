@@ -313,33 +313,82 @@
 }
 
 /* Skills */
+/* Locked view - compact grouped display */
+.skill-level-group {
+  margin-bottom: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.skill-level-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.skill-level-list {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Unlocked view - organized by level sections */
+.skill-level-section {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.skill-level-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.skill-level-header {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skill-level-header h5 {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.remove-level-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.remove-level-btn:hover {
+  color: #c53030;
+}
+
 .skill-item {
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 8px;
-}
-
-.skill-rating {
-  padding: 6px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  background: white;
-  color: #666;
-  font-weight: 600;
-  min-width: 130px;
-}
-
-.card-element.locked .skill-rating {
-  border: none;
-  padding: 2px 4px;
-  background: transparent;
+  margin-bottom: 6px;
 }
 
 .skill-name-select {
   flex: 1;
-  padding: 6px;
+  padding: 6px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -350,13 +399,7 @@
 
 .skill-name-select:focus {
   outline: none;
-  border-color: #2c5282;
-}
-
-.card-element.locked .skill-name-select {
-  border: none;
-  padding: 2px 4px;
-  background: transparent;
+  border-color: #999;
 }
 
 .skill-delete-btn {
@@ -368,10 +411,60 @@
   padding: 0 4px;
   line-height: 1;
   transition: color 0.2s;
+  flex-shrink: 0;
 }
 
 .skill-delete-btn:hover {
   color: #c53030;
+}
+
+.add-skill-to-level-btn {
+  width: 100%;
+  padding: 6px;
+  background: none;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #999;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.add-skill-to-level-btn:hover {
+  border-color: #999;
+  color: #666;
+  background-color: #f7fafc;
+}
+
+.add-level-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.add-level-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px dashed #999;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: white;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-level-select:hover {
+  border-color: #666;
+  color: #333;
+  background-color: #f7fafc;
+}
+
+.add-level-select:focus {
+  outline: none;
+  border-style: solid;
+  border-color: #2c5282;
 }
 
 /* Stress Tracks */
@@ -552,12 +645,52 @@
   margin-bottom: 0;
 }
 
+.consequence-label-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
 .consequence-item label {
   display: block;
   font-size: 0.85rem;
   color: #666;
-  margin-bottom: 4px;
   font-weight: 500;
+}
+
+.consequence-label-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: white;
+  color: #666;
+  font-weight: 500;
+}
+
+.consequence-label-input:focus {
+  outline: none;
+  border-color: #999;
+}
+
+
+
+.consequence-delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.consequence-delete-btn:hover {
+  color: #c53030;
 }
 
 /* Fate Points */

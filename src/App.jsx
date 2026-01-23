@@ -10,6 +10,14 @@ function App() {
     'Empathy', 'Fight', 'Investigate', 'Lore', 'Notice', 'Physique',
     'Provoke', 'Rapport', 'Resources', 'Shoot', 'Stealth', 'Will'
   ])
+  const [skillLevels, setSkillLevels] = useState([
+    { label: 'Superb', value: 5 },
+    { label: 'Great', value: 4 },
+    { label: 'Good', value: 3 },
+    { label: 'Fair', value: 2 },
+    { label: 'Average', value: 1 },
+    { label: 'Mediocre', value: 0 }
+  ])
   const [showTemplateMenu, setShowTemplateMenu] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -17,15 +25,18 @@ function App() {
   const [newCategoryName, setNewCategoryName] = useState('')
   const [showSkillsAdmin, setShowSkillsAdmin] = useState(false)
   const [newSkillName, setNewSkillName] = useState('')
+  const [showSkillLevelsAdmin, setShowSkillLevelsAdmin] = useState(false)
+  const [newSkillLevelName, setNewSkillLevelName] = useState('')
   const [darkMode, setDarkMode] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const fileInputRef = useRef(null)
 
-  // Load cards, categories, skills, and dark mode from localStorage on mount
+  // Load cards, categories, skills, skill levels, and dark mode from localStorage on mount
   useEffect(() => {
     const savedCards = localStorage.getItem('fate-cards')
     const savedCategories = localStorage.getItem('fate-categories')
     const savedSkills = localStorage.getItem('fate-skills')
+    const savedSkillLevels = localStorage.getItem('fate-skill-levels')
     const savedDarkMode = localStorage.getItem('fate-darkmode')
     
     if (savedCards) {
@@ -103,6 +114,10 @@ function App() {
       setSkills(JSON.parse(savedSkills))
     }
     
+    if (savedSkillLevels) {
+      setSkillLevels(JSON.parse(savedSkillLevels))
+    }
+    
     if (savedDarkMode !== null) {
       setDarkMode(savedDarkMode === 'true')
     }
@@ -130,6 +145,13 @@ function App() {
       localStorage.setItem('fate-skills', JSON.stringify(skills))
     }
   }, [skills, isLoaded])
+
+  // Save skill levels to localStorage whenever they change (but only after initial load)
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('fate-skill-levels', JSON.stringify(skillLevels))
+    }
+  }, [skillLevels, isLoaded])
 
   // Save dark mode to localStorage whenever it changes (but only after initial load)
   useEffect(() => {
@@ -378,6 +400,53 @@ function App() {
     }
   }
 
+  const addSkillLevelAtTop = () => {
+    if (!newSkillLevelName.trim()) return
+    
+    if (skillLevels.some(level => level.label === newSkillLevelName.trim())) {
+      alert('A skill level with this name already exists!')
+      return
+    }
+    
+    // Find the next available value (highest + 1)
+    const maxValue = skillLevels.length > 0 ? Math.max(...skillLevels.map(l => l.value)) : -1
+    const newLevel = { label: newSkillLevelName.trim(), value: maxValue + 1 }
+    
+    // Add and sort by value descending
+    setSkillLevels([...skillLevels, newLevel].sort((a, b) => b.value - a.value))
+    setNewSkillLevelName('')
+  }
+
+  const addSkillLevelAtBottom = () => {
+    if (!newSkillLevelName.trim()) return
+    
+    if (skillLevels.some(level => level.label === newSkillLevelName.trim())) {
+      alert('A skill level with this name already exists!')
+      return
+    }
+    
+    // Find the next available value (lowest - 1)
+    const minValue = skillLevels.length > 0 ? Math.min(...skillLevels.map(l => l.value)) : 1
+    const newLevel = { label: newSkillLevelName.trim(), value: minValue - 1 }
+    
+    // Add and sort by value descending
+    setSkillLevels([...skillLevels, newLevel].sort((a, b) => b.value - a.value))
+    setNewSkillLevelName('')
+  }
+
+  const deleteSkillLevel = (levelValue) => {
+    const level = skillLevels.find(l => l.value === levelValue)
+    if (window.confirm(`Are you sure you want to delete the skill level "${level.label}"?`)) {
+      setSkillLevels(skillLevels.filter(l => l.value !== levelValue))
+    }
+  }
+
+  const updateSkillLevelLabel = (levelValue, newLabel) => {
+    setSkillLevels(skillLevels.map(level => 
+      level.value === levelValue ? { ...level, label: newLabel } : level
+    ))
+  }
+
   const exportCards = () => {
     const dataStr = JSON.stringify(cards, null, 2)
     const dataBlob = new Blob([dataStr], { type: 'application/json' })
@@ -445,6 +514,9 @@ function App() {
           <button onClick={() => setShowSkillsAdmin(true)} className="action-btn skills-btn">
             🎯 Manage Skills
           </button>
+          <button onClick={() => setShowSkillLevelsAdmin(true)} className="action-btn skills-btn">
+            📊 Manage Skill Levels
+          </button>
           <button onClick={exportCards} className="action-btn export-btn">
             💾 Export Cards
           </button>
@@ -490,6 +562,7 @@ function App() {
                     onDelete={deleteCard}
                     onDuplicate={duplicateCard}
                     skills={skills}
+                    skillLevels={skillLevels}
                     categories={categories}
                   />
                 ))
@@ -641,6 +714,60 @@ function App() {
                 <button onClick={addSkill} className="add-skill-btn">
                   Add Skill
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSkillLevelsAdmin && (
+        <div className="modal-overlay" onClick={() => setShowSkillLevelsAdmin(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Manage Skill Levels</h3>
+              <button onClick={() => setShowSkillLevelsAdmin(false)} className="modal-close">×</button>
+            </div>
+            <div className="skills-admin-body">
+              <p className="skills-admin-description">
+                These skill levels (the ladder) are used throughout your game. The numbers are automatically assigned.
+              </p>
+              <div className="skills-list">
+                {skillLevels.map(level => (
+                  <div key={level.value} className="skill-level-admin-item">
+                    <span className="skill-level-value">{level.value >= 0 ? '+' : ''}{level.value}</span>
+                    <input
+                      type="text"
+                      value={level.label}
+                      onChange={(e) => updateSkillLevelLabel(level.value, e.target.value)}
+                      className="skill-level-label-edit"
+                    />
+                    <button 
+                      onClick={() => deleteSkillLevel(level.value)}
+                      className="skill-list-delete"
+                      title="Delete skill level"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="add-skill-section">
+                <input
+                  type="text"
+                  value={newSkillLevelName}
+                  onChange={(e) => setNewSkillLevelName(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addSkillLevelAtTop()}
+                  placeholder="Enter new skill level name..."
+                  className="skill-input"
+                />
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button onClick={addSkillLevelAtTop} className="add-skill-btn">
+                    Add to Top
+                  </button>
+                  <button onClick={addSkillLevelAtBottom} className="add-skill-btn">
+                    Add to Bottom
+                  </button>
+                </div>
               </div>
             </div>
           </div>
