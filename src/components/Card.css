@@ -15,10 +15,14 @@
 }
 
 .card.two-column .card-elements {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: start;
+  display: block;
+  column-count: 2;
+  column-gap: 16px;
+}
+
+.card.two-column .card-element {
+  break-inside: avoid;
+  margin-bottom: 16px;
 }
 
 .card.auto-column {
@@ -31,10 +35,14 @@
   }
   
   .card.auto-column .card-elements {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-items: start;
+    display: block;
+    column-count: 2;
+    column-gap: 16px;
+  }
+  
+  .card.auto-column .card-element {
+    break-inside: avoid;
+    margin-bottom: 16px;
   }
 }
 
