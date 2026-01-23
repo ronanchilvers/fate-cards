@@ -729,53 +729,55 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     <>
       <div className={`card ${card.layout === '2-column' ? 'two-column' : card.layout === 'auto' ? 'auto-column' : ''}`} style={{ borderColor: card.color, backgroundColor: getPaleBackground(card.color) }}>
         <div className="card-header" style={{ backgroundColor: card.color }}>
+          <div className="card-header-left">
+            {!isLocked && (
+              <button 
+                onClick={() => onDelete(card.id)}
+                className="card-icon-btn"
+                title="Delete card"
+              >
+                ✖
+              </button>
+            )}
+          </div>
           <div className="card-title-section">
             <h3>{card.title}</h3>
           </div>
           <div className="card-header-actions">
-            <button 
-              onClick={toggleLock}
-              className="icon-btn"
-              title={isLocked ? "Unlock card" : "Lock card"}
-            >
-              {isLocked ? '🔒' : '🔓'}
-            </button>
             {!isLocked && (
-              <button 
-                onClick={() => onDuplicate(card)}
-                className="icon-btn"
-                title="Duplicate card"
-              >
-                📋
-              </button>
+              <>
+                <button 
+                  onClick={() => setShowElementMenu(!showElementMenu)}
+                  className="card-icon-btn"
+                  title="Add element"
+                >
+                  ➕
+                </button>
+                <button 
+                  onClick={() => onDuplicate(card)}
+                  className="card-icon-btn"
+                  title="Duplicate card"
+                >
+                  📋
+                </button>
+              </>
             )}
             {!isLocked && (
               <button 
                 onClick={openSettings}
-                className="icon-btn"
+                className="card-icon-btn"
                 title="Card settings"
               >
                 ⚙️
               </button>
             )}
-            {!isLocked && (
-              <button 
-                onClick={() => setShowElementMenu(!showElementMenu)}
-                className="icon-btn"
-                title="Add element"
-              >
-                +
-              </button>
-            )}
-            {!isLocked && (
-              <button 
-                onClick={() => onDelete(card.id)}
-                className="icon-btn"
-                title="Delete card"
-              >
-                ×
-              </button>
-            )}
+            <button 
+              onClick={toggleLock}
+              className="card-icon-btn"
+              title={isLocked ? "Unlock card" : "Lock card"}
+            >
+              {isLocked ? '🔒' : '🔓'}
+            </button>
           </div>
         </div>
 
