@@ -456,12 +456,24 @@ function App() {
   }
 
   const exportCards = () => {
-    const dataStr = JSON.stringify(cards, null, 2)
+    const exportData = {
+      cards,
+      skills,
+      skillLevels
+    }
+    const dataStr = JSON.stringify(exportData, null, 2)
     const dataBlob = new Blob([dataStr], { type: 'application/json' })
     const url = URL.createObjectURL(dataBlob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `fate-cards-${new Date().toISOString().split('T')[0]}.json`
+    const now = new Date()
+    const timestamp = now.getFullYear().toString() +
+      (now.getMonth() + 1).toString().padStart(2, '0') +
+      now.getDate().toString().padStart(2, '0') +
+      now.getHours().toString().padStart(2, '0') +
+      now.getMinutes().toString().padStart(2, '0') +
+      now.getSeconds().toString().padStart(2, '0')
+    link.download = `fate-cards-${timestamp}.json`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -475,10 +487,23 @@ function App() {
     const reader = new FileReader()
     reader.onload = (e) => {
       try {
-        const importedCards = JSON.parse(e.target.result)
-        if (Array.isArray(importedCards)) {
-          setCards(importedCards)
-          alert(`Successfully imported ${importedCards.length} card(s)!`)
+        const importedData = JSON.parse(e.target.result)
+        
+        // Handle old format (array of cards) or new format (object with cards, skills, skillLevels)
+        if (Array.isArray(importedData)) {
+          // Old format - just cards
+          setCards(importedData)
+          alert(`Successfully imported ${importedData.length} card(s)!`)
+        } else if (importedData.cards && Array.isArray(importedData.cards)) {
+          // New format - cards, skills, and skill levels
+          setCards(importedData.cards)
+          if (importedData.skills && Array.isArray(importedData.skills)) {
+            setSkills(importedData.skills)
+          }
+          if (importedData.skillLevels && Array.isArray(importedData.skillLevels)) {
+            setSkillLevels(importedData.skillLevels)
+          }
+          alert(`Successfully imported ${importedData.cards.length} card(s)!`)
         } else {
           alert('Invalid file format. Please select a valid Fate Cards JSON file.')
         }
