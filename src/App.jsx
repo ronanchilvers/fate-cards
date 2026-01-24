@@ -29,6 +29,7 @@ function App() {
   const [newSkillLevelName, setNewSkillLevelName] = useState('')
   const [darkMode, setDarkMode] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const fileInputRef = useRef(null)
 
   // Load cards, categories, skills, skill levels, and dark mode from localStorage on mount
@@ -496,24 +497,33 @@ function App() {
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
-        <h1>Fate Cards</h1>
-        <div className="app-actions">
-          <button onClick={openTemplateMenu} className="action-btn add-card-header">
+        <h1>Fate RPG Cards</h1>
+        <button 
+          className="hamburger-btn"
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          aria-label="Toggle menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div className={`app-actions ${showMobileMenu ? 'mobile-open' : ''}`}>
+          <button onClick={() => { openTemplateMenu(); setShowMobileMenu(false); }} className="action-btn add-card-header">
             ➕ Card
           </button>
-          <button onClick={() => setShowAddCategory(true)} className="action-btn category-btn">
+          <button onClick={() => { setShowAddCategory(true); setShowMobileMenu(false); }} className="action-btn category-btn">
             ➕ Category
           </button>
-          <button onClick={() => setShowSkillsAdmin(true)} className="action-btn skills-btn">
+          <button onClick={() => { setShowSkillsAdmin(true); setShowMobileMenu(false); }} className="action-btn skills-btn">
             🎯 Skills
           </button>
-          <button onClick={() => setShowSkillLevelsAdmin(true)} className="action-btn skills-btn">
+          <button onClick={() => { setShowSkillLevelsAdmin(true); setShowMobileMenu(false); }} className="action-btn skills-btn">
             📊 Skill Levels
           </button>
-          <button onClick={exportCards} className="action-btn export-btn">
+          <button onClick={() => { exportCards(); setShowMobileMenu(false); }} className="action-btn export-btn">
             💾 Export
           </button>
-          <button onClick={triggerImport} className="action-btn import-btn">
+          <button onClick={() => { triggerImport(); setShowMobileMenu(false); }} className="action-btn import-btn">
             📁 Import
           </button>
           <input
@@ -524,7 +534,7 @@ function App() {
             style={{ display: 'none' }}
           />
           <button
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={() => { setDarkMode(!darkMode); setShowMobileMenu(false); }}
             className="action-btn darkmode-btn"
             title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
