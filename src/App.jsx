@@ -11,12 +11,19 @@ function App() {
     'Provoke', 'Rapport', 'Resources', 'Shoot', 'Stealth', 'Will'
   ])
   const [skillLevels, setSkillLevels] = useState([
+    { label: 'Legendary', value: 8 },
+    { label: 'Epic', value: 7 },
+    { label: 'Fantastic', value: 6 },
     { label: 'Superb', value: 5 },
     { label: 'Great', value: 4 },
     { label: 'Good', value: 3 },
     { label: 'Fair', value: 2 },
     { label: 'Average', value: 1 },
-    { label: 'Mediocre', value: 0 }
+    { label: 'Mediocre', value: 0 },
+    { label: 'Poor', value: -1 },
+    { label: 'Terrible', value: -2 },
+    { label: 'Catastrophic', value: -3 },
+    { label: 'Horrifying', value: -4 }
   ])
   const [showTemplateMenu, setShowTemplateMenu] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState('')
@@ -498,7 +505,7 @@ function App() {
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>Fate RPG Cards</h1>
-        <button 
+        <button
           className="hamburger-btn"
           onClick={() => setShowMobileMenu(!showMobileMenu)}
           aria-label="Toggle menu"
