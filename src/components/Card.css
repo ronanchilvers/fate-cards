@@ -16,7 +16,9 @@
 .card.two-column .card-elements {
   display: block;
   column-count: 2;
-  column-gap: 16px;
+  column-gap: 2rem;
+  column-rule: 2px solid;
+  column-rule-color: inherit;
 }
 
 .card.two-column .card-element {
@@ -36,7 +38,9 @@
   .card.auto-column .card-elements {
     display: block;
     column-count: 2;
-    column-gap: 16px;
+    column-gap: 2rem;
+    column-rule: 2px solid;
+    column-rule-color: inherit;
   }
   
   .card.auto-column .card-element {
@@ -110,7 +114,7 @@
 }
 
 .card-body {
-  padding: 16px;
+  padding: 0 1rem;
 }
 
 .card-subtitle-bar {

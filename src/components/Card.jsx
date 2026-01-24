@@ -807,7 +807,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         )}
 
         <div className="card-body">
-          <div className="card-elements">
+          <div className="card-elements" style={{ color: card.color }}>
             {card.elements.map(element => renderElement(element))}
           </div>
 

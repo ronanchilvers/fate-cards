@@ -38,7 +38,7 @@ function App() {
     const savedSkills = localStorage.getItem('fate-skills')
     const savedSkillLevels = localStorage.getItem('fate-skill-levels')
     const savedDarkMode = localStorage.getItem('fate-darkmode')
-    
+
     if (savedCards) {
       setCards(JSON.parse(savedCards))
     } else {
@@ -105,23 +105,23 @@ function App() {
         }
       ])
     }
-    
+
     if (savedCategories) {
       setCategories(JSON.parse(savedCategories))
     }
-    
+
     if (savedSkills) {
       setSkills(JSON.parse(savedSkills))
     }
-    
+
     if (savedSkillLevels) {
       setSkillLevels(JSON.parse(savedSkillLevels))
     }
-    
+
     if (savedDarkMode !== null) {
       setDarkMode(savedDarkMode === 'true')
     }
-    
+
     setIsLoaded(true)
   }, [])
 
@@ -338,32 +338,32 @@ function App() {
       'NPCs': '#2c5282',
       'Scenes': '#ed8936'
     }
-    
+
     if (defaultColors[category]) {
       return defaultColors[category]
     }
-    
+
     // Generate a color based on the category name hash
     let hash = 0
     for (let i = 0; i < category.length; i++) {
       hash = category.charCodeAt(i) + ((hash << 5) - hash)
     }
-    
+
     const hue = Math.abs(hash % 360)
     const saturation = 60 + (Math.abs(hash) % 20) // 60-80%
     const lightness = 35 + (Math.abs(hash >> 8) % 15) // 35-50%
-    
+
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`
   }
 
   const addCategory = () => {
     if (!newCategoryName.trim()) return
-    
+
     if (categories.includes(newCategoryName.trim())) {
       alert('A category with this name already exists!')
       return
     }
-    
+
     setCategories([...categories, newCategoryName.trim()])
     setNewCategoryName('')
     setShowAddCategory(false)
@@ -371,12 +371,12 @@ function App() {
 
   const deleteCategory = (category) => {
     const cardsInCategory = cards.filter(card => card.category === category).length
-    
+
     if (cardsInCategory > 0) {
       alert(`Cannot delete category "${category}" because it contains ${cardsInCategory} card(s). Please move or delete the cards first.`)
       return
     }
-    
+
     if (window.confirm(`Are you sure you want to delete the category "${category}"?`)) {
       setCategories(categories.filter(cat => cat !== category))
     }
@@ -384,12 +384,12 @@ function App() {
 
   const addSkill = () => {
     if (!newSkillName.trim()) return
-    
+
     if (skills.includes(newSkillName.trim())) {
       alert('A skill with this name already exists!')
       return
     }
-    
+
     setSkills([...skills, newSkillName.trim()].sort())
     setNewSkillName('')
   }
@@ -402,16 +402,16 @@ function App() {
 
   const addSkillLevelAtTop = () => {
     if (!newSkillLevelName.trim()) return
-    
+
     if (skillLevels.some(level => level.label === newSkillLevelName.trim())) {
       alert('A skill level with this name already exists!')
       return
     }
-    
+
     // Find the next available value (highest + 1)
     const maxValue = skillLevels.length > 0 ? Math.max(...skillLevels.map(l => l.value)) : -1
     const newLevel = { label: newSkillLevelName.trim(), value: maxValue + 1 }
-    
+
     // Add and sort by value descending
     setSkillLevels([...skillLevels, newLevel].sort((a, b) => b.value - a.value))
     setNewSkillLevelName('')
@@ -419,16 +419,16 @@ function App() {
 
   const addSkillLevelAtBottom = () => {
     if (!newSkillLevelName.trim()) return
-    
+
     if (skillLevels.some(level => level.label === newSkillLevelName.trim())) {
       alert('A skill level with this name already exists!')
       return
     }
-    
+
     // Find the next available value (lowest - 1)
     const minValue = skillLevels.length > 0 ? Math.min(...skillLevels.map(l => l.value)) : 1
     const newLevel = { label: newSkillLevelName.trim(), value: minValue - 1 }
-    
+
     // Add and sort by value descending
     setSkillLevels([...skillLevels, newLevel].sort((a, b) => b.value - a.value))
     setNewSkillLevelName('')
@@ -442,7 +442,7 @@ function App() {
   }
 
   const updateSkillLevelLabel = (levelValue, newLabel) => {
-    setSkillLevels(skillLevels.map(level => 
+    setSkillLevels(skillLevels.map(level =>
       level.value === levelValue ? { ...level, label: newLabel } : level
     ))
   }
@@ -479,7 +479,7 @@ function App() {
       }
     }
     reader.readAsText(file)
-    
+
     // Reset the file input so the same file can be imported again
     event.target.value = ''
   }
@@ -496,32 +496,25 @@ function App() {
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
-        <h1>Fate RPG Cards</h1>
+        <h1>Fate Cards</h1>
         <div className="app-actions">
-          <button 
-            onClick={() => setDarkMode(!darkMode)} 
-            className="action-btn darkmode-btn"
-            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          >
-            {darkMode ? '☀️' : '🌙'}
-          </button>
           <button onClick={openTemplateMenu} className="action-btn add-card-header">
-            ➕ Add Card
+            ➕ Card
           </button>
           <button onClick={() => setShowAddCategory(true)} className="action-btn category-btn">
-            ➕ Add Category
+            ➕ Category
           </button>
           <button onClick={() => setShowSkillsAdmin(true)} className="action-btn skills-btn">
-            🎯 Manage Skills
+            🎯 Skills
           </button>
           <button onClick={() => setShowSkillLevelsAdmin(true)} className="action-btn skills-btn">
-            📊 Manage Skill Levels
+            📊 Skill Levels
           </button>
           <button onClick={exportCards} className="action-btn export-btn">
-            💾 Export Cards
+            💾 Export
           </button>
           <button onClick={triggerImport} className="action-btn import-btn">
-            📁 Import Cards
+            📁 Import
           </button>
           <input
             ref={fileInputRef}
@@ -530,14 +523,22 @@ function App() {
             onChange={importCards}
             style={{ display: 'none' }}
           />
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="action-btn darkmode-btn"
+            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
+
         </div>
       </header>
-      
+
       {categories.map(category => (
         <div key={category} className="category-section">
           <div className="category-header" style={{ backgroundColor: getCategoryColor(category) }}>
             <h2>{category}</h2>
-            <button 
+            <button
               onClick={() => deleteCategory(category)}
               className="delete-category-btn"
               title={cards.filter(c => c.category === category).length > 0 ? 'Cannot delete category with cards' : 'Delete category'}
@@ -545,7 +546,7 @@ function App() {
               ×
             </button>
           </div>
-          
+
           <div className="cards-container">
             {cards.filter(card => card.category === category).length === 0 ? (
               <p className="empty-category-message">
@@ -580,7 +581,7 @@ function App() {
             </div>
             <div className="template-selection">
               <div className="template-options">
-                <div 
+                <div
                   onClick={() => setSelectedTemplate('standard-pc')}
                   className={`template-option ${selectedTemplate === 'standard-pc' ? 'selected' : ''}`}
                 >
@@ -590,7 +591,7 @@ function App() {
                     <p>Full character sheet with all Fate Core elements</p>
                   </div>
                 </div>
-                <div 
+                <div
                   onClick={() => setSelectedTemplate('quick-npc')}
                   className={`template-option ${selectedTemplate === 'quick-npc' ? 'selected' : ''}`}
                 >
@@ -600,7 +601,7 @@ function App() {
                     <p>Simplified character for NPCs and minor characters</p>
                   </div>
                 </div>
-                <div 
+                <div
                   onClick={() => setSelectedTemplate('scene')}
                   className={`template-option ${selectedTemplate === 'scene' ? 'selected' : ''}`}
                 >
@@ -610,7 +611,7 @@ function App() {
                     <p>Location or situation aspects and description</p>
                   </div>
                 </div>
-                <div 
+                <div
                   onClick={() => setSelectedTemplate('blank')}
                   className={`template-option ${selectedTemplate === 'blank' ? 'selected' : ''}`}
                 >
@@ -624,7 +625,7 @@ function App() {
               <div className="template-controls">
                 <div className="category-selector">
                   <label>Category:</label>
-                  <select 
+                  <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="category-select"
@@ -634,7 +635,7 @@ function App() {
                     ))}
                   </select>
                 </div>
-                <button 
+                <button
                   onClick={addCardFromTemplate}
                   className="add-template-btn"
                   disabled={!selectedTemplate || !selectedCategory}
@@ -692,7 +693,7 @@ function App() {
                 {skills.map(skill => (
                   <div key={skill} className="skill-list-item">
                     <span>{skill}</span>
-                    <button 
+                    <button
                       onClick={() => deleteSkill(skill)}
                       className="skill-list-delete"
                       title="Delete skill"
@@ -741,7 +742,7 @@ function App() {
                       onChange={(e) => updateSkillLevelLabel(level.value, e.target.value)}
                       className="skill-level-label-edit"
                     />
-                    <button 
+                    <button
                       onClick={() => deleteSkillLevel(level.value)}
                       className="skill-list-delete"
                       title="Delete skill level"
