@@ -33,9 +33,9 @@
 
 .action-btn {
   padding: 0.5rem 0.75rem;
-  border: 2px solid #2d3748;
+  border: none;
   border-radius: 6px;
-  background: white;
+  background: transparent;
   color: #2d3748;
   font-size: 0.95rem;
   font-weight: 600;
@@ -44,34 +44,16 @@
 }
 
 .dark-mode .action-btn {
-  background: #2d3748;
   color: #e2e8f0;
   border-color: #4a5568;
 }
 
 .action-btn:hover {
+  background: #CCC;
+}
+.dark-mode .action-btn:hover {
   background: #2d3748;
   color: white;
-}
-
-.export-btn:hover {
-  background: #2c5282;
-  border-color: #2c5282;
-}
-
-.import-btn:hover {
-  background: #2d5016;
-  border-color: #2d5016;
-}
-
-.add-card-header:hover {
-  background: #2c5282;
-  border-color: #2c5282;
-}
-
-.category-btn:hover {
-  background: #c53030;
-  border-color: #c53030;
 }
 
 .darkmode-btn:hover {
@@ -498,10 +480,10 @@
 }
 
 /* Skills Admin */
-.skills-btn:hover {
+/*.skills-btn:hover {
   background: #ed8936;
   border-color: #ed8936;
-}
+}*/
 
 .skills-admin-body {
   padding: 24px;
