@@ -58,7 +58,7 @@ function App() {
           category: 'PCs',
           color: '#c53030',
           title: 'Darv',
-          subtitle: 'Insatiably curious explorer with a flair for electronics',
+          subtitle: 'Crew member on the survey ship Challenger',
           layout: 'auto',
           elements: [
             {
@@ -618,8 +618,6 @@ function App() {
         { label: 'Horrifying', value: -4 }
       ])
       setThemeMode('system')
-
-      alert('All data has been reset to defaults.')
     }
   }
 
