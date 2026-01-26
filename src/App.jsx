@@ -557,7 +557,6 @@ function App() {
         if (Array.isArray(importedData)) {
           // Old format - just cards
           setCards(importedData)
-          alert(`Successfully imported ${importedData.length} card(s)!`)
         } else if (importedData.cards && Array.isArray(importedData.cards)) {
           // New format - cards, skills, and skill levels
           setCards(importedData.cards)
@@ -567,7 +566,6 @@ function App() {
           if (importedData.skillLevels && Array.isArray(importedData.skillLevels)) {
             setSkillLevels(importedData.skillLevels)
           }
-          alert(`Successfully imported ${importedData.cards.length} card(s)!`)
         } else {
           alert('Invalid file format. Please select a valid Fate Cards JSON file.')
         }
