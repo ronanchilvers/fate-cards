@@ -100,15 +100,15 @@ function App() {
               tracks: [
                 { name: 'Physical Stress', boxes: [
                   { checked: false, value: 1 },
-                  { checked: false, value: 2 },
-                  { checked: false, value: 3 },
-                  { checked: false, value: 4 }
+                  { checked: false, value: 1 },
+                  { checked: false, value: 1 },
+                  { checked: false, value: 1 }
                 ]},
                 { name: 'Mental Stress', boxes: [
                   { checked: false, value: 1 },
-                  { checked: false, value: 2 },
-                  { checked: false, value: 3 },
-                  { checked: false, value: 4 }
+                  { checked: false, value: 1 },
+                  { checked: false, value: 1 },
+                  { checked: false, value: 1 }
                 ]}
               ]
             },
@@ -262,15 +262,15 @@ function App() {
             tracks: [
               { name: 'Physical Stress', boxes: [
                 { checked: false, value: 1 },
-                { checked: false, value: 2 },
-                { checked: false, value: 3 },
-                { checked: false, value: 4 }
+                { checked: false, value: 1 },
+                { checked: false, value: 1 },
+                { checked: false, value: 1 }
               ]},
               { name: 'Mental Stress', boxes: [
                 { checked: false, value: 1 },
-                { checked: false, value: 2 },
-                { checked: false, value: 3 },
-                { checked: false, value: 4 }
+                { checked: false, value: 1 },
+                { checked: false, value: 1 },
+                { checked: false, value: 1 }
               ]}
             ]
           },
@@ -722,8 +722,8 @@ function App() {
 
       {categories.map(category => (
         <div key={category} className={`category-section ${collapsedCategories.includes(category) ? 'collapsed' : ''}`}>
-          <div 
-            className="category-header" 
+          <div
+            className="category-header"
             style={{ backgroundColor: getCategoryColor(category), cursor: 'pointer' }}
             onClick={() => toggleCategoryCollapse(category)}
           >
