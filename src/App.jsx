@@ -59,6 +59,7 @@ function App() {
           color: '#c53030',
           title: 'Darv',
           subtitle: 'Insatiably curious explorer with a flair for electronics',
+          layout: 'auto',
           elements: [
             {
               id: '1-1',
