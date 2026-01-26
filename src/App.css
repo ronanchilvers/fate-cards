@@ -103,7 +103,8 @@
 }
 
 .action-btn {
-  padding: 0.5rem 0.75rem;
+  padding: 0.15rem 0.4rem 0.2rem 0.4rem;
+  margin-left: 0rem;
   border: none;
   border-radius: 6px;
   background: transparent;

@@ -94,15 +94,29 @@ function App() {
             {
               id: '1-5',
               type: 'stress-tracks',
-              physical: [false, false, false, false],
-              mental: [false, false, false, false]
+              tracks: [
+                { name: 'Physical Stress', boxes: [
+                  { checked: false, value: 1 },
+                  { checked: false, value: 2 },
+                  { checked: false, value: 3 },
+                  { checked: false, value: 4 }
+                ]},
+                { name: 'Mental Stress', boxes: [
+                  { checked: false, value: 1 },
+                  { checked: false, value: 2 },
+                  { checked: false, value: 3 },
+                  { checked: false, value: 4 }
+                ]}
+              ]
             },
             {
               id: '1-6',
               type: 'consequences',
-              mild: { slots: 2, text: '---' },
-              moderate: { slots: 4, text: '---' },
-              severe: { slots: 6, text: '---' }
+              items: [
+                { label: 'Mild (2)', text: '---' },
+                { label: 'Moderate (4)', text: '---' },
+                { label: 'Severe (6)', text: '---' }
+              ]
             },
             {
               id: '1-7',
@@ -126,7 +140,7 @@ function App() {
     if (savedSkillLevels) {
       setSkillLevels(JSON.parse(savedSkillLevels))
     }
-    
+
     if (savedThemeMode) {
       setThemeMode(savedThemeMode)
     }
@@ -172,7 +186,7 @@ function App() {
   // Listen to system theme preference and update isDark
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    
+
     const updateDarkMode = () => {
       if (themeMode === 'system') {
         setIsDark(mediaQuery.matches)
@@ -185,7 +199,7 @@ function App() {
 
     updateDarkMode()
     mediaQuery.addEventListener('change', updateDarkMode)
-    
+
     return () => mediaQuery.removeEventListener('change', updateDarkMode)
   }, [themeMode])
 
@@ -509,7 +523,7 @@ function App() {
     reader.onload = (e) => {
       try {
         const importedData = JSON.parse(e.target.result)
-        
+
         // Handle old format (array of cards) or new format (object with cards, skills, skillLevels)
         if (Array.isArray(importedData)) {
           // Old format - just cards
@@ -540,6 +554,44 @@ function App() {
 
   const triggerImport = () => {
     fileInputRef.current?.click()
+  }
+
+  const resetAllData = () => {
+    if (window.confirm('Are you sure you want to reset all data? This will delete all cards, restore default skills and skill levels, and cannot be undone.')) {
+      // Clear localStorage
+      localStorage.removeItem('fate-cards')
+      localStorage.removeItem('fate-categories')
+      localStorage.removeItem('fate-skills')
+      localStorage.removeItem('fate-skill-levels')
+      localStorage.removeItem('fate-thememode')
+
+      // Reset to defaults
+      setCards([])
+      setCategories(['PCs', 'NPCs', 'Scenes'])
+      setSkills([
+        'Athletics', 'Burglary', 'Contacts', 'Crafts', 'Deceive', 'Drive',
+        'Empathy', 'Fight', 'Investigate', 'Lore', 'Notice', 'Physique',
+        'Provoke', 'Rapport', 'Resources', 'Shoot', 'Stealth', 'Will'
+      ])
+      setSkillLevels([
+        { label: 'Legendary', value: 8 },
+        { label: 'Epic', value: 7 },
+        { label: 'Fantastic', value: 6 },
+        { label: 'Superb', value: 5 },
+        { label: 'Great', value: 4 },
+        { label: 'Good', value: 3 },
+        { label: 'Fair', value: 2 },
+        { label: 'Average', value: 1 },
+        { label: 'Mediocre', value: 0 },
+        { label: 'Poor', value: -1 },
+        { label: 'Terrible', value: -2 },
+        { label: 'Catastrophic', value: -3 },
+        { label: 'Horrifying', value: -4 }
+      ])
+      setThemeMode('system')
+
+      alert('All data has been reset to defaults.')
+    }
   }
 
   const openTemplateMenu = () => {
@@ -600,6 +652,9 @@ function App() {
           </button>
           <button onClick={() => { triggerImport(); setShowMobileMenu(false); }} className="action-btn import-btn">
             📁 Import
+          </button>
+          <button onClick={() => { resetAllData(); setShowMobileMenu(false); }} className="action-btn reset-btn">
+            🔄 Reset
           </button>
           <input
             ref={fileInputRef}
