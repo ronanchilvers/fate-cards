@@ -137,6 +137,10 @@
   margin-bottom: 40px;
 }
 
+.category-section.collapsed {
+  margin-bottom: 0;
+}
+
 .category-header {
   display: flex;
   justify-content: space-between;
@@ -144,6 +148,16 @@
   padding: 12px 16px;
   color: white;
   margin-bottom: 20px;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.category-section.collapsed .category-header {
+  margin-bottom: 0;
+}
+
+.category-header:hover {
+  filter: brightness(1.1);
 }
 
 .category-header h2 {

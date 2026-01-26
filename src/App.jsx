@@ -38,6 +38,7 @@ function App() {
   const [isDark, setIsDark] = useState(false) // computed dark mode state
   const [isLoaded, setIsLoaded] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [collapsedCategories, setCollapsedCategories] = useState([])
   const fileInputRef = useRef(null)
 
   // Load cards, categories, skills, skill levels, and theme mode from localStorage on mount
@@ -47,6 +48,7 @@ function App() {
     const savedSkills = localStorage.getItem('fate-skills')
     const savedSkillLevels = localStorage.getItem('fate-skill-levels')
     const savedThemeMode = localStorage.getItem('fate-thememode')
+    const savedCollapsedCategories = localStorage.getItem('fate-collapsed-categories')
 
     if (savedCards) {
       setCards(JSON.parse(savedCards))
@@ -146,6 +148,10 @@ function App() {
       setThemeMode(savedThemeMode)
     }
 
+    if (savedCollapsedCategories) {
+      setCollapsedCategories(JSON.parse(savedCollapsedCategories))
+    }
+
     setIsLoaded(true)
   }, [])
 
@@ -183,6 +189,13 @@ function App() {
       localStorage.setItem('fate-thememode', themeMode)
     }
   }, [themeMode, isLoaded])
+
+  // Save collapsed categories to localStorage whenever they change (but only after initial load)
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('fate-collapsed-categories', JSON.stringify(collapsedCategories))
+    }
+  }, [collapsedCategories, isLoaded])
 
   // Listen to system theme preference and update isDark
   useEffect(() => {
@@ -624,6 +637,14 @@ function App() {
     setShowTemplateMenu(true)
   }
 
+  const toggleCategoryCollapse = (category) => {
+    if (collapsedCategories.includes(category)) {
+      setCollapsedCategories(collapsedCategories.filter(c => c !== category))
+    } else {
+      setCollapsedCategories([...collapsedCategories, category])
+    }
+  }
+
   const cycleThemeMode = () => {
     if (themeMode === 'light') {
       setThemeMode('dark')
@@ -700,11 +721,23 @@ function App() {
       </header>
 
       {categories.map(category => (
-        <div key={category} className="category-section">
-          <div className="category-header" style={{ backgroundColor: getCategoryColor(category) }}>
-            <h2>{category}</h2>
+        <div key={category} className={`category-section ${collapsedCategories.includes(category) ? 'collapsed' : ''}`}>
+          <div 
+            className="category-header" 
+            style={{ backgroundColor: getCategoryColor(category), cursor: 'pointer' }}
+            onClick={() => toggleCategoryCollapse(category)}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: collapsedCategories.includes(category) ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                ▼
+              </span>
+              <h2>{category}</h2>
+            </div>
             <button
-              onClick={() => deleteCategory(category)}
+              onClick={(e) => {
+                e.stopPropagation()
+                deleteCategory(category)
+              }}
               className="delete-category-btn"
               title={cards.filter(c => c.category === category).length > 0 ? 'Cannot delete category with cards' : 'Delete category'}
             >
@@ -712,7 +745,8 @@ function App() {
             </button>
           </div>
 
-          <div className="cards-container">
+          {!collapsedCategories.includes(category) && (
+            <div className="cards-container">
             {cards.filter(card => card.category === category).length === 0 ? (
               <p className="empty-category-message">
                 Click the <strong>Add Card</strong> button above to add a card to this category
@@ -733,7 +767,8 @@ function App() {
                   />
                 ))
             )}
-          </div>
+            </div>
+          )}
         </div>
       ))}
 
