@@ -102,6 +102,13 @@
   }
 }
 
+@media (max-width: 600px) {
+  .app-actions {
+    right: -100%;
+    width: 100%;
+  }
+}
+
 .action-btn {
   padding: 0.15rem 0.4rem 0.2rem 0.4rem;
   margin-left: 0rem;
