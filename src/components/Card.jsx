@@ -748,10 +748,10 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
               <>
                 <button 
                   onClick={() => setShowElementMenu(!showElementMenu)}
-                  className="card-icon-btn"
+                  className="card-icon-btn card-add-btn"
                   title="Add element"
                 >
-                  ➕
+                  +
                 </button>
                 <button 
                   onClick={() => onDuplicate(card)}

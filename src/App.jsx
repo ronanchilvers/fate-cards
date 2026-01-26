@@ -34,18 +34,19 @@ function App() {
   const [newSkillName, setNewSkillName] = useState('')
   const [showSkillLevelsAdmin, setShowSkillLevelsAdmin] = useState(false)
   const [newSkillLevelName, setNewSkillLevelName] = useState('')
-  const [darkMode, setDarkMode] = useState(false)
+  const [themeMode, setThemeMode] = useState('system') // 'light', 'dark', or 'system'
+  const [isDark, setIsDark] = useState(false) // computed dark mode state
   const [isLoaded, setIsLoaded] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const fileInputRef = useRef(null)
 
-  // Load cards, categories, skills, skill levels, and dark mode from localStorage on mount
+  // Load cards, categories, skills, skill levels, and theme mode from localStorage on mount
   useEffect(() => {
     const savedCards = localStorage.getItem('fate-cards')
     const savedCategories = localStorage.getItem('fate-categories')
     const savedSkills = localStorage.getItem('fate-skills')
     const savedSkillLevels = localStorage.getItem('fate-skill-levels')
-    const savedDarkMode = localStorage.getItem('fate-darkmode')
+    const savedThemeMode = localStorage.getItem('fate-thememode')
 
     if (savedCards) {
       setCards(JSON.parse(savedCards))
@@ -125,9 +126,9 @@ function App() {
     if (savedSkillLevels) {
       setSkillLevels(JSON.parse(savedSkillLevels))
     }
-
-    if (savedDarkMode !== null) {
-      setDarkMode(savedDarkMode === 'true')
+    
+    if (savedThemeMode) {
+      setThemeMode(savedThemeMode)
     }
 
     setIsLoaded(true)
@@ -161,12 +162,32 @@ function App() {
     }
   }, [skillLevels, isLoaded])
 
-  // Save dark mode to localStorage whenever it changes (but only after initial load)
+  // Save theme mode to localStorage whenever it changes (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-darkmode', darkMode.toString())
+      localStorage.setItem('fate-thememode', themeMode)
     }
-  }, [darkMode, isLoaded])
+  }, [themeMode, isLoaded])
+
+  // Listen to system theme preference and update isDark
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    
+    const updateDarkMode = () => {
+      if (themeMode === 'system') {
+        setIsDark(mediaQuery.matches)
+      } else if (themeMode === 'dark') {
+        setIsDark(true)
+      } else {
+        setIsDark(false)
+      }
+    }
+
+    updateDarkMode()
+    mediaQuery.addEventListener('change', updateDarkMode)
+    
+    return () => mediaQuery.removeEventListener('change', updateDarkMode)
+  }, [themeMode])
 
   const addCard = (category) => {
     const newCard = {
@@ -526,8 +547,30 @@ function App() {
     setShowTemplateMenu(true)
   }
 
+  const cycleThemeMode = () => {
+    if (themeMode === 'light') {
+      setThemeMode('dark')
+    } else if (themeMode === 'dark') {
+      setThemeMode('system')
+    } else {
+      setThemeMode('light')
+    }
+  }
+
+  const getThemeIcon = () => {
+    if (themeMode === 'light') return '☀️'
+    if (themeMode === 'dark') return '🌙'
+    return '💻' // system
+  }
+
+  const getThemeTitle = () => {
+    if (themeMode === 'light') return 'Light Mode (click for Dark)'
+    if (themeMode === 'dark') return 'Dark Mode (click for System)'
+    return 'System Mode (click for Light)'
+  }
+
   return (
-    <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`app ${isDark ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>Fate RPG Cards</h1>
         <button
@@ -566,11 +609,11 @@ function App() {
             style={{ display: 'none' }}
           />
           <button
-            onClick={() => { setDarkMode(!darkMode); setShowMobileMenu(false); }}
+            onClick={() => { cycleThemeMode(); setShowMobileMenu(false); }}
             className="action-btn darkmode-btn"
-            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            title={getThemeTitle()}
           >
-            {darkMode ? '☀️' : '🌙'}
+            {getThemeIcon()}
           </button>
 
         </div>
