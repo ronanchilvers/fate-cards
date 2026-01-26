@@ -245,15 +245,29 @@ function App() {
           {
             id: Date.now().toString() + '-5',
             type: 'stress-tracks',
-            physical: [false, false, false, false],
-            mental: [false, false, false, false]
+            tracks: [
+              { name: 'Physical Stress', boxes: [
+                { checked: false, value: 1 },
+                { checked: false, value: 2 },
+                { checked: false, value: 3 },
+                { checked: false, value: 4 }
+              ]},
+              { name: 'Mental Stress', boxes: [
+                { checked: false, value: 1 },
+                { checked: false, value: 2 },
+                { checked: false, value: 3 },
+                { checked: false, value: 4 }
+              ]}
+            ]
           },
           {
             id: Date.now().toString() + '-6',
             type: 'consequences',
-            mild: { slots: 2, text: '---' },
-            moderate: { slots: 4, text: '---' },
-            severe: { slots: 6, text: '---' }
+            items: [
+              { label: 'Mild (2)', text: '---' },
+              { label: 'Moderate (4)', text: '---' },
+              { label: 'Severe (6)', text: '---' }
+            ]
           },
           {
             id: Date.now().toString() + '-7',
@@ -290,15 +304,29 @@ function App() {
           {
             id: Date.now().toString() + '-5',
             type: 'stress-tracks',
-            physical: [false, false, false, false],
-            mental: [false, false, false, false]
+            tracks: [
+              { name: 'Physical Stress', boxes: [
+                { checked: false, value: 1 },
+                { checked: false, value: 2 },
+                { checked: false, value: 3 },
+                { checked: false, value: 4 }
+              ]},
+              { name: 'Mental Stress', boxes: [
+                { checked: false, value: 1 },
+                { checked: false, value: 2 },
+                { checked: false, value: 3 },
+                { checked: false, value: 4 }
+              ]}
+            ]
           },
           {
             id: Date.now().toString() + '-6',
             type: 'consequences',
-            mild: { slots: 2, text: '---' },
-            moderate: { slots: 4, text: '---' },
-            severe: { slots: 6, text: '---' }
+            items: [
+              { label: 'Mild (2)', text: '---' },
+              { label: 'Moderate (4)', text: '---' },
+              { label: 'Severe (6)', text: '---' }
+            ]
           }
         ]
       },
