@@ -2,7 +2,6 @@
 
 This document contains prioritized tasks to improve code quality, resilience, and maintainability. Each task is designed to be small and self-contained for easy consumption by an AI agent.
 
-
 ## Instructions
 
 - Always pick the next highest priority task (1 being highest priority) that has a status of "Pending". 
@@ -86,7 +85,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 4: Sync Card locked state with prop changes
 
-- **Status**: Pending
+- **Status**: Completed
 - **File**: `src/components/Card.jsx`
 - **Location**: Near the top of the component, after the `isLocked` useState (~line 7)
 - **Action**: Add a `useEffect` that updates local `isLocked` state when `card.locked` prop changes:
@@ -245,7 +244,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 1 | High | Wrap localStorage parsing in try/catch | Small | App.jsx |
 | Completed | 2 | High | Create card schema validator | Medium | New: utils/cardSchema.js |
 | Completed | 3 | High | Validate imports with schema | Small | App.jsx |
-| Pending | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
+| Completed | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
 | Pending | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
 | Pending | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
 | Pending | 7 | Low | Add element type render fallback | Small | Card.jsx |

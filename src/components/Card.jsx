@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Card.css'
 
 function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [isLocked, setIsLocked] = useState(card.locked || false)
+  
+  // Sync locked state when card prop changes
+  useEffect(() => {
+    setIsLocked(card.locked || false)
+  }, [card.locked])
   
   // Settings form state
   const [settingsTitle, setSettingsTitle] = useState(card.title)
