@@ -9,6 +9,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 - Once you have completed a task, write a summary markdown file the "changes" folder in the codebase root describing what you have done. The filename should be the task title where possible. The file should include the task summary from this document at the start and then describe your implementation.
 - Always make sure to leave the codebase in a clean and working state.
 - Always write clean, concise code adding clear comments so that the functionality is clear and transparent.
+- Always update the recommended order of tasks at the bottom of this document so it includes pending tasks, in priority order.
 
 ---
 
