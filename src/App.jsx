@@ -584,6 +584,7 @@ function App() {
     
     const exportData = {
       cards,
+      categories,
       skills,
       skillLevels
     }
@@ -632,30 +633,83 @@ function App() {
     reader.onload = (e) => {
       try {
         const importedData = JSON.parse(e.target.result)
+        const warnings = []
 
-        // Handle old format (array of cards) or new format (object with cards, skills, skillLevels)
+        // Handle old format (array of cards) or new format (object with cards, categories, skills, skillLevels)
         if (Array.isArray(importedData)) {
           // Old format - just cards; validate and normalize before setting
           const validCards = normalizeCards(importedData)
           if (validCards.length < importedData.length) {
-            alert(`${importedData.length - validCards.length} invalid cards were skipped during import.`)
+            warnings.push(`${importedData.length - validCards.length} invalid cards were skipped.`)
           }
           setCards(validCards)
+          warnings.push('Legacy format detected: categories, skills, and skill levels were not imported.')
         } else if (importedData.cards && Array.isArray(importedData.cards)) {
-          // New format - cards, skills, and skill levels; validate and normalize cards before setting
+          // New format - validate and import all fields
           const validCards = normalizeCards(importedData.cards)
           if (validCards.length < importedData.cards.length) {
-            alert(`${importedData.cards.length - validCards.length} invalid cards were skipped during import.`)
+            warnings.push(`${importedData.cards.length - validCards.length} invalid cards were skipped.`)
           }
           setCards(validCards)
-          if (importedData.skills && Array.isArray(importedData.skills)) {
-            setSkills(importedData.skills)
+
+          // Import and validate categories
+          if (importedData.categories && Array.isArray(importedData.categories)) {
+            // Validate that all items are non-empty strings
+            const validCategories = importedData.categories.filter(cat => 
+              typeof cat === 'string' && cat.trim().length > 0
+            )
+            if (validCategories.length > 0) {
+              setCategories(validCategories)
+            } else {
+              warnings.push('Categories were invalid and not imported.')
+            }
+          } else if (importedData.categories !== undefined) {
+            warnings.push('Categories were invalid and not imported.')
           }
+
+          // Import and validate skills
+          if (importedData.skills && Array.isArray(importedData.skills)) {
+            // Validate that all items are non-empty strings
+            const validSkills = importedData.skills.filter(skill => 
+              typeof skill === 'string' && skill.trim().length > 0
+            )
+            if (validSkills.length > 0) {
+              setSkills(validSkills)
+            } else {
+              warnings.push('Skills were invalid and not imported.')
+            }
+          } else if (importedData.skills !== undefined) {
+            warnings.push('Skills were invalid and not imported.')
+          }
+
+          // Import and validate skill levels
           if (importedData.skillLevels && Array.isArray(importedData.skillLevels)) {
-            setSkillLevels(importedData.skillLevels)
+            // Validate that all items have required properties
+            const validSkillLevels = importedData.skillLevels.filter(level => 
+              level && 
+              typeof level === 'object' &&
+              typeof level.label === 'string' && 
+              level.label.trim().length > 0 &&
+              typeof level.value === 'number' &&
+              !isNaN(level.value)
+            )
+            if (validSkillLevels.length > 0) {
+              setSkillLevels(validSkillLevels)
+            } else {
+              warnings.push('Skill levels were invalid and not imported.')
+            }
+          } else if (importedData.skillLevels !== undefined) {
+            warnings.push('Skill levels were invalid and not imported.')
           }
         } else {
           alert('Invalid file format. Please select a valid Fate Cards JSON file.')
+          event.target.value = ''
+          return
+        }
+
+        // Show consolidated feedback to user
+        if (warnings.length > 0) {
+          alert('Import completed with warnings:\n\n' + warnings.join('\n'))
         }
       } catch (error) {
         alert('Error reading file. Please make sure it is a valid JSON file.')

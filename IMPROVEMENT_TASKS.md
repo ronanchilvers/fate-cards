@@ -242,7 +242,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 12: Persist categories, skills, and skill levels on import
 
-- **Status**: Pending
+- **Status**: Completed
 - **Priority**: Medium
 - **File**: `src/App.jsx`
 - **Location**: `importCards` function (~lines 600-650)
@@ -265,7 +265,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 3 | High | Validate imports with schema | Small | App.jsx |
 | Completed | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
 | Completed | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
-| Pending | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
+| Completed | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
 | Completed | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
 | Completed | 7 | Low | Add element type render fallback | Small | Card.jsx |
 | Completed | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
@@ -273,4 +273,4 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
 | Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
 
-**Recommended order for pending tasks**: Task 12 → Task 8 → Task 9 → Task 10
+**Recommended order for pending tasks**: Task 8 → Task 9 → Task 10
