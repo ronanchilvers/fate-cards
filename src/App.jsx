@@ -258,7 +258,7 @@ function App() {
 
   const addCard = (category) => {
     const newCard = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       category,
       color: getCategoryColor(category),
       title: 'New Card',
@@ -276,27 +276,27 @@ function App() {
         subtitle: 'Player Character',
         elements: [
           {
-            id: Date.now().toString() + '-1',
+            id: crypto.randomUUID(),
             type: 'high-concept',
             text: ''
           },
           {
-            id: Date.now().toString() + '-2',
+            id: crypto.randomUUID(),
             type: 'trouble',
             text: ''
           },
           {
-            id: Date.now().toString() + '-3',
+            id: crypto.randomUUID(),
             type: 'aspects',
             items: ['', '', '']
           },
           {
-            id: Date.now().toString() + '-4',
+            id: crypto.randomUUID(),
             type: 'skills',
             items: []
           },
           {
-            id: Date.now().toString() + '-5',
+            id: crypto.randomUUID(),
             type: 'stress-tracks',
             tracks: [
               { name: 'Physical Stress', boxes: [
@@ -314,7 +314,7 @@ function App() {
             ]
           },
           {
-            id: Date.now().toString() + '-6',
+            id: crypto.randomUUID(),
             type: 'consequences',
             items: [
               { label: 'Mild (2)', text: '---' },
@@ -323,7 +323,7 @@ function App() {
             ]
           },
           {
-            id: Date.now().toString() + '-7',
+            id: crypto.randomUUID(),
             type: 'fate-points',
             current: 3,
             refresh: 3
@@ -335,27 +335,27 @@ function App() {
         subtitle: 'Non-Player Character',
         elements: [
           {
-            id: Date.now().toString() + '-1',
+            id: crypto.randomUUID(),
             type: 'high-concept',
             text: ''
           },
           {
-            id: Date.now().toString() + '-2',
+            id: crypto.randomUUID(),
             type: 'trouble',
             text: ''
           },
           {
-            id: Date.now().toString() + '-3',
+            id: crypto.randomUUID(),
             type: 'aspects',
             items: ['']
           },
           {
-            id: Date.now().toString() + '-4',
+            id: crypto.randomUUID(),
             type: 'skills',
             items: []
           },
           {
-            id: Date.now().toString() + '-5',
+            id: crypto.randomUUID(),
             type: 'stress-tracks',
             tracks: [
               { name: 'Physical Stress', boxes: [
@@ -373,7 +373,7 @@ function App() {
             ]
           },
           {
-            id: Date.now().toString() + '-6',
+            id: crypto.randomUUID(),
             type: 'consequences',
             items: [
               { label: 'Mild (2)', text: '---' },
@@ -388,17 +388,17 @@ function App() {
         subtitle: 'Location or Situation',
         elements: [
           {
-            id: Date.now().toString() + '-1',
+            id: crypto.randomUUID(),
             type: 'high-concept',
             text: ''
           },
           {
-            id: Date.now().toString() + '-2',
+            id: crypto.randomUUID(),
             type: 'aspects',
             items: ['', '']
           },
           {
-            id: Date.now().toString() + '-3',
+            id: crypto.randomUUID(),
             type: 'note',
             text: ''
           }
@@ -413,7 +413,7 @@ function App() {
 
     const templateData = templates[template] || templates['blank']
     const newCard = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       category,
       color: getCategoryColor(category),
       layout: 'auto',
@@ -436,12 +436,12 @@ function App() {
   const duplicateCard = (cardToDuplicate) => {
     const newCard = {
       ...JSON.parse(JSON.stringify(cardToDuplicate)), // Deep clone
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       title: cardToDuplicate.title + ' (Copy)',
       locked: false, // Unlock the duplicate
       elements: cardToDuplicate.elements.map(el => ({
         ...el,
-        id: Date.now().toString() + '-' + Math.random()
+        id: crypto.randomUUID()
       }))
     }
     setCards([...cards, newCard])

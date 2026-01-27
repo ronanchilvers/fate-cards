@@ -100,7 +100,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 5: Replace Date.now() IDs with crypto.randomUUID()
 
-- **Status**: Pending
+- **Status**: Completed
 - **Files**: 
   - `src/App.jsx`: `addCard` (~L235), `addTemplateCard` (~L390), `duplicateCard` (~L413, L418)
   - `src/components/Card.jsx`: `createNewElement` (~L92)
@@ -259,7 +259,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 2 | High | Create card schema validator | Medium | New: utils/cardSchema.js |
 | Completed | 3 | High | Validate imports with schema | Small | App.jsx |
 | Completed | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
-| Pending | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
+| Completed | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
 | Pending | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
 | Pending | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
 | Pending | 7 | Low | Add element type render fallback | Small | Card.jsx |
@@ -268,4 +268,4 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
 | Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
 
-**Recommended order**: Tasks 1 → 2 → 3 → 6 → 7 → 11 → 4 → 5 → 12 → 9 → 10 → 8
+**Recommended order**: Tasks 1 → 2 → 3 → 6 → 7 → 11 → 4 → 12 → 9 → 10 → 8

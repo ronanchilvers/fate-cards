@@ -94,7 +94,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
   }
 
   const createNewElement = (type) => {
-    const id = Date.now().toString()
+    const id = crypto.randomUUID()
     const elements = {
       'high-concept': {
         id,
