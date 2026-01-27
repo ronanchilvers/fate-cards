@@ -30,11 +30,11 @@
   width: 350px;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 800px) {
   .card.auto-column {
     width: 720px;
   }
-  
+
   .card.auto-column .card-elements {
     display: block;
     column-count: 2;
@@ -42,7 +42,7 @@
     column-rule: 2px solid;
     column-rule-color: inherit;
   }
-  
+
   .card.auto-column .card-element {
     break-inside: avoid;
     margin-bottom: 16px;
