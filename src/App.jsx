@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Card from './components/Card'
+import { normalizeCards } from './utils/cardSchema'
 
 function App() {
   const [cards, setCards] = useState([])
@@ -633,11 +634,19 @@ function App() {
 
         // Handle old format (array of cards) or new format (object with cards, skills, skillLevels)
         if (Array.isArray(importedData)) {
-          // Old format - just cards
-          setCards(importedData)
+          // Old format - just cards; validate and normalize before setting
+          const validCards = normalizeCards(importedData)
+          if (validCards.length < importedData.length) {
+            alert(`${importedData.length - validCards.length} invalid cards were skipped during import.`)
+          }
+          setCards(validCards)
         } else if (importedData.cards && Array.isArray(importedData.cards)) {
-          // New format - cards, skills, and skill levels
-          setCards(importedData.cards)
+          // New format - cards, skills, and skill levels; validate and normalize cards before setting
+          const validCards = normalizeCards(importedData.cards)
+          if (validCards.length < importedData.cards.length) {
+            alert(`${importedData.cards.length - validCards.length} invalid cards were skipped during import.`)
+          }
+          setCards(validCards)
           if (importedData.skills && Array.isArray(importedData.skills)) {
             setSkills(importedData.skills)
           }

@@ -61,7 +61,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 3: Validate and normalize imported data
 
-- **Status**: Pending
+- **Status**: Completed
 - **File**: `src/App.jsx`
 - **Location**: `importCards` function (~lines 600-633)
 - **Action**: 
@@ -245,7 +245,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 |------|---|----------|------|--------|-------|
 | Completed | 1 | High | Wrap localStorage parsing in try/catch | Small | App.jsx |
 | Completed | 2 | High | Create card schema validator | Medium | New: utils/cardSchema.js |
-| Pending | 3 | High | Validate imports with schema | Small | App.jsx |
+| Completed | 3 | High | Validate imports with schema | Small | App.jsx |
 | Pending | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
 | Pending | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
 | Pending | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
