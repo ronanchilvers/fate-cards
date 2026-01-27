@@ -4,30 +4,13 @@ import Card from './components/Card'
 import { normalizeCards } from './utils/cardSchema'
 import { cardTemplates } from './data/cardTemplates'
 import { safeGetJSON, safeSetJSON } from './utils/storage'
+import { defaultCategories, defaultSkills, defaultSkillLevels, defaultSampleCard } from './data/defaults'
 
 function App() {
   const [cards, setCards] = useState([])
-  const [categories, setCategories] = useState(['PCs', 'NPCs', 'Scenes'])
-  const [skills, setSkills] = useState([
-    'Athletics', 'Burglary', 'Contacts', 'Crafts', 'Deceive', 'Drive',
-    'Empathy', 'Fight', 'Investigate', 'Lore', 'Notice', 'Physique',
-    'Provoke', 'Rapport', 'Resources', 'Shoot', 'Stealth', 'Will'
-  ])
-  const [skillLevels, setSkillLevels] = useState([
-    { label: 'Legendary', value: 8 },
-    { label: 'Epic', value: 7 },
-    { label: 'Fantastic', value: 6 },
-    { label: 'Superb', value: 5 },
-    { label: 'Great', value: 4 },
-    { label: 'Good', value: 3 },
-    { label: 'Fair', value: 2 },
-    { label: 'Average', value: 1 },
-    { label: 'Mediocre', value: 0 },
-    { label: 'Poor', value: -1 },
-    { label: 'Terrible', value: -2 },
-    { label: 'Catastrophic', value: -3 },
-    { label: 'Horrifying', value: -4 }
-  ])
+  const [categories, setCategories] = useState(defaultCategories)
+  const [skills, setSkills] = useState(defaultSkills)
+  const [skillLevels, setSkillLevels] = useState(defaultSkillLevels)
   const [showTemplateMenu, setShowTemplateMenu] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -59,82 +42,7 @@ function App() {
       setCards(savedCards)
     } else {
       // Initialize with sample data
-      setCards([
-        {
-          id: '1',
-          category: 'PCs',
-          color: '#c53030',
-          title: 'Darv',
-          subtitle: 'Crew member on the survey ship Challenger',
-          layout: 'auto',
-          elements: [
-            {
-              id: '1-1',
-              type: 'high-concept',
-              text: 'Insatiably curious explorer with a flair for electronics'
-            },
-            {
-              id: '1-2',
-              type: 'trouble',
-              text: 'I always have to see for myself'
-            },
-            {
-              id: '1-3',
-              type: 'aspects',
-              items: ['Excellent Lateral Thinker', 'I Notice What Others Miss', 'Good Pilot']
-            },
-            {
-              id: '1-4',
-              type: 'skills',
-              items: [
-                { name: 'Notice', rating: 4 },
-                { name: 'Investigate', rating: 3 },
-                { name: 'Crafts', rating: 3 },
-                { name: 'Physique', rating: 2 },
-                { name: 'Will', rating: 2 },
-                { name: 'Lore', rating: 2 },
-                { name: 'Deceive', rating: 1 },
-                { name: 'Shoot', rating: 1 },
-                { name: 'Rapport', rating: 1 },
-                { name: 'Resources', rating: 1 }
-              ]
-            },
-            {
-              id: '1-5',
-              type: 'stress-tracks',
-              tracks: [
-                { name: 'Physical Stress', boxes: [
-                  { checked: false, value: 1 },
-                  { checked: false, value: 1 },
-                  { checked: false, value: 1 },
-                  { checked: false, value: 1 }
-                ]},
-                { name: 'Mental Stress', boxes: [
-                  { checked: false, value: 1 },
-                  { checked: false, value: 1 },
-                  { checked: false, value: 1 },
-                  { checked: false, value: 1 }
-                ]}
-              ]
-            },
-            {
-              id: '1-6',
-              type: 'consequences',
-              items: [
-                { label: 'Mild (2)', text: '---' },
-                { label: 'Moderate (4)', text: '---' },
-                { label: 'Severe (6)', text: '---' }
-              ]
-            },
-            {
-              id: '1-7',
-              type: 'fate-points',
-              current: 3,
-              refresh: 3
-            }
-          ]
-        }
-      ])
+      setCards([defaultSampleCard])
     }
 
     if (savedCategories) {
@@ -575,27 +483,9 @@ function App() {
 
       // Reset to defaults
       setCards([])
-      setCategories(['PCs', 'NPCs', 'Scenes'])
-      setSkills([
-        'Athletics', 'Burglary', 'Contacts', 'Crafts', 'Deceive', 'Drive',
-        'Empathy', 'Fight', 'Investigate', 'Lore', 'Notice', 'Physique',
-        'Provoke', 'Rapport', 'Resources', 'Shoot', 'Stealth', 'Will'
-      ])
-      setSkillLevels([
-        { label: 'Legendary', value: 8 },
-        { label: 'Epic', value: 7 },
-        { label: 'Fantastic', value: 6 },
-        { label: 'Superb', value: 5 },
-        { label: 'Great', value: 4 },
-        { label: 'Good', value: 3 },
-        { label: 'Fair', value: 2 },
-        { label: 'Average', value: 1 },
-        { label: 'Mediocre', value: 0 },
-        { label: 'Poor', value: -1 },
-        { label: 'Terrible', value: -2 },
-        { label: 'Catastrophic', value: -3 },
-        { label: 'Horrifying', value: -4 }
-      ])
+      setCategories(defaultCategories)
+      setSkills(defaultSkills)
+      setSkillLevels(defaultSkillLevels)
       setThemeMode('system')
       setLastExportFilename('')
     }

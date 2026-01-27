@@ -212,7 +212,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 10: Extract default data constants
 
-- **Status**: Pending
+- **Status**: Completed
 - **Priority**: Low
 - **File**: Create new file `src/data/defaults.js`
 - **Action**: Move to the new file and export:
@@ -272,6 +272,6 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
 | Completed | 8 | Low | Extract templates to module | Medium | New: data/cardTemplates.js, App.jsx |
 | Completed | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
-| Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
+| Completed | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
 
-**Recommended order for pending tasks**: Task 10
+**All tasks completed!** 🎉
