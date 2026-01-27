@@ -560,6 +560,7 @@ function App() {
 
   const deleteSkillLevel = (levelValue) => {
     const level = skillLevels.find(l => l.value === levelValue)
+    if (!level) return
     if (window.confirm(`Are you sure you want to delete the skill level "${level.label}"?`)) {
       setSkillLevels(skillLevels.filter(l => l.value !== levelValue))
     }
