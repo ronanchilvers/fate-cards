@@ -5,6 +5,7 @@ import { normalizeCards } from './utils/cardSchema'
 import { cardTemplates } from './data/cardTemplates'
 import { safeGetJSON, safeSetJSON } from './utils/storage'
 import { defaultCategories, defaultSkills, defaultSkillLevels, defaultSampleCard } from './data/defaults'
+import { getCategoryColor } from './utils/colors'
 
 function App() {
   const [cards, setCards] = useState([])
@@ -145,7 +146,7 @@ function App() {
     const newCard = {
       id: crypto.randomUUID(),
       category,
-      color: getCategoryColor(category),
+      color: getCategoryColorWithDefaults(category),
       title: 'New Card',
       subtitle: '',
       elements: [],
@@ -161,7 +162,7 @@ function App() {
     const newCard = {
       id: crypto.randomUUID(),
       category,
-      color: getCategoryColor(category),
+      color: getCategoryColorWithDefaults(category),
       layout: 'auto',
       ...templateData
     }
@@ -201,29 +202,14 @@ function App() {
     setCards(cards.filter(card => card.id !== id))
   }
 
-  const getCategoryColor = (category) => {
-    // Generate a consistent color based on category name
+  // Helper to get category color with default colors
+  const getCategoryColorWithDefaults = (category) => {
     const defaultColors = {
       'PCs': '#c53030',
       'NPCs': '#2c5282',
       'Scenes': '#ed8936'
     }
-
-    if (defaultColors[category]) {
-      return defaultColors[category]
-    }
-
-    // Generate a color based on the category name hash
-    let hash = 0
-    for (let i = 0; i < category.length; i++) {
-      hash = category.charCodeAt(i) + ((hash << 5) - hash)
-    }
-
-    const hue = Math.abs(hash % 360)
-    const saturation = 60 + (Math.abs(hash) % 20) // 60-80%
-    const lightness = 35 + (Math.abs(hash >> 8) % 15) // 35-50%
-
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`
+    return getCategoryColor(category, defaultColors)
   }
 
   const addCategory = () => {
@@ -583,7 +569,7 @@ function App() {
         <div key={category} className={`category-section ${collapsedCategories.includes(category) ? 'collapsed' : ''}`}>
           <div
             className="category-header"
-            style={{ backgroundColor: getCategoryColor(category), cursor: 'pointer' }}
+            style={{ backgroundColor: getCategoryColorWithDefaults(category), cursor: 'pointer' }}
             onClick={() => toggleCategoryCollapse(category)}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

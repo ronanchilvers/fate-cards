@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './Card.css'
+import { getPaleBackground, getMidToneBackground } from '../utils/colors'
 
 function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
@@ -30,34 +31,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     '#1f2937', '#374151'
   ]
 
-  // Convert hex color to pale background color
-  const getPaleBackground = (hexColor) => {
-    // Convert hex to RGB
-    const r = parseInt(hexColor.slice(1, 3), 16)
-    const g = parseInt(hexColor.slice(3, 5), 16)
-    const b = parseInt(hexColor.slice(5, 7), 16)
-    
-    // Mix with white (90% white, 10% original color) for a very pale shade
-    const paleR = Math.round(r * 0.1 + 255 * 0.9)
-    const paleG = Math.round(g * 0.1 + 255 * 0.9)
-    const paleB = Math.round(b * 0.1 + 255 * 0.9)
-    
-    return `rgb(${paleR}, ${paleG}, ${paleB})`
-  }
 
-  // Get mid-tone color between title bar and card background (50/50 mix)
-  const getMidToneBackground = (hexColor) => {
-    const r = parseInt(hexColor.slice(1, 3), 16)
-    const g = parseInt(hexColor.slice(3, 5), 16)
-    const b = parseInt(hexColor.slice(5, 7), 16)
-    
-    // Mix with white (50% white, 50% original color) for mid-tone
-    const midR = Math.round(r * 0.5 + 255 * 0.5)
-    const midG = Math.round(g * 0.5 + 255 * 0.5)
-    const midB = Math.round(b * 0.5 + 255 * 0.5)
-    
-    return `rgb(${midR}, ${midG}, ${midB})`
-  }
 
   const toggleLock = () => {
     const newLockedState = !isLocked
