@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Card from './components/Card'
 import { normalizeCards } from './utils/cardSchema'
+import { cardTemplates } from './data/cardTemplates'
 
 function App() {
   const [cards, setCards] = useState([])
@@ -270,148 +271,9 @@ function App() {
   }
 
   const addTemplateCard = (category, template) => {
-    const templates = {
-      'standard-pc': {
-        title: 'New Character',
-        subtitle: 'Player Character',
-        elements: [
-          {
-            id: crypto.randomUUID(),
-            type: 'high-concept',
-            text: ''
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'trouble',
-            text: ''
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'aspects',
-            items: ['', '', '']
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'skills',
-            items: []
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'stress-tracks',
-            tracks: [
-              { name: 'Physical Stress', boxes: [
-                { checked: false, value: 1 },
-                { checked: false, value: 1 },
-                { checked: false, value: 1 },
-                { checked: false, value: 1 }
-              ]},
-              { name: 'Mental Stress', boxes: [
-                { checked: false, value: 1 },
-                { checked: false, value: 1 },
-                { checked: false, value: 1 },
-                { checked: false, value: 1 }
-              ]}
-            ]
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'consequences',
-            items: [
-              { label: 'Mild (2)', text: '---' },
-              { label: 'Moderate (4)', text: '---' },
-              { label: 'Severe (6)', text: '---' }
-            ]
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'fate-points',
-            current: 3,
-            refresh: 3
-          }
-        ]
-      },
-      'quick-npc': {
-        title: 'New NPC',
-        subtitle: 'Non-Player Character',
-        elements: [
-          {
-            id: crypto.randomUUID(),
-            type: 'high-concept',
-            text: ''
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'trouble',
-            text: ''
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'aspects',
-            items: ['']
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'skills',
-            items: []
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'stress-tracks',
-            tracks: [
-              { name: 'Physical Stress', boxes: [
-                { checked: false, value: 1 },
-                { checked: false, value: 2 },
-                { checked: false, value: 3 },
-                { checked: false, value: 4 }
-              ]},
-              { name: 'Mental Stress', boxes: [
-                { checked: false, value: 1 },
-                { checked: false, value: 2 },
-                { checked: false, value: 3 },
-                { checked: false, value: 4 }
-              ]}
-            ]
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'consequences',
-            items: [
-              { label: 'Mild (2)', text: '---' },
-              { label: 'Moderate (4)', text: '---' },
-              { label: 'Severe (6)', text: '---' }
-            ]
-          }
-        ]
-      },
-      'scene': {
-        title: 'New Scene',
-        subtitle: 'Location or Situation',
-        elements: [
-          {
-            id: crypto.randomUUID(),
-            type: 'high-concept',
-            text: ''
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'aspects',
-            items: ['', '']
-          },
-          {
-            id: crypto.randomUUID(),
-            type: 'note',
-            text: ''
-          }
-        ]
-      },
-      'blank': {
-        title: 'New Card',
-        subtitle: '',
-        elements: []
-      }
-    }
-
-    const templateData = templates[template] || templates['blank']
+    // Get template factory function and call it to generate fresh data with new IDs
+    const templateFactory = cardTemplates[template] || cardTemplates['blank']
+    const templateData = templateFactory()
     const newCard = {
       id: crypto.randomUUID(),
       category,
