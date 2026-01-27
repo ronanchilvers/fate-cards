@@ -532,17 +532,7 @@ function App() {
     ))
   }
 
-  const exportCards = () => {
-    const exportData = {
-      cards,
-      skills,
-      skillLevels
-    }
-    const dataStr = JSON.stringify(exportData, null, 2)
-    const dataBlob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement('a')
-    link.href = url
+  const exportCards = async () => {
     const now = new Date()
     const timestamp = now.getFullYear().toString() +
       (now.getMonth() + 1).toString().padStart(2, '0') +
@@ -550,7 +540,43 @@ function App() {
       now.getHours().toString().padStart(2, '0') +
       now.getMinutes().toString().padStart(2, '0') +
       now.getSeconds().toString().padStart(2, '0')
-    link.download = `fate-cards-${timestamp}.json`
+    const defaultFilename = `fate-cards-${timestamp}.json`
+    
+    const exportData = {
+      cards,
+      skills,
+      skillLevels
+    }
+    const dataStr = JSON.stringify(exportData, null, 2)
+    
+    // Try to use File System Access API if available
+    if ('showSaveFilePicker' in window) {
+      try {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: defaultFilename,
+          types: [{
+            description: 'JSON Files',
+            accept: { 'application/json': ['.json'] }
+          }]
+        })
+        const writable = await fileHandle.createWritable()
+        await writable.write(dataStr)
+        await writable.close()
+        return
+      } catch (err) {
+        // User cancelled or error occurred, fall back to download link
+        if (err.name === 'AbortError') {
+          return
+        }
+      }
+    }
+    
+    // Fallback for browsers that don't support File System Access API
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = defaultFilename
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
