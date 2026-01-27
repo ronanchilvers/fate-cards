@@ -39,6 +39,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [collapsedCategories, setCollapsedCategories] = useState([])
+  const [lastExportFilename, setLastExportFilename] = useState('')
   const fileInputRef = useRef(null)
 
   // Load cards, categories, skills, skill levels, and theme mode from localStorage on mount
@@ -49,6 +50,7 @@ function App() {
     const savedSkillLevels = localStorage.getItem('fate-skill-levels')
     const savedThemeMode = localStorage.getItem('fate-thememode')
     const savedCollapsedCategories = localStorage.getItem('fate-collapsed-categories')
+    const savedLastExportFilename = localStorage.getItem('fate-last-export-filename')
 
     if (savedCards) {
       setCards(JSON.parse(savedCards))
@@ -152,6 +154,10 @@ function App() {
       setCollapsedCategories(JSON.parse(savedCollapsedCategories))
     }
 
+    if (savedLastExportFilename) {
+      setLastExportFilename(savedLastExportFilename)
+    }
+
     setIsLoaded(true)
   }, [])
 
@@ -196,6 +202,13 @@ function App() {
       localStorage.setItem('fate-collapsed-categories', JSON.stringify(collapsedCategories))
     }
   }, [collapsedCategories, isLoaded])
+
+  // Save last export filename to localStorage whenever it changes (but only after initial load)
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('fate-last-export-filename', lastExportFilename)
+    }
+  }, [lastExportFilename, isLoaded])
 
   // Listen to system theme preference and update isDark
   useEffect(() => {
@@ -540,7 +553,7 @@ function App() {
       now.getHours().toString().padStart(2, '0') +
       now.getMinutes().toString().padStart(2, '0') +
       now.getSeconds().toString().padStart(2, '0')
-    const defaultFilename = `fate-cards-${timestamp}.json`
+    const defaultFilename = lastExportFilename || `fate-cards-${timestamp}.json`
     
     const exportData = {
       cards,
@@ -562,6 +575,7 @@ function App() {
         const writable = await fileHandle.createWritable()
         await writable.write(dataStr)
         await writable.close()
+        setLastExportFilename(fileHandle.name)
         return
       } catch (err) {
         // User cancelled or error occurred, fall back to download link
