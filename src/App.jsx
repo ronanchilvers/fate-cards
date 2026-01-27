@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Card from './components/Card'
+import { safeGetJSON, safeSetJSON } from './utils/storage'
 import { normalizeCards } from './utils/cardSchema'
 import { cardTemplates } from './data/cardTemplates'
-import { safeGetJSON, safeSetJSON } from './utils/storage'
 import { defaultCategories, defaultSkills, defaultSkillLevels, defaultSampleCard } from './data/defaults'
+import { STORAGE_KEYS, THEME_MODES } from './constants'
+import ErrorBoundary from './components/ErrorBoundary'
 import { getCategoryColor } from './utils/colors'
 
 function App() {
@@ -31,13 +33,13 @@ function App() {
 
   // Load cards, categories, skills, skill levels, and theme mode from localStorage on mount
   useEffect(() => {
-    const savedCards = safeGetJSON('fate-cards')
-    const savedCategories = safeGetJSON('fate-categories')
-    const savedSkills = safeGetJSON('fate-skills')
-    const savedSkillLevels = safeGetJSON('fate-skill-levels')
-    const savedThemeMode = localStorage.getItem('fate-thememode')
-    const savedCollapsedCategories = safeGetJSON('fate-collapsed-categories')
-    const savedLastExportFilename = localStorage.getItem('fate-last-export-filename')
+    const savedCards = safeGetJSON(STORAGE_KEYS.CARDS)
+    const savedCategories = safeGetJSON(STORAGE_KEYS.CATEGORIES)
+    const savedSkills = safeGetJSON(STORAGE_KEYS.SKILLS)
+    const savedSkillLevels = safeGetJSON(STORAGE_KEYS.SKILL_LEVELS)
+    const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME_MODE)
+    const savedCollapsedCategories = safeGetJSON(STORAGE_KEYS.COLLAPSED_CATEGORIES)
+    const savedLastExportFilename = localStorage.getItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
 
     if (savedCards) {
       setCards(savedCards)
@@ -76,28 +78,28 @@ function App() {
   // Save cards to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      safeSetJSON('fate-cards', cards)
+      safeSetJSON(STORAGE_KEYS.CARDS, cards)
     }
   }, [cards, isLoaded])
 
   // Save categories to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      safeSetJSON('fate-categories', categories)
+      safeSetJSON(STORAGE_KEYS.CATEGORIES, categories)
     }
   }, [categories, isLoaded])
 
   // Save skills to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      safeSetJSON('fate-skills', skills)
+      safeSetJSON(STORAGE_KEYS.SKILLS, skills)
     }
   }, [skills, isLoaded])
 
   // Save skill levels to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      safeSetJSON('fate-skill-levels', skillLevels)
+      safeSetJSON(STORAGE_KEYS.SKILL_LEVELS, skillLevels)
     }
   }, [skillLevels, isLoaded])
 
@@ -111,14 +113,14 @@ function App() {
   // Save collapsed categories to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      safeSetJSON('fate-collapsed-categories', collapsedCategories)
+      safeSetJSON(STORAGE_KEYS.COLLAPSED_CATEGORIES, collapsedCategories)
     }
   }, [collapsedCategories, isLoaded])
 
   // Save last export filename to localStorage whenever it changes (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-last-export-filename', lastExportFilename)
+      localStorage.setItem(STORAGE_KEYS.LAST_EXPORT_FILENAME, lastExportFilename)
     }
   }, [lastExportFilename, isLoaded])
 
@@ -127,9 +129,9 @@ function App() {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
     const updateDarkMode = () => {
-      if (themeMode === 'system') {
+      if (themeMode === THEME_MODES.AUTO) {
         setIsDark(mediaQuery.matches)
-      } else if (themeMode === 'dark') {
+      } else if (themeMode === THEME_MODES.DARK) {
         setIsDark(true)
       } else {
         setIsDark(false)
@@ -182,7 +184,7 @@ function App() {
 
   const duplicateCard = (cardToDuplicate) => {
     const newCard = {
-      ...JSON.parse(JSON.stringify(cardToDuplicate)), // Deep clone
+      ...structuredClone(cardToDuplicate), // Deep clone using structuredClone
       id: crypto.randomUUID(),
       title: cardToDuplicate.title + ' (Copy)',
       locked: false, // Unlock the duplicate
@@ -460,19 +462,19 @@ function App() {
   const resetAllData = () => {
     if (window.confirm('Are you sure you want to reset all data? This will delete all cards, restore default skills and skill levels, and cannot be undone.')) {
       // Clear localStorage
-      localStorage.removeItem('fate-cards')
-      localStorage.removeItem('fate-categories')
-      localStorage.removeItem('fate-skills')
-      localStorage.removeItem('fate-skill-levels')
-      localStorage.removeItem('fate-thememode')
-      localStorage.removeItem('fate-last-export-filename')
+      localStorage.removeItem(STORAGE_KEYS.CARDS)
+      localStorage.removeItem(STORAGE_KEYS.CATEGORIES)
+      localStorage.removeItem(STORAGE_KEYS.SKILLS)
+      localStorage.removeItem(STORAGE_KEYS.SKILL_LEVELS)
+      localStorage.removeItem(STORAGE_KEYS.THEME_MODE)
+      localStorage.removeItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
 
       // Reset to defaults
       setCards([])
       setCategories(defaultCategories)
       setSkills(defaultSkills)
       setSkillLevels(defaultSkillLevels)
-      setThemeMode('system')
+      setThemeMode(THEME_MODES.AUTO)
       setLastExportFilename('')
     }
   }
@@ -491,25 +493,28 @@ function App() {
   }
 
   const cycleThemeMode = () => {
-    if (themeMode === 'light') {
-      setThemeMode('dark')
-    } else if (themeMode === 'dark') {
-      setThemeMode('system')
+    let newMode
+    if (themeMode === THEME_MODES.LIGHT) {
+      newMode = THEME_MODES.DARK
+    } else if (themeMode === THEME_MODES.DARK) {
+      newMode = THEME_MODES.AUTO
     } else {
-      setThemeMode('light')
+      newMode = THEME_MODES.LIGHT
     }
+    setThemeMode(newMode)
+    localStorage.setItem(STORAGE_KEYS.THEME_MODE, newMode)
   }
 
   const getThemeIcon = () => {
-    if (themeMode === 'light') return '☀️'
-    if (themeMode === 'dark') return '🌙'
-    return '💻' // system
+    if (themeMode === THEME_MODES.LIGHT) return '☀️'
+    if (themeMode === THEME_MODES.DARK) return '🌙'
+    return '🌓'
   }
 
   const getThemeTitle = () => {
-    if (themeMode === 'light') return 'Light Mode (click for Dark)'
-    if (themeMode === 'dark') return 'Dark Mode (click for System)'
-    return 'System Mode (click for Light)'
+    if (themeMode === THEME_MODES.LIGHT) return 'Light Mode (click for Dark)'
+    if (themeMode === THEME_MODES.DARK) return 'Dark Mode (click for Auto)'
+    return 'Auto Mode (click for Light)'
   }
 
   return (
@@ -591,6 +596,7 @@ function App() {
           </div>
 
           {!collapsedCategories.includes(category) && (
+            <ErrorBoundary>
             <div className="cards-container">
             {cards.filter(card => card.category === category).length === 0 ? (
               <p className="empty-category-message">
@@ -613,6 +619,7 @@ function App() {
                 ))
             )}
             </div>
+            </ErrorBoundary>
           )}
         </div>
       ))}

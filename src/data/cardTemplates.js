@@ -5,6 +5,17 @@
  * Each template is a factory function that generates a new card structure with unique IDs.
  */
 
+import {
+  createHighConceptElement,
+  createTroubleElement,
+  createAspectsElement,
+  createSkillsElement,
+  createStressTracksElement,
+  createConsequencesElement,
+  createNoteElement,
+  createFatePointsElement
+} from './elementFactories.js'
+
 /**
  * Standard Player Character template
  * Full character sheet with all standard elements
@@ -13,65 +24,13 @@ export const standardPC = () => ({
   title: 'New Character',
   subtitle: 'Player Character',
   elements: [
-    {
-      id: crypto.randomUUID(),
-      type: 'high-concept',
-      text: ''
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'trouble',
-      text: ''
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'aspects',
-      items: ['', '', '']
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'skills',
-      items: []
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'stress-tracks',
-      tracks: [
-        { 
-          name: 'Physical Stress', 
-          boxes: [
-            { checked: false, value: 1 },
-            { checked: false, value: 1 },
-            { checked: false, value: 1 },
-            { checked: false, value: 1 }
-          ]
-        },
-        { 
-          name: 'Mental Stress', 
-          boxes: [
-            { checked: false, value: 1 },
-            { checked: false, value: 1 },
-            { checked: false, value: 1 },
-            { checked: false, value: 1 }
-          ]
-        }
-      ]
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'consequences',
-      items: [
-        { label: 'Mild (2)', text: '---' },
-        { label: 'Moderate (4)', text: '---' },
-        { label: 'Severe (6)', text: '---' }
-      ]
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'fate-points',
-      current: 3,
-      refresh: 3
-    }
+    createHighConceptElement(),
+    createTroubleElement(),
+    createAspectsElement(3),
+    createSkillsElement(),
+    createStressTracksElement(),
+    createConsequencesElement(),
+    createFatePointsElement()
   ]
 })
 
@@ -83,59 +42,12 @@ export const quickNPC = () => ({
   title: 'New NPC',
   subtitle: 'Non-Player Character',
   elements: [
-    {
-      id: crypto.randomUUID(),
-      type: 'high-concept',
-      text: ''
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'trouble',
-      text: ''
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'aspects',
-      items: ['']
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'skills',
-      items: []
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'stress-tracks',
-      tracks: [
-        { 
-          name: 'Physical Stress', 
-          boxes: [
-            { checked: false, value: 1 },
-            { checked: false, value: 2 },
-            { checked: false, value: 3 },
-            { checked: false, value: 4 }
-          ]
-        },
-        { 
-          name: 'Mental Stress', 
-          boxes: [
-            { checked: false, value: 1 },
-            { checked: false, value: 2 },
-            { checked: false, value: 3 },
-            { checked: false, value: 4 }
-          ]
-        }
-      ]
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'consequences',
-      items: [
-        { label: 'Mild (2)', text: '---' },
-        { label: 'Moderate (4)', text: '---' },
-        { label: 'Severe (6)', text: '---' }
-      ]
-    }
+    createHighConceptElement(),
+    createTroubleElement(),
+    createAspectsElement(1),
+    createSkillsElement(),
+    createStressTracksElement(),
+    createConsequencesElement()
   ]
 })
 
@@ -147,21 +59,9 @@ export const scene = () => ({
   title: 'New Scene',
   subtitle: 'Location or Situation',
   elements: [
-    {
-      id: crypto.randomUUID(),
-      type: 'high-concept',
-      text: ''
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'aspects',
-      items: ['', '']
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'note',
-      text: ''
-    }
+    createHighConceptElement(),
+    createAspectsElement(2),
+    createNoteElement()
   ]
 })
 

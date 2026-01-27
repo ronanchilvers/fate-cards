@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Card.css'
 import { getPaleBackground, getMidToneBackground } from '../utils/colors'
+import { createElementByType } from '../data/elementFactories'
 
 function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
@@ -68,73 +69,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
   }
 
   const createNewElement = (type) => {
-    const id = crypto.randomUUID()
-    const elements = {
-      'high-concept': {
-        id,
-        type: 'high-concept',
-        text: ''
-      },
-      'trouble': {
-        id,
-        type: 'trouble',
-        text: ''
-      },
-      'aspects': {
-        id,
-        type: 'aspects',
-        items: ['', '', '']
-      },
-      'skills': {
-        id,
-        type: 'skills',
-        items: []
-      },
-      'stress-tracks': {
-        id,
-        type: 'stress-tracks',
-        tracks: [
-          { name: 'Physical Stress', boxes: [
-            { checked: false, value: 1 },
-            { checked: false, value: 2 },
-            { checked: false, value: 3 },
-            { checked: false, value: 4 }
-          ]},
-          { name: 'Mental Stress', boxes: [
-            { checked: false, value: 1 },
-            { checked: false, value: 2 },
-            { checked: false, value: 3 },
-            { checked: false, value: 4 }
-          ]}
-        ]
-      },
-      'consequences': {
-        id,
-        type: 'consequences',
-        items: [
-          { label: 'Mild (2)', text: '---' },
-          { label: 'Moderate (4)', text: '---' },
-          { label: 'Severe (6)', text: '---' }
-        ]
-      },
-      'note': {
-        id,
-        type: 'note',
-        text: ''
-      },
-      'fate-points': {
-        id,
-        type: 'fate-points',
-        current: 3,
-        refresh: 3
-      },
-      'game-tools': {
-        id,
-        type: 'game-tools',
-        dice: []
-      }
-    }
-    return elements[type] || elements['note']
+    return createElementByType(type)
   }
 
   const updateElement = (elementId, updates) => {
@@ -865,7 +800,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
                   className="settings-select"
                 >
                   <option value="auto">Auto</option>
-                  <option value="1-column">1 Column</option>
+                  <option value="single-column">1 Column</option>
                   <option value="2-column">2 Columns</option>
                 </select>
               </div>
