@@ -5,9 +5,12 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ## Instructions
 
-- Always pick the next highest priority task (1 being highest priority) that has a status of "Pending". Once you have completed the task, change the status to "Completed" in the task description and in the Status column in the Summary table at the end of this document.
+- Always pick the next highest priority task (1 being highest priority) that has a status of "Pending". 
+- Once you have completed the task, change the status to "Completed" in the task description and in the Status column in the Summary table at the end of this document.
+- Once you have completed a task, write a summary markdown file the "changes" folder in the codebase root describing what you have done. The filename should be the task title where possible. The file should include the task summary from this document at the start and then describe your implementation.
 - Always make sure to leave the codebase in a clean and working state.
 - Always write clean, concise code adding clear comments so that the functionality is clear and transparent.
+- 
 
 ---
 
@@ -40,7 +43,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 2: Create a card schema validator/normalizer utility
 
-- **Status**: Pending
+- **Status**: Completed
 - **File**: Create new file `src/utils/cardSchema.js`
 - **Action**: Create and export a `normalizeCard(card)` function that:
   - Returns `null` if input is not an object
@@ -241,7 +244,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Status | # | Priority | Task | Effort | Files |
 |------|---|----------|------|--------|-------|
 | Completed | 1 | High | Wrap localStorage parsing in try/catch | Small | App.jsx |
-| Pending | 2 | High | Create card schema validator | Medium | New: utils/cardSchema.js |
+| Completed | 2 | High | Create card schema validator | Medium | New: utils/cardSchema.js |
 | Pending | 3 | High | Validate imports with schema | Small | App.jsx |
 | Pending | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
 | Pending | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
