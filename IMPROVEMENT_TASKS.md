@@ -12,11 +12,10 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ---
 
-## High Priority (Data Integrity)
-
 ### Task 1: Wrap localStorage JSON parsing in try/catch
 
 - **Status**: Completed
+- **Priority**: High
 - **File**: `src/App.jsx`
 - **Location**: Inside the initial `useEffect` that loads from localStorage (~lines 45-160)
 - **Action**: Wrap each `JSON.parse(savedX)` call in try/catch. On failure:
@@ -42,6 +41,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 2: Create a card schema validator/normalizer utility
 
 - **Status**: Completed
+- **Priority**: High
 - **File**: Create new file `src/utils/cardSchema.js`
 - **Action**: Create and export a `normalizeCard(card)` function that:
   - Returns `null` if input is not an object
@@ -60,6 +60,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 3: Validate and normalize imported data
 
 - **Status**: Completed
+- **Priority**: High
 - **File**: `src/App.jsx`
 - **Location**: `importCards` function (~lines 600-633)
 - **Action**: 
@@ -81,11 +82,10 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ---
 
-## Medium Priority (State Consistency)
-
 ### Task 4: Sync Card locked state with prop changes
 
 - **Status**: Completed
+- **Priority**: Medium
 - **File**: `src/components/Card.jsx`
 - **Location**: Near the top of the component, after the `isLocked` useState (~line 7)
 - **Action**: Add a `useEffect` that updates local `isLocked` state when `card.locked` prop changes:
@@ -101,6 +101,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 5: Replace Date.now() IDs with crypto.randomUUID()
 
 - **Status**: Completed
+- **Priority**: Medium
 - **Files**: 
   - `src/App.jsx`: `addCard` (~L235), `addTemplateCard` (~L390), `duplicateCard` (~L413, L418)
   - `src/components/Card.jsx`: `createNewElement` (~L92)
@@ -118,11 +119,10 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ---
 
-## Low Priority (Defensive Coding)
-
 ### Task 6: Guard null dereference in deleteSkillLevel
 
 - **Status**: Completed
+- **Priority**: Low
 - **File**: `src/App.jsx`
 - **Location**: `deleteSkillLevel` function (~lines 535-540)
 - **Action**: Add early return if `level` is not found:
@@ -142,6 +142,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 7: Add element type fallback in Card render
 
 - **Status**: Completed
+- **Priority**: Low
 - **File**: `src/components/Card.jsx`
 - **Location**: `renderElement` function's switch statement (find the `default` case)
 - **Action**: Ensure the `default` case returns a safe fallback UI showing the unknown type:
@@ -163,11 +164,10 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ---
 
-## Code Organization (Maintainability)
-
 ### Task 8: Extract card templates to separate file
 
 - **Status**: Pending
+- **Priority**: Low
 - **File**: Create new file `src/data/cardTemplates.js`
 - **Action**: 
   1. Move the `templates` object from inside `addTemplateCard()` (~L247-386 in App.jsx) to the new file
@@ -181,6 +181,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 9: Extract localStorage helpers to utility module
 
 - **Status**: Pending
+- **Priority**: Low
 - **File**: Create new file `src/utils/storage.js`
 - **Action**: Create and export helper functions:
   ```javascript
@@ -211,6 +212,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 10: Extract default data constants
 
 - **Status**: Pending
+- **Priority**: Low
 - **File**: Create new file `src/data/defaults.js`
 - **Action**: Move to the new file and export:
   1. `defaultSkills` — the array of skill names (~L8-12 in App.jsx)
@@ -225,6 +227,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 11: Clear stored export filename on app reset
 
 - **Status**: Completed
+- **Priority**: Low
 - **File**: `src/App.jsx`
 - **Location**: `resetAllData` function (~lines 675-720)
 - **Action**: Add a call to clear the stored export filename when the user confirms the reset:
@@ -240,6 +243,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 ### Task 12: Persist categories, skills, and skill levels on import
 
 - **Status**: Pending
+- **Priority**: Medium
 - **File**: `src/App.jsx`
 - **Location**: `importCards` function (~lines 600-650)
 - **Action**:
@@ -269,4 +273,4 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
 | Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
 
-**Recommended order**: Tasks 1 → 2 → 3 → 6 → 7 → 11 → 4 → 12 → 9 → 10 → 8
+**Recommended order for pending tasks**: Task 12 → Task 8 → Task 9 → Task 10
