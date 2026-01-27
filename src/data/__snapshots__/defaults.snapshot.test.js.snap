@@ -1,0 +1,123 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default Data Snapshots > defaultCategories matches snapshot 1`] = `
+[
+  "PCs",
+  "NPCs",
+  "Scenes",
+]
+`;
+
+exports[`Default Data Snapshots > defaultSampleCard structure matches snapshot 1`] = `
+{
+  "category": "PCs",
+  "color": "#c53030",
+  "elements": [
+    {
+      "type": "high-concept",
+    },
+    {
+      "type": "trouble",
+    },
+    {
+      "type": "aspects",
+    },
+    {
+      "type": "skills",
+    },
+    {
+      "type": "stress-tracks",
+    },
+    {
+      "type": "consequences",
+    },
+    {
+      "type": "fate-points",
+    },
+  ],
+  "id": "1",
+  "layout": "auto",
+  "subtitle": "Crew member on the survey ship Challenger",
+  "title": "Darv",
+}
+`;
+
+exports[`Default Data Snapshots > defaultSkillLevels matches snapshot 1`] = `
+[
+  {
+    "label": "Legendary",
+    "value": 8,
+  },
+  {
+    "label": "Epic",
+    "value": 7,
+  },
+  {
+    "label": "Fantastic",
+    "value": 6,
+  },
+  {
+    "label": "Superb",
+    "value": 5,
+  },
+  {
+    "label": "Great",
+    "value": 4,
+  },
+  {
+    "label": "Good",
+    "value": 3,
+  },
+  {
+    "label": "Fair",
+    "value": 2,
+  },
+  {
+    "label": "Average",
+    "value": 1,
+  },
+  {
+    "label": "Mediocre",
+    "value": 0,
+  },
+  {
+    "label": "Poor",
+    "value": -1,
+  },
+  {
+    "label": "Terrible",
+    "value": -2,
+  },
+  {
+    "label": "Catastrophic",
+    "value": -3,
+  },
+  {
+    "label": "Horrifying",
+    "value": -4,
+  },
+]
+`;
+
+exports[`Default Data Snapshots > defaultSkills matches snapshot 1`] = `
+[
+  "Athletics",
+  "Burglary",
+  "Contacts",
+  "Crafts",
+  "Deceive",
+  "Drive",
+  "Empathy",
+  "Fight",
+  "Investigate",
+  "Lore",
+  "Notice",
+  "Physique",
+  "Provoke",
+  "Rapport",
+  "Resources",
+  "Shoot",
+  "Stealth",
+  "Will",
+]
+`;
