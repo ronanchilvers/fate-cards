@@ -3,6 +3,7 @@ import './App.css'
 import Card from './components/Card'
 import { normalizeCards } from './utils/cardSchema'
 import { cardTemplates } from './data/cardTemplates'
+import { safeGetJSON, safeSetJSON } from './utils/storage'
 
 function App() {
   const [cards, setCards] = useState([])
@@ -46,21 +47,16 @@ function App() {
 
   // Load cards, categories, skills, skill levels, and theme mode from localStorage on mount
   useEffect(() => {
-    const savedCards = localStorage.getItem('fate-cards')
-    const savedCategories = localStorage.getItem('fate-categories')
-    const savedSkills = localStorage.getItem('fate-skills')
-    const savedSkillLevels = localStorage.getItem('fate-skill-levels')
+    const savedCards = safeGetJSON('fate-cards')
+    const savedCategories = safeGetJSON('fate-categories')
+    const savedSkills = safeGetJSON('fate-skills')
+    const savedSkillLevels = safeGetJSON('fate-skill-levels')
     const savedThemeMode = localStorage.getItem('fate-thememode')
-    const savedCollapsedCategories = localStorage.getItem('fate-collapsed-categories')
+    const savedCollapsedCategories = safeGetJSON('fate-collapsed-categories')
     const savedLastExportFilename = localStorage.getItem('fate-last-export-filename')
 
     if (savedCards) {
-      try {
-        setCards(JSON.parse(savedCards))
-      } catch (err) {
-        console.error('Failed to parse saved cards:', err)
-        localStorage.removeItem('fate-cards')
-      }
+      setCards(savedCards)
     } else {
       // Initialize with sample data
       setCards([
@@ -142,30 +138,15 @@ function App() {
     }
 
     if (savedCategories) {
-      try {
-        setCategories(JSON.parse(savedCategories))
-      } catch (err) {
-        console.error('Failed to parse saved categories:', err)
-        localStorage.removeItem('fate-categories')
-      }
+      setCategories(savedCategories)
     }
 
     if (savedSkills) {
-      try {
-        setSkills(JSON.parse(savedSkills))
-      } catch (err) {
-        console.error('Failed to parse saved skills:', err)
-        localStorage.removeItem('fate-skills')
-      }
+      setSkills(savedSkills)
     }
 
     if (savedSkillLevels) {
-      try {
-        setSkillLevels(JSON.parse(savedSkillLevels))
-      } catch (err) {
-        console.error('Failed to parse saved skill levels:', err)
-        localStorage.removeItem('fate-skill-levels')
-      }
+      setSkillLevels(savedSkillLevels)
     }
 
     if (savedThemeMode) {
@@ -173,12 +154,7 @@ function App() {
     }
 
     if (savedCollapsedCategories) {
-      try {
-        setCollapsedCategories(JSON.parse(savedCollapsedCategories))
-      } catch (err) {
-        console.error('Failed to parse saved collapsed categories:', err)
-        localStorage.removeItem('fate-collapsed-categories')
-      }
+      setCollapsedCategories(savedCollapsedCategories)
     }
 
     if (savedLastExportFilename) {
@@ -191,28 +167,28 @@ function App() {
   // Save cards to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-cards', JSON.stringify(cards))
+      safeSetJSON('fate-cards', cards)
     }
   }, [cards, isLoaded])
 
   // Save categories to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-categories', JSON.stringify(categories))
+      safeSetJSON('fate-categories', categories)
     }
   }, [categories, isLoaded])
 
   // Save skills to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-skills', JSON.stringify(skills))
+      safeSetJSON('fate-skills', skills)
     }
   }, [skills, isLoaded])
 
   // Save skill levels to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-skill-levels', JSON.stringify(skillLevels))
+      safeSetJSON('fate-skill-levels', skillLevels)
     }
   }, [skillLevels, isLoaded])
 
@@ -226,7 +202,7 @@ function App() {
   // Save collapsed categories to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('fate-collapsed-categories', JSON.stringify(collapsedCategories))
+      safeSetJSON('fate-collapsed-categories', collapsedCategories)
     }
   }, [collapsedCategories, isLoaded])
 

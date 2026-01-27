@@ -181,7 +181,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 9: Extract localStorage helpers to utility module
 
-- **Status**: Pending
+- **Status**: Completed
 - **Priority**: Low
 - **File**: Create new file `src/utils/storage.js`
 - **Action**: Create and export helper functions:
@@ -271,7 +271,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 7 | Low | Add element type render fallback | Small | Card.jsx |
 | Completed | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
 | Completed | 8 | Low | Extract templates to module | Medium | New: data/cardTemplates.js, App.jsx |
-| Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
+| Completed | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
 | Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
 
-**Recommended order for pending tasks**: Task 9 → Task 10
+**Recommended order for pending tasks**: Task 10
