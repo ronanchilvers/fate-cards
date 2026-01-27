@@ -141,7 +141,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 7: Add element type fallback in Card render
 
-- **Status**: Pending
+- **Status**: Completed
 - **File**: `src/components/Card.jsx`
 - **Location**: `renderElement` function's switch statement (find the `default` case)
 - **Action**: Ensure the `default` case returns a safe fallback UI showing the unknown type:
@@ -263,7 +263,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
 | Pending | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
 | Completed | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
-| Pending | 7 | Low | Add element type render fallback | Small | Card.jsx |
+| Completed | 7 | Low | Add element type render fallback | Small | Card.jsx |
 | Pending | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
 | Pending | 8 | Low | Extract templates to module | Medium | New: data/cardTemplates.js, App.jsx |
 | Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |

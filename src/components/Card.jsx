@@ -726,7 +726,22 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         )
 
       default:
-        return null
+        return (
+          <div key={element.id} className="card-element">
+            <div className="element-header">
+              <h4>Unknown Element</h4>
+              {!isLocked && (
+                <button 
+                  onClick={() => deleteElement(element.id)}
+                  className="element-delete-btn"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            <p className="card-placeholder">Element type "{element.type}" is not supported.</p>
+          </div>
+        )
     }
   }
 
