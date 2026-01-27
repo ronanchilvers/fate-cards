@@ -237,6 +237,20 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ---
 
+### Task 12: Persist categories, skills, and skill levels on import
+
+- **Status**: Pending
+- **File**: `src/App.jsx`
+- **Location**: `importCards` function (~lines 600-650)
+- **Action**:
+  1. When imported data includes `categories`, `skills`, or `skillLevels`, update state with those values.
+  2. Validate shapes (arrays of strings/objects) and fall back to current state if invalid.
+  3. Ensure these values are saved to localStorage alongside cards so they persist across reloads.
+  4. Provide user feedback if any of these fields were missing or invalid and skipped.
+- **Why**: Imported files currently only update cards, causing categories/skills/levels to revert on reload or mismatch the imported data set.
+
+---
+
 ## Summary
 
 | Status | # | Priority | Task | Effort | Files |
@@ -246,6 +260,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 3 | High | Validate imports with schema | Small | App.jsx |
 | Completed | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
 | Pending | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
+| Pending | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
 | Pending | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
 | Pending | 7 | Low | Add element type render fallback | Small | Card.jsx |
 | Pending | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
@@ -253,4 +268,4 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
 | Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
 
-**Recommended order**: Tasks 1 → 2 → 3 → 6 → 7 → 11 → 4 → 5 → 9 → 10 → 8
+**Recommended order**: Tasks 1 → 2 → 3 → 6 → 7 → 11 → 4 → 5 → 12 → 9 → 10 → 8
