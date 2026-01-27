@@ -247,6 +247,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
   2. Validate shapes (arrays of strings/objects) and fall back to current state if invalid.
   3. Ensure these values are saved to localStorage alongside cards so they persist across reloads.
   4. Provide user feedback if any of these fields were missing or invalid and skipped.
+  5. When exporting data ensure that `skills`, `skillLevels` and `categories` are all included in the exported data.
 - **Why**: Imported files currently only update cards, causing categories/skills/levels to revert on reload or mismatch the imported data set.
 
 ---
