@@ -20,8 +20,8 @@ function isValidHexColor(color) {
  * @returns {Object|null} Normalized card object, or null if input is invalid
  */
 export function normalizeCard(card) {
-  // Return null if input is not an object
-  if (typeof card !== 'object' || card === null) {
+  // Return null if input is not an object or is an array
+  if (typeof card !== 'object' || card === null || Array.isArray(card)) {
     return null
   }
 
