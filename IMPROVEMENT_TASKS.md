@@ -122,7 +122,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 6: Guard null dereference in deleteSkillLevel
 
-- **Status**: Pending
+- **Status**: Completed
 - **File**: `src/App.jsx`
 - **Location**: `deleteSkillLevel` function (~lines 535-540)
 - **Action**: Add early return if `level` is not found:
@@ -261,7 +261,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Completed | 4 | Medium | Sync Card locked state with prop changes | Small | Card.jsx |
 | Completed | 5 | Medium | Use crypto.randomUUID() for IDs | Small | App.jsx, Card.jsx |
 | Pending | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
-| Pending | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
+| Completed | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
 | Pending | 7 | Low | Add element type render fallback | Small | Card.jsx |
 | Pending | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
 | Pending | 8 | Low | Extract templates to module | Medium | New: data/cardTemplates.js, App.jsx |
