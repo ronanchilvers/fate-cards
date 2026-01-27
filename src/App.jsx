@@ -679,6 +679,7 @@ function App() {
       localStorage.removeItem('fate-skills')
       localStorage.removeItem('fate-skill-levels')
       localStorage.removeItem('fate-thememode')
+      localStorage.removeItem('fate-last-export-filename')
 
       // Reset to defaults
       setCards([])
@@ -704,6 +705,7 @@ function App() {
         { label: 'Horrifying', value: -4 }
       ])
       setThemeMode('system')
+      setLastExportFilename('')
     }
   }
 

@@ -224,7 +224,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 
 ### Task 11: Clear stored export filename on app reset
 
-- **Status**: Pending
+- **Status**: Completed
 - **File**: `src/App.jsx`
 - **Location**: `resetAllData` function (~lines 675-720)
 - **Action**: Add a call to clear the stored export filename when the user confirms the reset:
@@ -264,7 +264,7 @@ This document contains prioritized tasks to improve code quality, resilience, an
 | Pending | 12 | Medium | Persist categories, skills, and skill levels on import | Small | App.jsx |
 | Completed | 6 | Low | Guard null in deleteSkillLevel | Small | App.jsx |
 | Completed | 7 | Low | Add element type render fallback | Small | Card.jsx |
-| Pending | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
+| Completed | 11 | Low | Clear stored export filename on reset | Small | App.jsx |
 | Pending | 8 | Low | Extract templates to module | Medium | New: data/cardTemplates.js, App.jsx |
 | Pending | 9 | Low | Extract storage helpers | Medium | New: utils/storage.js, App.jsx |
 | Pending | 10 | Low | Extract default data constants | Small | New: data/defaults.js, App.jsx |
