@@ -53,7 +53,12 @@ function App() {
     const savedLastExportFilename = localStorage.getItem('fate-last-export-filename')
 
     if (savedCards) {
-      setCards(JSON.parse(savedCards))
+      try {
+        setCards(JSON.parse(savedCards))
+      } catch (err) {
+        console.error('Failed to parse saved cards:', err)
+        localStorage.removeItem('fate-cards')
+      }
     } else {
       // Initialize with sample data
       setCards([
@@ -135,15 +140,30 @@ function App() {
     }
 
     if (savedCategories) {
-      setCategories(JSON.parse(savedCategories))
+      try {
+        setCategories(JSON.parse(savedCategories))
+      } catch (err) {
+        console.error('Failed to parse saved categories:', err)
+        localStorage.removeItem('fate-categories')
+      }
     }
 
     if (savedSkills) {
-      setSkills(JSON.parse(savedSkills))
+      try {
+        setSkills(JSON.parse(savedSkills))
+      } catch (err) {
+        console.error('Failed to parse saved skills:', err)
+        localStorage.removeItem('fate-skills')
+      }
     }
 
     if (savedSkillLevels) {
-      setSkillLevels(JSON.parse(savedSkillLevels))
+      try {
+        setSkillLevels(JSON.parse(savedSkillLevels))
+      } catch (err) {
+        console.error('Failed to parse saved skill levels:', err)
+        localStorage.removeItem('fate-skill-levels')
+      }
     }
 
     if (savedThemeMode) {
@@ -151,7 +171,12 @@ function App() {
     }
 
     if (savedCollapsedCategories) {
-      setCollapsedCategories(JSON.parse(savedCollapsedCategories))
+      try {
+        setCollapsedCategories(JSON.parse(savedCollapsedCategories))
+      } catch (err) {
+        console.error('Failed to parse saved collapsed categories:', err)
+        localStorage.removeItem('fate-collapsed-categories')
+      }
     }
 
     if (savedLastExportFilename) {
