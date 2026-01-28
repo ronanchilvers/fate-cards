@@ -3016,7 +3016,7 @@ describe('SkillLevelsAdminModal', () => {
 
 ### Task 2.5: Update Modal Index File
 
-**Status**: Pending
+**Status**: Completed
 
 **File**: `src/components/modals/index.js`
 
