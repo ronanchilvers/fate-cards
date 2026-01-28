@@ -1524,7 +1524,7 @@ describe('useCategories', () => {
 
 ### Task 1.6: Create useCards Hook
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract cards management from App.jsx (most complex hook)
 
