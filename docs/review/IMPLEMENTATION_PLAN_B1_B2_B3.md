@@ -1114,7 +1114,7 @@ describe('useSkillLevels', () => {
 
 ### Task 1.5: Create useCategories Hook
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract category management from App.jsx
 
