@@ -39,6 +39,8 @@ This plan addresses three related code quality issues:
 
 ### Task 0.1: Create Directory Structure
 
+**Status**: Pending
+
 **Action**: Create the following directories:
 
 ```
@@ -59,6 +61,8 @@ mkdir -p src/hooks src/components/modals src/components/elements
 ---
 
 ### Task 0.2: Create Index Files
+
+**Status**: Pending
 
 **Action**: Create barrel export files for clean imports
 
@@ -101,6 +105,8 @@ Extract state management logic from App.jsx into 6 custom hooks. This phase addr
 ---
 
 ### Task 1.1: Create useLocalStorage Hook
+
+**Status**: Pending
 
 **Purpose**: Standardize localStorage access pattern (addresses B.3)
 
@@ -255,6 +261,8 @@ describe('useLocalStorage', () => {
 ---
 
 ### Task 1.2: Create useTheme Hook
+
+**Status**: Pending
 
 **Purpose**: Extract theme management from App.jsx
 
@@ -479,6 +487,8 @@ describe('useTheme', () => {
 ---
 
 ### Task 1.3: Create useSkills Hook
+
+**Status**: Pending
 
 **Purpose**: Extract skills management from App.jsx
 
@@ -736,6 +746,8 @@ describe('useSkills', () => {
 ---
 
 ### Task 1.4: Create useSkillLevels Hook
+
+**Status**: Pending
 
 **Purpose**: Extract skill levels (the ladder) management from App.jsx
 
@@ -1101,6 +1113,8 @@ describe('useSkillLevels', () => {
 ---
 
 ### Task 1.5: Create useCategories Hook
+
+**Status**: Pending
 
 **Purpose**: Extract category management from App.jsx
 
@@ -1509,6 +1523,8 @@ describe('useCategories', () => {
 ---
 
 ### Task 1.6: Create useCards Hook
+
+**Status**: Pending
 
 **Purpose**: Extract cards management from App.jsx (most complex hook)
 
@@ -1920,6 +1936,8 @@ describe('useCards', () => {
 
 ### Task 1.7: Update hooks/index.js with All Exports
 
+**Status**: Pending
+
 **File**: `src/hooks/index.js`
 
 ```javascript
@@ -1939,6 +1957,8 @@ export { useCards } from './useCards'
 ---
 
 ### Task 1.8: Integration Test for All Hooks
+
+**Status**: Pending
 
 **Purpose**: Verify hooks work together correctly
 
@@ -2043,6 +2063,8 @@ Extract inline modal JSX from App.jsx into separate components. Each modal becom
 ---
 
 ### Task 2.1: Create TemplateModal Component
+
+**Status**: Pending
 
 **Purpose**: Extract card template selection modal
 
@@ -2292,6 +2314,8 @@ describe('TemplateModal', () => {
 
 ### Task 2.2: Create CategoryModal Component
 
+**Status**: Pending
+
 **Purpose**: Extract add category modal
 
 **Source Lines in App.jsx**: 708-738
@@ -2505,6 +2529,8 @@ describe('CategoryModal', () => {
 ---
 
 ### Task 2.3: Create SkillsAdminModal Component
+
+**Status**: Pending
 
 **Purpose**: Extract skills management modal
 
@@ -2727,6 +2753,8 @@ describe('SkillsAdminModal', () => {
 ---
 
 ### Task 2.4: Create SkillLevelsAdminModal Component
+
+**Status**: Pending
 
 **Purpose**: Extract skill levels management modal
 
@@ -2988,6 +3016,8 @@ describe('SkillLevelsAdminModal', () => {
 
 ### Task 2.5: Update Modal Index File
 
+**Status**: Pending
+
 **File**: `src/components/modals/index.js`
 
 ```javascript
@@ -3013,6 +3043,8 @@ Extract element rendering from Card.jsx's `renderElement` function into separate
 ---
 
 ### Task 3.1: Create Base Element Wrapper Component
+
+**Status**: Pending
 
 **Purpose**: Shared wrapper for all element types with common header/delete functionality
 
@@ -3067,6 +3099,8 @@ export default ElementWrapper
 ---
 
 ### Task 3.2: Create HighConceptElement Component
+
+**Status**: Pending
 
 **Purpose**: Extract high concept rendering
 
@@ -3181,6 +3215,8 @@ describe('HighConceptElement', () => {
 
 ### Task 3.3: Create TroubleElement Component
 
+**Status**: Pending
+
 **Purpose**: Extract trouble rendering (nearly identical to HighConcept)
 
 **Source Lines in Card.jsx**: 116-142
@@ -3234,6 +3270,8 @@ export default TroubleElement
 ---
 
 ### Task 3.4: Create AspectsElement Component
+
+**Status**: Pending
 
 **Purpose**: Extract aspects list rendering
 
@@ -3388,6 +3426,8 @@ describe('AspectsElement', () => {
 
 ### Task 3.5: Create NoteElement Component
 
+**Status**: Pending
+
 **Purpose**: Extract note/textarea rendering
 
 **Source Lines in Card.jsx**: 545-571
@@ -3442,6 +3482,8 @@ export default NoteElement
 ---
 
 ### Task 3.6: Create FatePointsElement Component
+
+**Status**: Pending
 
 **Purpose**: Extract fate points rendering
 
@@ -3615,6 +3657,8 @@ describe('FatePointsElement', () => {
 
 ### Task 3.7: Create SkillsElement Component
 
+**Status**: Pending
+
 **Purpose**: Extract skills rendering (most complex element)
 
 **Source Lines in Card.jsx**: 190-340 (approximately)
@@ -3640,6 +3684,8 @@ Key features to implement:
 
 ### Task 3.8: Create StressTracksElement Component
 
+**Status**: Pending
+
 **Purpose**: Extract stress tracks rendering
 
 **Source Lines in Card.jsx**: 341-475 (approximately)
@@ -3664,6 +3710,8 @@ Key features to implement:
 
 ### Task 3.9: Create ConsequencesElement Component
 
+**Status**: Pending
+
 **Purpose**: Extract consequences rendering
 
 **Source Lines in Card.jsx**: 476-544 (approximately)
@@ -3685,6 +3733,8 @@ Key features to implement:
 ---
 
 ### Task 3.10: Create Element Index and Registry
+
+**Status**: Pending
 
 **File**: `src/components/elements/index.js`
 
@@ -3732,6 +3782,8 @@ export function getElementComponent(type) {
 ---
 
 ### Task 3.11: Update Card.jsx to Use Element Components
+
+**Status**: Pending
 
 **Purpose**: Replace renderElement switch with component registry
 
@@ -3792,6 +3844,8 @@ Standardize state management patterns across the application (addresses B.3).
 
 ### Task 4.1: Update App.jsx to Use Custom Hooks
 
+**Status**: Pending
+
 **Purpose**: Replace inline state management with custom hooks
 
 **File**: `src/App.jsx` (refactored)
@@ -3849,6 +3903,8 @@ function App() {
 ---
 
 ### Task 4.2: Standardize All localStorage Access
+
+**Status**: Pending
 
 **Purpose**: Ensure all localStorage uses safeGetJSON/safeSetJSON
 
