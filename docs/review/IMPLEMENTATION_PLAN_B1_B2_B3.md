@@ -3737,7 +3737,7 @@ describe('FatePointsElement', () => {
 
 ### Task 3.10: Create Element Index and Registry
 
-**Status**: Pending
+**Status**: Completed
 
 **File**: `src/components/elements/index.js`
 
@@ -3786,7 +3786,7 @@ export function getElementComponent(type) {
 
 ### Task 3.11: Update Card.jsx to Use Element Components
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Replace renderElement switch with component registry
 

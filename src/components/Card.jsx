@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import './Card.css'
 import { getPaleBackground, getMidToneBackground } from '../utils/colors'
 import { createElementByType } from '../data/elementFactories'
+import { ELEMENT_COMPONENTS } from './elements'
+import { ELEMENT_TYPES } from '../constants'
 
 function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
@@ -31,8 +33,6 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     '#ca8a04', '#ea580c', '#f97316', '#dc2626', '#991b1b', '#451a03',
     '#1f2937', '#374151'
   ]
-
-
 
   const toggleLock = () => {
     const newLockedState = !isLocked
@@ -85,573 +85,43 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     })
   }
 
+  /**
+   * Render an element using the component registry
+   * Falls back to unknown element message if component not found
+   */
   const renderElement = (element) => {
-    switch (element.type) {
-      case 'high-concept':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>High Concept</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            <input
-              type="text"
-              value={element.text}
-              onChange={(e) => updateElement(element.id, { text: e.target.value })}
-              placeholder="Enter high concept..."
-              className="element-input"
-              disabled={isLocked}
-            />
-          </div>
-        )
-
-      case 'trouble':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>Trouble</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            <input
-              type="text"
-              value={element.text}
-              onChange={(e) => updateElement(element.id, { text: e.target.value })}
-              placeholder="Enter trouble..."
-              className="element-input"
-              disabled={isLocked}
-            />
-          </div>
-        )
-
-      case 'aspects':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>Aspects</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            {element.items.map((item, index) => (
-              <div key={index} className="aspect-item">
-                <span className="aspect-bullet">📋</span>
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) => {
-                    const newItems = [...element.items]
-                    newItems[index] = e.target.value
-                    updateElement(element.id, { items: newItems })
-                  }}
-                  placeholder="---"
-                  className="element-input"
-                  disabled={isLocked}
-                />
-                {!isLocked && (
-                  <button
-                    onClick={() => {
-                      const newItems = element.items.filter((_, i) => i !== index)
-                      updateElement(element.id, { items: newItems })
-                    }}
-                    className="aspect-delete-btn"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-            ))}
+    const ElementComponent = ELEMENT_COMPONENTS[element.type]
+    
+    if (!ElementComponent) {
+      return (
+        <div key={element.id} className="card-element">
+          <div className="element-header">
+            <h4>Unknown Element</h4>
             {!isLocked && (
-              <button 
-                onClick={() => updateElement(element.id, { items: [...element.items, ''] })}
-                className="add-item-btn"
-              >
-                + Add Aspect
-              </button>
-            )}
-          </div>
-        )
-
-      case 'skills':
-        // Use centralized skill levels with formatted labels
-        const allSkillLevels = skillLevels.map(level => ({
-          value: level.value,
-          label: `${level.label} (${level.value >= 0 ? '+' : ''}${level.value})`
-        }))
-
-        // Get unique rating levels that exist in items
-        const existingRatings = [...new Set(element.items.map(skill => skill.rating))].sort((a, b) => b - a)
-        const existingLevels = existingRatings.map(rating => 
-          allSkillLevels.find(level => level.value === rating)
-        ).filter(Boolean)
-
-        // Group skills by rating
-        const skillsByRating = {}
-        existingRatings.forEach(rating => {
-          skillsByRating[rating] = element.items.filter(skill => skill.rating === rating)
-        })
-
-        if (isLocked) {
-          // Locked view: compact grouped display
-          return (
-            <div key={element.id} className={`card-element locked`}>
-              <div className="element-header">
-                <h4>Skills</h4>
-              </div>
-              {existingLevels.map(level => {
-                const levelSkills = skillsByRating[level.value]
-                if (levelSkills.length === 0) return null
-                
-                return (
-                  <div key={level.value} className="skill-level-group">
-                    <span className="skill-level-label">{level.label}:</span>
-                    <span className="skill-level-list">
-                      {levelSkills.map(skill => skill.name).join(', ')}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          )
-        }
-
-        // Get available levels to add (not currently in use)
-        const availableLevels = allSkillLevels.filter(level => 
-          !existingRatings.includes(level.value)
-        )
-
-        // Unlocked view: organized by level sections
-        return (
-          <div key={element.id} className={`card-element`}>
-            <div className="element-header">
-              <h4>Skills</h4>
               <button 
                 onClick={() => deleteElement(element.id)}
                 className="element-delete-btn"
               >
                 ×
               </button>
-            </div>
-            {existingLevels.map(level => {
-              const levelSkills = skillsByRating[level.value]
-              
-              return (
-                <div key={level.value} className="skill-level-section">
-                  <div className="skill-level-header">
-                    <h5>{level.label}</h5>
-                    <button
-                      onClick={() => {
-                        // Remove all skills at this level
-                        const newItems = element.items.filter(skill => skill.rating !== level.value)
-                        updateElement(element.id, { items: newItems })
-                      }}
-                      className="remove-level-btn"
-                      title="Remove this level"
-                    >
-                      ×
-                    </button>
-                  </div>
-                  {levelSkills.map((skill, skillIndex) => {
-                    const globalIndex = element.items.findIndex(s => s === skill)
-                    return (
-                      <div key={skillIndex} className="skill-item">
-                        <select
-                          value={skill.name}
-                          onChange={(e) => {
-                            const newItems = [...element.items]
-                            newItems[globalIndex].name = e.target.value
-                            updateElement(element.id, { items: newItems })
-                          }}
-                          className="skill-name-select"
-                        >
-                          <option value="">Select skill...</option>
-                          {skills.map(skillName => (
-                            <option key={skillName} value={skillName}>{skillName}</option>
-                          ))}
-                        </select>
-                        <button
-                          onClick={() => {
-                            const newItems = element.items.filter((_, i) => i !== globalIndex)
-                            updateElement(element.id, { items: newItems })
-                          }}
-                          className="skill-delete-btn"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    )
-                  })}
-                  <button 
-                    onClick={() => updateElement(element.id, { 
-                      items: [...element.items, { name: '', rating: level.value }] 
-                    })}
-                    className="add-skill-to-level-btn"
-                  >
-                    + Add Skill
-                  </button>
-                </div>
-              )
-            })}
-            {availableLevels.length > 0 && (
-              <div className="add-level-section">
-                <select
-                  onChange={(e) => {
-                    const rating = parseInt(e.target.value)
-                    if (!isNaN(rating)) {
-                      // Add a level by adding an empty skill at that rating
-                      updateElement(element.id, { 
-                        items: [...element.items, { name: '', rating }] 
-                      })
-                      e.target.value = '' // Reset dropdown
-                    }
-                  }}
-                  className="add-level-select"
-                  defaultValue=""
-                >
-                  <option value="" disabled>+ Add Level</option>
-                  {availableLevels.map(level => (
-                    <option key={level.value} value={level.value}>{level.label}</option>
-                  ))}
-                </select>
-              </div>
             )}
           </div>
-        )
-
-      case 'stress-tracks':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>Stress Tracks</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            {element.tracks.map((track, trackIndex) => (
-              <div key={trackIndex} className="stress-track">
-                <div className="stress-track-header">
-                  {!isLocked ? (
-                    <input
-                      type="text"
-                      value={track.name}
-                      onChange={(e) => {
-                        const newTracks = [...element.tracks]
-                        newTracks[trackIndex] = { ...track, name: e.target.value }
-                        updateElement(element.id, { tracks: newTracks })
-                      }}
-                      className="stress-track-name-input"
-                      placeholder="Track name"
-                    />
-                  ) : (
-                    <label>{track.name}</label>
-                  )}
-                  {!isLocked && (
-                    <div className="stress-track-controls">
-                      <button
-                        onClick={() => {
-                          const newTracks = [...element.tracks]
-                          newTracks[trackIndex] = { 
-                            ...track, 
-                            boxes: [...track.boxes, { checked: false, value: 1 }] 
-                          }
-                          updateElement(element.id, { tracks: newTracks })
-                        }}
-                        className="stress-control-btn"
-                        title="Add box"
-                      >
-                        +
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (track.boxes.length > 1) {
-                            const newTracks = [...element.tracks]
-                            newTracks[trackIndex] = { 
-                              ...track, 
-                              boxes: track.boxes.slice(0, -1) 
-                            }
-                            updateElement(element.id, { tracks: newTracks })
-                          }
-                        }}
-                        className="stress-control-btn"
-                        title="Remove box"
-                        disabled={track.boxes.length <= 1}
-                      >
-                        −
-                      </button>
-                      <button
-                        onClick={() => {
-                          const newTracks = element.tracks.filter((_, i) => i !== trackIndex)
-                          updateElement(element.id, { tracks: newTracks })
-                        }}
-                        className="stress-control-btn stress-delete-btn"
-                        title="Delete track"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <div className="stress-boxes">
-                  {track.boxes.map((box, boxIndex) => (
-                    <div 
-                      key={boxIndex}
-                      className={`stress-box ${box.checked ? 'checked' : ''} ${isLocked ? 'locked' : ''}`}
-                      onClick={() => {
-                        const newTracks = [...element.tracks]
-                        const newBoxes = [...track.boxes]
-                        newBoxes[boxIndex] = { ...box, checked: !box.checked }
-                        newTracks[trackIndex] = { ...track, boxes: newBoxes }
-                        updateElement(element.id, { tracks: newTracks })
-                      }}
-                    >
-                      {!isLocked ? (
-                        <input
-                          type="number"
-                          min="1"
-                          max="99"
-                          value={box.value}
-                          onChange={(e) => {
-                            e.stopPropagation()
-                            const newTracks = [...element.tracks]
-                            const newBoxes = [...track.boxes]
-                            newBoxes[boxIndex] = { ...box, value: parseInt(e.target.value) || 1 }
-                            newTracks[trackIndex] = { ...track, boxes: newBoxes }
-                            updateElement(element.id, { tracks: newTracks })
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                          className="stress-box-value"
-                        />
-                      ) : (
-                        <span>{box.value}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-            {!isLocked && (
-              <button
-                onClick={() => {
-                  const newTracks = [...element.tracks, { 
-                    name: 'New Track', 
-                    boxes: [
-                      { checked: false, value: 1 },
-                      { checked: false, value: 2 },
-                      { checked: false, value: 3 }
-                    ] 
-                  }]
-                  updateElement(element.id, { tracks: newTracks })
-                }}
-                className="add-stress-track-btn"
-              >
-                + Add Track
-              </button>
-            )}
-          </div>
-        )
-
-      case 'consequences':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>Consequences</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            {element.items.map((consequence, index) => (
-              <div key={index} className="consequence-item">
-                <div className="consequence-label-row">
-                  {!isLocked ? (
-                    <>
-                      <input
-                        type="text"
-                        value={consequence.label}
-                        onChange={(e) => {
-                          const newItems = [...element.items]
-                          newItems[index] = { ...consequence, label: e.target.value }
-                          updateElement(element.id, { items: newItems })
-                        }}
-                        className="consequence-label-input"
-                        placeholder="Label"
-                      />
-                      <button
-                        onClick={() => {
-                          const newItems = element.items.filter((_, i) => i !== index)
-                          updateElement(element.id, { items: newItems })
-                        }}
-                        className="consequence-delete-btn"
-                      >
-                        ×
-                      </button>
-                    </>
-                  ) : (
-                    <label>{consequence.label}</label>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  value={consequence.text}
-                  onChange={(e) => {
-                    const newItems = [...element.items]
-                    newItems[index] = { ...consequence, text: e.target.value }
-                    updateElement(element.id, { items: newItems })
-                  }}
-                  className="element-input"
-                  disabled={isLocked}
-                />
-              </div>
-            ))}
-            {!isLocked && (
-              <button
-                onClick={() => {
-                  const newItems = [...element.items, { label: 'New', text: '---' }]
-                  updateElement(element.id, { items: newItems })
-                }}
-                className="add-item-btn"
-              >
-                + Add Consequence
-              </button>
-            )}
-          </div>
-        )
-
-      case 'note':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>Note</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            <textarea
-              value={element.text}
-              onChange={(e) => updateElement(element.id, { text: e.target.value })}
-              placeholder="Enter notes..."
-              className="element-textarea"
-              rows="4"
-              disabled={isLocked}
-            />
-          </div>
-        )
-
-      case 'fate-points':
-        return (
-          <div key={element.id} className={`card-element ${isLocked ? 'locked' : ''}`}>
-            <div className="element-header">
-              <h4>Fate Points</h4>
-              {isLocked ? (
-                <span className="refresh-label">Refresh {element.refresh}</span>
-              ) : (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            <div className="fate-points">
-              {Array.from({ length: Math.min(element.current, element.refresh) }).map((_, i) => (
-                <div 
-                  key={i} 
-                  className="fate-point filled"
-                  onClick={isLocked ? () => updateElement(element.id, { 
-                    current: Math.max(0, element.current - 1) 
-                  }) : undefined}
-                  style={isLocked ? { cursor: 'pointer' } : undefined}
-                >●</div>
-              ))}
-              {Array.from({ length: Math.max(0, element.refresh - element.current) }).map((_, i) => (
-                <div key={i + element.current} className="fate-point empty">○</div>
-              ))}
-              {element.current > element.refresh && Array.from({ length: element.current - element.refresh }).map((_, i) => (
-                <div 
-                  key={i + element.refresh} 
-                  className="fate-point filled"
-                  onClick={isLocked ? () => updateElement(element.id, { 
-                    current: Math.max(0, element.current - 1) 
-                  }) : undefined}
-                  style={isLocked ? { cursor: 'pointer' } : undefined}
-                >●</div>
-              ))}
-            </div>
-            {!isLocked && (
-              <div className="fate-points-controls">
-                <button onClick={() => updateElement(element.id, { 
-                  current: Math.max(0, element.current - 1) 
-                })}>-</button>
-                <span>{element.current} / </span>
-                <input
-                  type="number"
-                  min="0"
-                  max="10"
-                  value={element.refresh}
-                  onChange={(e) => updateElement(element.id, { 
-                    refresh: Math.max(0, Math.min(10, parseInt(e.target.value) || 0))
-                  })}
-                  className="refresh-input"
-                />
-                <button onClick={() => updateElement(element.id, { 
-                  current: element.current + 1
-                })}>+</button>
-              </div>
-            )}
-          </div>
-        )
-
-      default:
-        return (
-          <div key={element.id} className="card-element">
-            <div className="element-header">
-              <h4>Unknown Element</h4>
-              {!isLocked && (
-                <button 
-                  onClick={() => deleteElement(element.id)}
-                  className="element-delete-btn"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            <p className="card-placeholder">Element type "{element.type}" is not supported.</p>
-          </div>
-        )
+          <p className="card-placeholder">Element type "{element.type}" is not supported.</p>
+        </div>
+      )
     }
+
+    return (
+      <ElementComponent
+        key={element.id}
+        element={element}
+        isLocked={isLocked}
+        onUpdate={(updates) => updateElement(element.id, updates)}
+        onDelete={() => deleteElement(element.id)}
+        skills={skills}
+        skillLevels={skillLevels}
+      />
+    )
   }
 
   return (
@@ -717,14 +187,14 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
             <button onClick={() => setShowElementMenu(false)}>×</button>
           </div>
           <div className="element-menu-options">
-            <button onClick={() => addElement('high-concept')}>High Concept</button>
-            <button onClick={() => addElement('trouble')}>Trouble</button>
-            <button onClick={() => addElement('aspects')}>Aspects List</button>
-            <button onClick={() => addElement('skills')}>Skill List</button>
-            <button onClick={() => addElement('stress-tracks')}>Stress Tracks</button>
-            <button onClick={() => addElement('consequences')}>Consequences List</button>
-            <button onClick={() => addElement('fate-points')}>Fate Points</button>
-            <button onClick={() => addElement('note')}>Note</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.HIGH_CONCEPT)}>High Concept</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.TROUBLE)}>Trouble</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.ASPECTS)}>Aspects List</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.SKILLS)}>Skill List</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.STRESS_TRACKS)}>Stress Tracks</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.CONSEQUENCES)}>Consequences List</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.FATE_POINTS)}>Fate Points</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.NOTE)}>Note</button>
           </div>
         </div>
       )}
