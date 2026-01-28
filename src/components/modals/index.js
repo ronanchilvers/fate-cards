@@ -1,2 +1,3 @@
 // Modal components barrel export
-// Add exports as modals are created
+export { default as TemplateModal } from './TemplateModal'
+export { default as CategoryModal } from './CategoryModal'

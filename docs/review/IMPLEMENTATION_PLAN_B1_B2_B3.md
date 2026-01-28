@@ -2064,7 +2064,7 @@ Extract inline modal JSX from App.jsx into separate components. Each modal becom
 
 ### Task 2.1: Create TemplateModal Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract card template selection modal
 
@@ -2314,7 +2314,7 @@ describe('TemplateModal', () => {
 
 ### Task 2.2: Create CategoryModal Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract add category modal
 
