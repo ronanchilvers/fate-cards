@@ -262,7 +262,7 @@ describe('useLocalStorage', () => {
 
 ### Task 1.2: Create useTheme Hook
 
-**Status**: ✓ Complete
+**Status**: Completed
 
 **Purpose**: Extract theme management from App.jsx
 
@@ -3271,7 +3271,7 @@ export default TroubleElement
 
 ### Task 3.4: Create AspectsElement Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract aspects list rendering
 
@@ -3426,7 +3426,7 @@ describe('AspectsElement', () => {
 
 ### Task 3.5: Create NoteElement Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract note/textarea rendering
 
@@ -3483,7 +3483,7 @@ export default NoteElement
 
 ### Task 3.6: Create FatePointsElement Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract fate points rendering
 
@@ -3657,7 +3657,7 @@ describe('FatePointsElement', () => {
 
 ### Task 3.7: Create SkillsElement Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract skills rendering (most complex element)
 
@@ -3665,26 +3665,27 @@ describe('FatePointsElement', () => {
 
 **File**: `src/components/elements/SkillsElement.jsx`
 
-This is the most complex element component. Create separately due to size. See Card.jsx lines 190-340 for full implementation details.
-
-Key features to implement:
+**Implementation Summary**:
 - Locked view: compact grouped display by level
 - Unlocked view: organized sections by level with skill dropdowns
 - Add/remove skill levels
 - Add/remove skills within levels
 - Integration with skillLevels prop for formatted labels
+- Defensive coding for undefined items, skills, skillLevels
+- Proper skill rating sorting (descending)
+- Formatted level labels with +/- values
 
 **Verification**:
-- [ ] Component file created
-- [ ] Test file created
-- [ ] `npm test` passes
-- [ ] Export added to `src/components/elements/index.js`
+- ✅ Component file created
+- ✅ Test file created (27 tests)
+- ✅ `npm test` passes
+- ✅ Export added to `src/components/elements/index.js`
 
 ---
 
 ### Task 3.8: Create StressTracksElement Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract stress tracks rendering
 
@@ -3692,25 +3693,26 @@ Key features to implement:
 
 **File**: `src/components/elements/StressTracksElement.jsx`
 
-Key features to implement:
+**Implementation Summary**:
 - Multiple named tracks
-- Toggleable stress boxes
-- Editable box values
-- Add/remove boxes per track
+- Toggleable stress boxes (click to check/uncheck)
+- Editable box values (1-99)
+- Add/remove boxes per track (min 1 box)
 - Add/remove tracks
-- Track name editing
+- Editable track names (unlocked view)
+- Locked view shows labels and values as read-only
 
 **Verification**:
-- [ ] Component file created
-- [ ] Test file created
-- [ ] `npm test` passes
-- [ ] Export added to `src/components/elements/index.js`
+- ✅ Component file created
+- ✅ Test file created (30 tests)
+- ✅ `npm test` passes
+- ✅ Export added to `src/components/elements/index.js`
 
 ---
 
 ### Task 3.9: Create ConsequencesElement Component
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract consequences rendering
 
@@ -3718,17 +3720,18 @@ Key features to implement:
 
 **File**: `src/components/elements/ConsequencesElement.jsx`
 
-Key features to implement:
+**Implementation Summary**:
 - List of consequence items with label and text
 - Editable labels (e.g., "Mild (2)")
 - Editable consequence text
 - Add/remove consequences
+- Lock-aware: labels shown as text when locked, inputs disabled
 
 **Verification**:
-- [ ] Component file created
-- [ ] Test file created
-- [ ] `npm test` passes
-- [ ] Export added to `src/components/elements/index.js`
+- ✅ Component file created
+- ✅ Test file created (32 tests)
+- ✅ `npm test` passes
+- ✅ Export added to `src/components/elements/index.js`
 
 ---
 
