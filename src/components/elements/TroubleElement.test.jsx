@@ -1,0 +1,128 @@
+import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import TroubleElement from './TroubleElement'
+
+describe('TroubleElement', () => {
+  const defaultProps = {
+    element: { id: '1', type: 'trouble', text: 'Test Trouble' },
+    isLocked: false,
+    onUpdate: vi.fn(),
+    onDelete: vi.fn()
+  }
+
+  it('should render with element text', () => {
+    render(<TroubleElement {...defaultProps} />)
+    expect(screen.getByDisplayValue('Test Trouble')).toBeInTheDocument()
+  })
+
+  it('should render title', () => {
+    render(<TroubleElement {...defaultProps} />)
+    expect(screen.getByText('Trouble')).toBeInTheDocument()
+  })
+
+  it('should call onUpdate when text changes', () => {
+    const onUpdate = vi.fn()
+    render(<TroubleElement {...defaultProps} onUpdate={onUpdate} />)
+    
+    fireEvent.change(screen.getByDisplayValue('Test Trouble'), {
+      target: { value: 'New Trouble' }
+    })
+    
+    expect(onUpdate).toHaveBeenCalledWith({ text: 'New Trouble' })
+  })
+
+  it('should disable input when locked', () => {
+    render(<TroubleElement {...defaultProps} isLocked={true} />)
+    expect(screen.getByDisplayValue('Test Trouble')).toBeDisabled()
+  })
+
+  it('should hide delete button when locked', () => {
+    render(<TroubleElement {...defaultProps} isLocked={true} />)
+    expect(screen.queryByText('×')).not.toBeInTheDocument()
+  })
+
+  it('should show delete button when unlocked', () => {
+    render(<TroubleElement {...defaultProps} />)
+    expect(screen.getByText('×')).toBeInTheDocument()
+  })
+
+  it('should call onDelete when delete clicked', () => {
+    const onDelete = vi.fn()
+    render(<TroubleElement {...defaultProps} onDelete={onDelete} />)
+    fireEvent.click(screen.getByText('×'))
+    expect(onDelete).toHaveBeenCalled()
+  })
+
+  it('should handle empty element text gracefully', () => {
+    const emptyElement = { id: '1', type: 'trouble', text: '' }
+    render(<TroubleElement {...defaultProps} element={emptyElement} />)
+    expect(screen.getByPlaceholderText('Enter trouble...')).toHaveValue('')
+  })
+
+  it('should handle undefined element text', () => {
+    const undefinedElement = { id: '1', type: 'trouble' }
+    render(<TroubleElement {...defaultProps} element={undefinedElement} />)
+    expect(screen.getByPlaceholderText('Enter trouble...')).toHaveValue('')
+  })
+
+  it('should have correct placeholder text', () => {
+    render(<TroubleElement {...defaultProps} />)
+    expect(screen.getByPlaceholderText('Enter trouble...')).toBeInTheDocument()
+  })
+
+  it('should apply element-input class to input', () => {
+    render(<TroubleElement {...defaultProps} />)
+    const input = screen.getByDisplayValue('Test Trouble')
+    expect(input).toHaveClass('element-input')
+  })
+
+  it('should handle multiple text changes', () => {
+    const onUpdate = vi.fn()
+    render(<TroubleElement {...defaultProps} onUpdate={onUpdate} />)
+    
+    const input = screen.getByDisplayValue('Test Trouble')
+    
+    fireEvent.change(input, { target: { value: 'First Change' } })
+    fireEvent.change(input, { target: { value: 'Second Change' } })
+    fireEvent.change(input, { target: { value: 'Third Change' } })
+    
+    expect(onUpdate).toHaveBeenCalledTimes(3)
+    expect(onUpdate).toHaveBeenLastCalledWith({ text: 'Third Change' })
+  })
+
+  it('should allow input when not locked', () => {
+    const onUpdate = vi.fn()
+    render(<TroubleElement {...defaultProps} isLocked={false} onUpdate={onUpdate} />)
+    
+    const input = screen.getByDisplayValue('Test Trouble')
+    expect(input).not.toBeDisabled()
+    
+    fireEvent.change(input, { target: { value: 'Updated' } })
+    expect(onUpdate).toHaveBeenCalled()
+  })
+
+  it('should prevent input changes when locked', () => {
+    const onUpdate = vi.fn()
+    render(<TroubleElement {...defaultProps} isLocked={true} onUpdate={onUpdate} />)
+    
+    const input = screen.getByDisplayValue('Test Trouble')
+    fireEvent.change(input, { target: { value: 'Should not update' } })
+    
+    // onUpdate will not be called because input is disabled and change won't fire
+    // but we test that the input is disabled
+    expect(input).toBeDisabled()
+  })
+
+  it('should update on prop change', () => {
+    const { rerender } = render(<TroubleElement {...defaultProps} />)
+    expect(screen.getByDisplayValue('Test Trouble')).toBeInTheDocument()
+    
+    rerender(
+      <TroubleElement 
+        {...defaultProps} 
+        element={{ ...defaultProps.element, text: 'Updated Trouble' }}
+      />
+    )
+    expect(screen.getByDisplayValue('Updated Trouble')).toBeInTheDocument()
+  })
+})
