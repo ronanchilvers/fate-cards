@@ -1936,7 +1936,7 @@ describe('useCards', () => {
 
 ### Task 1.7: Update hooks/index.js with All Exports
 
-**Status**: Pending
+**Status**: Completed
 
 **File**: `src/hooks/index.js`
 

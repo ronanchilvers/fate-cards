@@ -1,5 +1,5 @@
 // Custom hooks barrel export
-// Add exports as hooks are created
+// All state management hooks for the Fate Cards application
 
 export { useLocalStorage, useLocalStorageRemove } from './useLocalStorage'
 export { useTheme } from './useTheme'
