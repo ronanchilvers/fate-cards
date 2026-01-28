@@ -4,3 +4,4 @@
 export { useLocalStorage, useLocalStorageRemove } from './useLocalStorage'
 export { useTheme } from './useTheme'
 export { useSkills } from './useSkills'
+export { useSkillLevels } from './useSkillLevels'

@@ -747,7 +747,7 @@ describe('useSkills', () => {
 
 ### Task 1.4: Create useSkillLevels Hook
 
-**Status**: Pending
+**Status**: Completed
 
 **Purpose**: Extract skill levels (the ladder) management from App.jsx
 
