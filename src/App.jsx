@@ -48,7 +48,7 @@ function App() {
   }
 
   const handleCreateCard = (category, templateKey) => {
-    cardsHook.addCardFromTemplate(templateKey, category)
+    cardsHook.addCardFromTemplate(category, templateKey)
   }
 
   const exportCards = async () => {
