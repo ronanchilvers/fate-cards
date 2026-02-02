@@ -8,6 +8,38 @@ This guide will help you deploy Fate Cards to GitHub Pages.
 - Git installed on your computer
 - Node.js and npm installed
 
+## Deployment Methods
+
+There are two ways to deploy this site to GitHub Pages:
+
+### Method 1: Automated Deployment with GitHub Actions (Recommended)
+
+This repository includes a GitHub Actions workflow that automatically deploys your site whenever you push to the main branch.
+
+**Setup:**
+1. Push your code to GitHub (see "Setup Steps" below)
+2. Go to your repository settings on GitHub
+3. Navigate to **Settings → Pages**
+4. Under "Build and deployment", select **Source: GitHub Actions**
+5. The workflow will automatically run on the next push to `main`
+
+The site will be automatically deployed to `https://YOUR-USERNAME.github.io/YOUR-REPO-NAME`
+
+### Method 2: Manual Deployment with npm script
+
+You can also deploy manually using the `npm run deploy` command.
+
+**Requirements:**
+- Git credentials configured on your machine
+- Write access to the repository
+
+**To deploy manually:**
+```bash
+npm run deploy
+```
+
+This will build the project and push the `dist` folder to the `gh-pages` branch.
+
 ## Setup Steps
 
 ### 1. Update the Homepage URL
@@ -59,28 +91,39 @@ git branch -M main
 git push -u origin main
 ```
 
-### 5. Deploy to GitHub Pages
+### 5. Enable GitHub Pages (if using GitHub Actions)
 
-```bash
-npm run deploy
-```
-
-This command will:
-- Build your project (`npm run build`)
-- Create a `gh-pages` branch
-- Push the `dist` folder to that branch
-
-### 6. Enable GitHub Pages
-
+If using the automated GitHub Actions deployment:
 1. Go to your repository on GitHub
 2. Click **Settings**
 3. Click **Pages** in the left sidebar
-4. Under "Source", select **gh-pages** branch
-5. Click **Save**
+4. Under "Build and deployment", select **Source: GitHub Actions**
+5. The next push to `main` will automatically deploy the site
+
+If using manual deployment with `npm run deploy`:
+1. Run `npm run deploy` first
+2. Go to your repository on GitHub
+3. Click **Settings**
+4. Click **Pages** in the left sidebar
+5. Under "Source", select **gh-pages** branch
+6. Click **Save**
 
 Your site will be live at `https://YOUR-USERNAME.github.io/YOUR-REPO-NAME` in a few minutes!
 
 ## Updating Your Deployed Site
+
+### With GitHub Actions (Automated)
+Simply push your changes to the main branch:
+
+```bash
+git add .
+git commit -m "Your commit message"
+git push origin main
+```
+
+The site will automatically rebuild and deploy.
+
+### With Manual Deployment
 
 Whenever you want to deploy changes:
 
