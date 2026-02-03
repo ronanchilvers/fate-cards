@@ -35,6 +35,20 @@ class LocalStorageMock {
 
 global.localStorage = new LocalStorageMock()
 
+// Mock matchMedia for components that listen to system theme changes
+if (!window.matchMedia) {
+  window.matchMedia = (query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn()
+  })
+}
+
 // Mock crypto.randomUUID
 Object.defineProperty(global, 'crypto', {
   value: {

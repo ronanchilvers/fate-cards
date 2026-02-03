@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { normalizeCard, normalizeCards } from './cardSchema'
+import { ELEMENT_TYPES } from '../constants'
 
 describe('normalizeCard', () => {
   it('returns a normalized card when given a valid card object', () => {
@@ -93,6 +94,75 @@ describe('normalizeCard - default values', () => {
   })
 })
 
+describe('normalizeCard - element normalization', () => {
+  it('drops elements with unknown types', () => {
+    const input = {
+      id: 'test-id',
+      title: 'Test Card',
+      elements: [
+        { id: 'note-1', type: ELEMENT_TYPES.NOTE, text: 'Keep me' },
+        { id: 'unknown-1', type: 'mystery-type', payload: 'nope' }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements).toHaveLength(1)
+    expect(result.elements[0].type).toBe(ELEMENT_TYPES.NOTE)
+  })
+
+  it('normalizes note elements to ensure text is present', () => {
+    const input = {
+      id: 'note-card',
+      elements: [
+        { id: 'note-1', type: ELEMENT_TYPES.NOTE }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements[0].text).toBe('')
+  })
+
+  it('normalizes skills elements to ensure items is an array', () => {
+    const input = {
+      id: 'skills-card',
+      elements: [
+        { id: 'skills-1', type: ELEMENT_TYPES.SKILLS, items: 'not-an-array' }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements[0].items).toEqual([])
+  })
+
+  it('normalizes stress tracks to ensure tracks contain boxes', () => {
+    const input = {
+      id: 'stress-card',
+      elements: [
+        { 
+          id: 'stress-1', 
+          type: ELEMENT_TYPES.STRESS_TRACKS, 
+          tracks: [
+            { name: 'Physical', boxes: null },
+            { name: 'Mental' }
+          ] 
+        }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    const tracks = result.elements[0].tracks
+    expect(Array.isArray(tracks)).toBe(true)
+    tracks.forEach(track => {
+      expect(Array.isArray(track.boxes)).toBe(true)
+      expect(track.boxes.length).toBeGreaterThan(0)
+      track.boxes.forEach(box => {
+        expect(typeof box.checked).toBe('boolean')
+        expect(typeof box.value).toBe('number')
+      })
+    })
+  })
+})
+
 describe('normalizeCards', () => {
   it('returns empty array for non-array input', () => {
     expect(normalizeCards(null)).toEqual([])
@@ -127,5 +197,23 @@ describe('normalizeCards', () => {
     const input = [null, undefined, 'string', 123]
     const result = normalizeCards(input)
     expect(result).toEqual([])
+  })
+
+  it('handles cards with mixed valid and invalid elements without throwing', () => {
+    const input = [
+      {
+        id: 'mixed-elements',
+        elements: [
+          { id: 'note-1', type: ELEMENT_TYPES.NOTE, text: 'Ok' },
+          { id: 'unknown-1', type: 'unknown-type' },
+          null
+        ]
+      }
+    ]
+
+    expect(() => normalizeCards(input)).not.toThrow()
+    const result = normalizeCards(input)
+    expect(result[0].elements).toHaveLength(1)
+    expect(result[0].elements[0].type).toBe(ELEMENT_TYPES.NOTE)
   })
 })

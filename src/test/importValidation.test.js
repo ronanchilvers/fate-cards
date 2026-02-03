@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { normalizeCards } from '../utils/cardSchema'
+import { ELEMENT_TYPES } from '../constants'
 
 describe('Import Data Validation', () => {
   it('handles valid import data structure', () => {
@@ -51,6 +52,26 @@ describe('Import Data Validation', () => {
     expect(normalizeCards([])).toEqual([])
     expect(normalizeCards(null)).toEqual([])
     expect(normalizeCards(undefined)).toEqual([])
+  })
+
+  it('sanitizes imported elements during normalization', () => {
+    const importData = {
+      cards: [
+        { 
+          id: '1', 
+          title: 'Card 1', 
+          elements: [
+            { id: 'note-1', type: ELEMENT_TYPES.NOTE },
+            { id: 'unknown-1', type: 'mystery-type' }
+          ]
+        }
+      ]
+    }
+
+    const validCards = normalizeCards(importData.cards)
+    expect(validCards).toHaveLength(1)
+    expect(validCards[0].elements).toHaveLength(1)
+    expect(validCards[0].elements[0].type).toBe(ELEMENT_TYPES.NOTE)
   })
 })
 

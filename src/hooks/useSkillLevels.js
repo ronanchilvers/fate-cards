@@ -3,6 +3,27 @@ import { safeGetJSON, safeSetJSON } from '../utils/storage'
 import { STORAGE_KEYS } from '../constants'
 import { defaultSkillLevels } from '../data/defaults'
 
+const normalizeSkillLevelsList = (levels) => {
+  if (!Array.isArray(levels)) return null
+  const seen = new Set()
+  const normalized = []
+
+  levels.forEach(level => {
+    if (!level || typeof level !== 'object' || Array.isArray(level)) return
+    const label = typeof level.label === 'string' ? level.label.trim() : ''
+    if (!label || seen.has(label)) return
+    const value = typeof level.value === 'number' && !Number.isNaN(level.value)
+      ? level.value
+      : null
+    if (value === null) return
+    seen.add(label)
+    normalized.push({ label, value })
+  })
+
+  if (normalized.length === 0) return null
+  return normalized.sort((a, b) => b.value - a.value)
+}
+
 /**
  * Custom hook for managing skill levels (the Fate ladder)
  * Handles CRUD operations and localStorage persistence
@@ -16,8 +37,9 @@ export function useSkillLevels() {
   // Load skill levels from localStorage on mount
   useEffect(() => {
     const savedSkillLevels = safeGetJSON(STORAGE_KEYS.SKILL_LEVELS)
-    if (savedSkillLevels && Array.isArray(savedSkillLevels)) {
-      setSkillLevels(savedSkillLevels)
+    const normalizedLevels = normalizeSkillLevelsList(savedSkillLevels)
+    if (normalizedLevels) {
+      setSkillLevels(normalizedLevels)
     }
     setIsLoaded(true)
   }, [])

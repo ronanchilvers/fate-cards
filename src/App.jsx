@@ -15,7 +15,7 @@ import {
   useCategories, 
   useCards 
 } from './hooks'
-import { STORAGE_KEYS } from './constants'
+import { FILE_CONSTRAINTS, STORAGE_KEYS } from './constants'
 
 function App() {
   // Custom hooks for state management
@@ -126,6 +126,13 @@ function App() {
   const importCards = (event) => {
     const file = event.target.files[0]
     if (!file) return
+
+    if (file.size > FILE_CONSTRAINTS.MAX_IMPORT_SIZE) {
+      const maxSizeMb = Math.ceil(FILE_CONSTRAINTS.MAX_IMPORT_SIZE / (1024 * 1024))
+      alert(`Import file is too large. Maximum size is ${maxSizeMb} MB.`)
+      event.target.value = ''
+      return
+    }
 
     const reader = new FileReader()
     reader.onload = (e) => {
