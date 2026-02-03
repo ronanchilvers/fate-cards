@@ -188,14 +188,15 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
             <button onClick={() => setShowElementMenu(false)}>×</button>
           </div>
           <div className="element-menu-options">
-            <button onClick={() => addElement(ELEMENT_TYPES.HIGH_CONCEPT)}>High Concept</button>
-            <button onClick={() => addElement(ELEMENT_TYPES.TROUBLE)}>Trouble</button>
             <button onClick={() => addElement(ELEMENT_TYPES.ASPECTS)}>Aspects List</button>
-            <button onClick={() => addElement(ELEMENT_TYPES.SKILLS)}>Skill List</button>
-            <button onClick={() => addElement(ELEMENT_TYPES.STRESS_TRACKS)}>Stress Tracks</button>
             <button onClick={() => addElement(ELEMENT_TYPES.CONSEQUENCES)}>Consequences List</button>
             <button onClick={() => addElement(ELEMENT_TYPES.FATE_POINTS)}>Fate Points</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.HIGH_CONCEPT)}>High Concept</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.INVENTORY)}>Inventory</button>
             <button onClick={() => addElement(ELEMENT_TYPES.NOTE)}>Note</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.SKILLS)}>Skill List</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.STRESS_TRACKS)}>Stress Tracks</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.TROUBLE)}>Trouble</button>
           </div>
         </div>
       )}
