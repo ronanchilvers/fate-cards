@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './Card.css'
-import { getPaleBackground, getMidToneBackground } from '../utils/colors'
+import { getPaleBackground, getMidToneBackground, normalizeColorToHex } from '../utils/colors'
 import { createElementByType } from '../data/elementFactories'
 import { ELEMENT_COMPONENTS } from './elements'
 import { ELEMENT_TYPES } from '../constants'
@@ -50,10 +50,11 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
   }
 
   const saveSettings = () => {
+    const normalizedColor = normalizeColorToHex(settingsColor) || card.color || '#1f2937'
     updateCard({
       title: settingsTitle,
       subtitle: settingsSubtitle,
-      color: settingsColor,
+      color: normalizedColor,
       category: settingsCategory,
       layout: settingsLayout
     })

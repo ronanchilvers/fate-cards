@@ -80,9 +80,12 @@ export function useSkills() {
       return { success: false, warning: 'Skills were invalid and not imported.' }
     }
 
-    const validSkills = importedSkills.filter(skill => 
-      typeof skill === 'string' && skill.trim().length > 0
-    )
+    const trimmedSkills = importedSkills
+      .filter(skill => typeof skill === 'string')
+      .map(skill => skill.trim())
+      .filter(skill => skill.length > 0)
+
+    const validSkills = [...new Set(trimmedSkills)]
 
     if (validSkills.length === 0) {
       return { success: false, warning: 'Skills were invalid and not imported.' }

@@ -91,6 +91,31 @@ describe('useSkillLevels', () => {
     expect(updated.label).toBe('Updated Label')
   })
 
+  it('should reject empty or whitespace-only label updates', () => {
+    const { result } = renderHook(() => useSkillLevels())
+    const level = result.current.skillLevels[0]
+
+    act(() => {
+      result.current.updateSkillLevelLabel(level.value, '   ')
+    })
+
+    const updated = result.current.skillLevels.find(l => l.value === level.value)
+    expect(updated.label).toBe(level.label)
+  })
+
+  it('should reject duplicate label updates after trimming', () => {
+    const { result } = renderHook(() => useSkillLevels())
+    const target = result.current.skillLevels[0]
+    const existing = result.current.skillLevels[1]
+
+    act(() => {
+      result.current.updateSkillLevelLabel(target.value, `  ${existing.label}  `)
+    })
+
+    const updated = result.current.skillLevels.find(l => l.value === target.value)
+    expect(updated.label).toBe(target.label)
+  })
+
   it('should get skill level by value', () => {
     const { result } = renderHook(() => useSkillLevels())
     const expected = result.current.skillLevels[0]
