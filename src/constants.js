@@ -20,6 +20,7 @@ export const ELEMENT_TYPES = {
   TROUBLE: 'trouble',
   ASPECTS: 'aspects',
   SKILLS: 'skills',
+  INVENTORY: 'inventory',
   STRESS_TRACKS: 'stress-tracks',
   CONSEQUENCES: 'consequences',
   NOTE: 'note',

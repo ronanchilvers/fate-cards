@@ -204,6 +204,34 @@
   gap: 16px;
 }
 
+.card-element-drag-wrapper.draggable {
+  cursor: grab;
+}
+
+.card-element-drag-wrapper.dragging {
+  opacity: 0.65;
+}
+
+.card-element-drag-wrapper.drag-over .card-element {
+  outline: 2px dashed #c53030;
+  outline-offset: 2px;
+}
+
+.card-elements-dropzone {
+  display: none;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.card-elements-dropzone.active {
+  display: block;
+}
+
+.card-elements-dropzone.drag-over {
+  background: rgba(197, 48, 48, 0.12);
+  border: 1px dashed #c53030;
+}
+
 .card-element {
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -326,6 +354,34 @@
   border-color: #666;
   color: #333;
   background-color: #f5f5f5;
+}
+
+/* Inventory */
+.inventory-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.inventory-name {
+  flex: 1;
+}
+
+.inventory-delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.inventory-delete-btn:hover {
+  color: #c53030;
 }
 
 /* Skills */

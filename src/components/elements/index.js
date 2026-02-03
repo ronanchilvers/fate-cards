@@ -6,6 +6,7 @@ export { default as AspectsElement } from './AspectsElement'
 export { default as NoteElement } from './NoteElement'
 export { default as FatePointsElement } from './FatePointsElement'
 export { default as SkillsElement } from './SkillsElement'
+export { default as InventoryElement } from './InventoryElement'
 export { default as StressTracksElement } from './StressTracksElement'
 export { default as ConsequencesElement } from './ConsequencesElement'
 
@@ -15,6 +16,7 @@ import HighConceptElement from './HighConceptElement'
 import TroubleElement from './TroubleElement'
 import AspectsElement from './AspectsElement'
 import SkillsElement from './SkillsElement'
+import InventoryElement from './InventoryElement'
 import StressTracksElement from './StressTracksElement'
 import ConsequencesElement from './ConsequencesElement'
 import NoteElement from './NoteElement'
@@ -29,6 +31,7 @@ export const ELEMENT_COMPONENTS = {
   [ELEMENT_TYPES.TROUBLE]: TroubleElement,
   [ELEMENT_TYPES.ASPECTS]: AspectsElement,
   [ELEMENT_TYPES.SKILLS]: SkillsElement,
+  [ELEMENT_TYPES.INVENTORY]: InventoryElement,
   [ELEMENT_TYPES.STRESS_TRACKS]: StressTracksElement,
   [ELEMENT_TYPES.CONSEQUENCES]: ConsequencesElement,
   [ELEMENT_TYPES.NOTE]: NoteElement,

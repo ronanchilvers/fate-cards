@@ -9,11 +9,20 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
   const [showElementMenu, setShowElementMenu] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [isLocked, setIsLocked] = useState(card.locked || false)
+  const [draggedElementId, setDraggedElementId] = useState(null)
+  const [dragOverElementId, setDragOverElementId] = useState(null)
   
   // Sync locked state when card prop changes
   useEffect(() => {
     setIsLocked(card.locked || false)
   }, [card.locked])
+
+  useEffect(() => {
+    if (isLocked) {
+      setDraggedElementId(null)
+      setDragOverElementId(null)
+    }
+  }, [isLocked])
   
   // Settings form state
   const [settingsTitle, setSettingsTitle] = useState(card.title)
@@ -84,6 +93,89 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     updateCard({
       elements: card.elements.filter(el => el.id !== elementId)
     })
+  }
+
+  const handleDragStart = (event, elementId) => {
+    if (isLocked) return
+    if (event.target.closest('input, textarea, select, button')) {
+      event.preventDefault()
+      return
+    }
+    setDraggedElementId(elementId)
+    setDragOverElementId(null)
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', elementId)
+  }
+
+  const handleDragOver = (event, elementId) => {
+    if (isLocked) return
+    event.preventDefault()
+    if (dragOverElementId !== elementId) {
+      setDragOverElementId(elementId)
+    }
+    event.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleDrop = (event, elementId) => {
+    if (isLocked) return
+    event.preventDefault()
+    const sourceId = event.dataTransfer.getData('text/plain') || draggedElementId
+    if (!sourceId || sourceId === elementId) {
+      setDragOverElementId(null)
+      setDraggedElementId(null)
+      return
+    }
+
+    const elements = card.elements || []
+    const fromIndex = elements.findIndex(el => el.id === sourceId)
+    const toIndex = elements.findIndex(el => el.id === elementId)
+
+    if (fromIndex === -1 || toIndex === -1) {
+      setDragOverElementId(null)
+      setDraggedElementId(null)
+      return
+    }
+
+    const nextElements = [...elements]
+    const [moved] = nextElements.splice(fromIndex, 1)
+    const insertIndex = fromIndex < toIndex ? toIndex - 1 : toIndex
+    nextElements.splice(insertIndex, 0, moved)
+
+    updateCard({ elements: nextElements })
+    setDragOverElementId(null)
+    setDraggedElementId(null)
+  }
+
+  const handleDropAtEnd = (event) => {
+    if (isLocked) return
+    event.preventDefault()
+    const sourceId = event.dataTransfer.getData('text/plain') || draggedElementId
+    if (!sourceId) {
+      setDragOverElementId(null)
+      setDraggedElementId(null)
+      return
+    }
+
+    const elements = card.elements || []
+    const fromIndex = elements.findIndex(el => el.id === sourceId)
+    if (fromIndex === -1) {
+      setDragOverElementId(null)
+      setDraggedElementId(null)
+      return
+    }
+
+    const nextElements = [...elements]
+    const [moved] = nextElements.splice(fromIndex, 1)
+    nextElements.push(moved)
+
+    updateCard({ elements: nextElements })
+    setDragOverElementId(null)
+    setDraggedElementId(null)
+  }
+
+  const handleDragEnd = () => {
+    setDragOverElementId(null)
+    setDraggedElementId(null)
   }
 
   /**
@@ -188,14 +280,15 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
             <button onClick={() => setShowElementMenu(false)}>×</button>
           </div>
           <div className="element-menu-options">
-            <button onClick={() => addElement(ELEMENT_TYPES.HIGH_CONCEPT)}>High Concept</button>
-            <button onClick={() => addElement(ELEMENT_TYPES.TROUBLE)}>Trouble</button>
             <button onClick={() => addElement(ELEMENT_TYPES.ASPECTS)}>Aspects List</button>
-            <button onClick={() => addElement(ELEMENT_TYPES.SKILLS)}>Skill List</button>
-            <button onClick={() => addElement(ELEMENT_TYPES.STRESS_TRACKS)}>Stress Tracks</button>
             <button onClick={() => addElement(ELEMENT_TYPES.CONSEQUENCES)}>Consequences List</button>
             <button onClick={() => addElement(ELEMENT_TYPES.FATE_POINTS)}>Fate Points</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.HIGH_CONCEPT)}>High Concept</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.INVENTORY)}>Inventory</button>
             <button onClick={() => addElement(ELEMENT_TYPES.NOTE)}>Note</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.SKILLS)}>Skill List</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.STRESS_TRACKS)}>Stress Tracks</button>
+            <button onClick={() => addElement(ELEMENT_TYPES.TROUBLE)}>Trouble</button>
           </div>
         </div>
       )}
@@ -208,7 +301,46 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
 
         <div className="card-body">
           <div className="card-elements" style={{ color: card.color }}>
-            {card.elements.map(element => renderElement(element))}
+            {card.elements.map(element => (
+              <div
+                key={element.id}
+                className={[
+                  'card-element-drag-wrapper',
+                  !isLocked ? 'draggable' : '',
+                  draggedElementId === element.id ? 'dragging' : '',
+                  dragOverElementId === element.id ? 'drag-over' : ''
+                ].filter(Boolean).join(' ')}
+                draggable={!isLocked}
+                onDragStart={(event) => handleDragStart(event, element.id)}
+                onDragOver={(event) => handleDragOver(event, element.id)}
+                onDragLeave={() => {
+                  if (dragOverElementId === element.id) {
+                    setDragOverElementId(null)
+                  }
+                }}
+                onDrop={(event) => handleDrop(event, element.id)}
+                onDragEnd={handleDragEnd}
+              >
+                {renderElement(element)}
+              </div>
+            ))}
+            {!isLocked && card.elements.length > 0 && (
+              <div
+                className={[
+                  'card-elements-dropzone',
+                  draggedElementId ? 'active' : '',
+                  dragOverElementId === 'end' ? 'drag-over' : ''
+                ].filter(Boolean).join(' ')}
+                onDragOver={(event) => handleDragOver(event, 'end')}
+                onDragLeave={() => {
+                  if (dragOverElementId === 'end') {
+                    setDragOverElementId(null)
+                  }
+                }}
+                onDrop={handleDropAtEnd}
+                onDragEnd={handleDragEnd}
+              />
+            )}
           </div>
 
           {card.elements.length === 0 && !isLocked && (
