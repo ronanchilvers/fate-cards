@@ -33,3 +33,8 @@ export const THEME_MODES = {
   DARK: 'dark',
   AUTO: 'auto'
 }
+
+// File constraints
+export const FILE_CONSTRAINTS = {
+  MAX_IMPORT_SIZE: 5 * 1024 * 1024 // 5MB
+}
