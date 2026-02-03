@@ -1,10 +1,12 @@
 # Fate Cards — Agents Instructions
 
+
 ## Commands (run early when relevant)
-- Install deps: `npm install`
-- Dev server: `npm run dev`
-- Build: `npm run build`
-- Preview build: `npm run preview`
+**NB:** The development environment uses asdf to manage multiple versions of node.js. You will need to query asdf to find the correct shims and binary locations for running the following commands. In addition, use of `npq-hero` is preferred for security reasons.
+- Install deps: `npq-hero ci`
+- Dev server: `npq-hero run dev`
+- Build: `npq-hero run build`
+- Preview build: `npq-hero run preview`
 
 ## Project knowledge
 - **Tech stack:** React 18, Vite 5, JavaScript (ESM)
