@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { safeGetJSON, safeSetJSON } from '../utils/storage'
 import { STORAGE_KEYS } from '../constants'
 import { defaultCategories } from '../data/defaults'
-import { getCategoryColor } from '../utils/colors'
+import { getCategoryColor, normalizeColorToHex } from '../utils/colors'
 
 const normalizeCategoryList = (categories) => {
   if (!Array.isArray(categories)) return null
@@ -154,7 +154,8 @@ export function useCategories() {
    * @returns {string} Hex color code
    */
   const getCategoryColorWithDefaults = useCallback((categoryName) => {
-    return getCategoryColor(categoryName, defaultColors)
+    const resolvedColor = getCategoryColor(categoryName, defaultColors)
+    return normalizeColorToHex(resolvedColor) || '#1f2937'
   }, [])
 
   /**
@@ -184,9 +185,12 @@ export function useCategories() {
       return { success: false, warning: 'Categories were invalid and not imported.' }
     }
 
-    const validCategories = importedCategories.filter(cat => 
-      typeof cat === 'string' && cat.trim().length > 0
-    )
+    const trimmedCategories = importedCategories
+      .filter(cat => typeof cat === 'string')
+      .map(cat => cat.trim())
+      .filter(cat => cat.length > 0)
+
+    const validCategories = [...new Set(trimmedCategories)]
 
     if (validCategories.length === 0) {
       return { success: false, warning: 'Categories were invalid and not imported.' }

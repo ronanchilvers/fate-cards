@@ -22,11 +22,11 @@ class ErrorBoundary extends React.Component {
     console.error('ErrorBoundary caught an error:', error, errorInfo)
     
     // Store error details in state for display
-    this.state = {
+    this.setState({
       hasError: true,
       error,
       errorInfo
-    }
+    })
   }
 
   handleReset = () => {

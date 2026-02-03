@@ -5,6 +5,7 @@
  * ensuring data integrity and providing safe defaults for missing fields.
  */
 
+import { normalizeColorToHex } from './colors'
 import { ELEMENT_TYPES } from '../constants'
 
 /**
@@ -192,10 +193,9 @@ export function normalizeCard(card) {
     ? card.category
     : 'PCs'
 
-  // Ensure color is a valid hex string (default: '#1f2937')
-  const color = isValidHexColor(card.color)
-    ? card.color
-    : '#1f2937'
+  // Ensure color is a valid hex or HSL string, normalized to hex (default: '#1f2937')
+  const normalizedColor = normalizeColorToHex(card.color)
+  const color = normalizedColor || '#1f2937'
 
   // Ensure layout is one of the allowed values (default: 'auto')
   const allowedLayouts = ['auto', 'single-column', '2-column']

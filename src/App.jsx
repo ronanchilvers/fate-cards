@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import './App.css'
 import Card from './components/Card'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -42,6 +42,24 @@ function App() {
   const [lastExportFilename, setLastExportFilename] = useState(() => {
     return localStorage.getItem(STORAGE_KEYS.LAST_EXPORT_FILENAME) || ''
   })
+
+  const { cardsByCategory, cardCounts } = useMemo(() => {
+    const byCategory = new Map()
+    const counts = new Map()
+
+    cardsHook.cards.forEach(card => {
+      const existing = byCategory.get(card.category)
+      if (existing) {
+        existing.push(card)
+      } else {
+        byCategory.set(card.category, [card])
+      }
+
+      counts.set(card.category, (counts.get(card.category) || 0) + 1)
+    })
+
+    return { cardsByCategory: byCategory, cardCounts: counts }
+  }, [cardsHook.cards])
 
   const openTemplateMenu = () => {
     setShowTemplateMenu(true)
@@ -193,7 +211,7 @@ function App() {
   }
 
   const handleDeleteCategory = (categoryName) => {
-    const cardCount = cardsHook.getCardCountByCategory(categoryName)
+    const cardCount = cardCounts.get(categoryName) || 0
     if (cardCount > 0) {
       alert(`Cannot delete category "${categoryName}" because it contains ${cardCount} card(s). Please move or delete the cards first.`)
       return
@@ -259,57 +277,62 @@ function App() {
         </div>
       </header>
 
-      {categoriesHook.categories.map(category => (
-        <div key={category} className={`category-section ${categoriesHook.isCategoryCollapsed(category) ? 'collapsed' : ''}`}>
-          <div
-            className="category-header"
-            style={{ backgroundColor: categoriesHook.getCategoryColorWithDefaults(category), cursor: 'pointer' }}
-            onClick={() => categoriesHook.toggleCategoryCollapse(category)}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: categoriesHook.isCategoryCollapsed(category) ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
-                ▼
-              </span>
-              <h2>{category}</h2>
-            </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleDeleteCategory(category)
-              }}
-              className="delete-category-btn"
-              title={cardsHook.getCardCountByCategory(category) > 0 ? 'Cannot delete category with cards' : 'Delete category'}
-            >
-              ×
-            </button>
-          </div>
+      {categoriesHook.categories.map(category => {
+        const cardsForCategory = cardsByCategory.get(category) || []
+        const cardCount = cardCounts.get(category) || 0
 
-          {!categoriesHook.isCategoryCollapsed(category) && (
-            <ErrorBoundary>
-              <div className="cards-container">
-                {cardsHook.getCardsByCategory(category).length === 0 ? (
-                  <p className="empty-category-message">
-                    Click the <strong>Add Card</strong> button above to add a card to this category
-                  </p>
-                ) : (
-                  cardsHook.getCardsByCategory(category).map(card => (
-                    <Card
-                      key={card.id}
-                      card={card}
-                      onUpdate={cardsHook.updateCard}
-                      onDelete={cardsHook.deleteCard}
-                      onDuplicate={cardsHook.duplicateCard}
-                      skills={skillsHook.skills}
-                      skillLevels={skillLevelsHook.skillLevels}
-                      categories={categoriesHook.categories}
-                    />
-                  ))
-                )}
+        return (
+          <div key={category} className={`category-section ${categoriesHook.isCategoryCollapsed(category) ? 'collapsed' : ''}`}>
+            <div
+              className="category-header"
+              style={{ backgroundColor: categoriesHook.getCategoryColorWithDefaults(category), cursor: 'pointer' }}
+              onClick={() => categoriesHook.toggleCategoryCollapse(category)}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: categoriesHook.isCategoryCollapsed(category) ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+                <h2>{category}</h2>
               </div>
-            </ErrorBoundary>
-          )}
-        </div>
-      ))}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDeleteCategory(category)
+                }}
+                className="delete-category-btn"
+                title={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
+              >
+                ×
+              </button>
+            </div>
+
+            {!categoriesHook.isCategoryCollapsed(category) && (
+              <ErrorBoundary>
+                <div className="cards-container">
+                  {cardsForCategory.length === 0 ? (
+                    <p className="empty-category-message">
+                      Click the <strong>Add Card</strong> button above to add a card to this category
+                    </p>
+                  ) : (
+                    cardsForCategory.map(card => (
+                      <Card
+                        key={card.id}
+                        card={card}
+                        onUpdate={cardsHook.updateCard}
+                        onDelete={cardsHook.deleteCard}
+                        onDuplicate={cardsHook.duplicateCard}
+                        skills={skillsHook.skills}
+                        skillLevels={skillLevelsHook.skillLevels}
+                        categories={categoriesHook.categories}
+                      />
+                    ))
+                  )}
+                </div>
+              </ErrorBoundary>
+            )}
+          </div>
+        )
+      })}
 
       <TemplateModal
         isOpen={showTemplateMenu}

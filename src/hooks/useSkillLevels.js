@@ -113,10 +113,18 @@ export function useSkillLevels() {
    * @param {string} newLabel - New label text
    */
   const updateSkillLevelLabel = useCallback((levelValue, newLabel) => {
+    const trimmedLabel = newLabel?.trim()
+    if (!trimmedLabel) return false
+
+    if (skillLevels.some(level => level.value !== levelValue && level.label === trimmedLabel)) {
+      return false
+    }
+
     setSkillLevels(prev => prev.map(level =>
-      level.value === levelValue ? { ...level, label: newLabel } : level
+      level.value === levelValue ? { ...level, label: trimmedLabel } : level
     ))
-  }, [])
+    return true
+  }, [skillLevels])
 
   /**
    * Get a skill level by value

@@ -105,6 +105,33 @@ describe('useCategories', () => {
     expect(result.current.categories).not.toContain(oldName)
   })
 
+  it('should reject renaming to empty or whitespace-only names', () => {
+    const { result } = renderHook(() => useCategories())
+    const oldName = result.current.categories[0]
+
+    let renameResult
+    act(() => {
+      renameResult = result.current.renameCategory(oldName, '   ')
+    })
+
+    expect(renameResult).toBe(false)
+    expect(result.current.categories).toContain(oldName)
+  })
+
+  it('should reject renaming to a duplicate category after trimming', () => {
+    const { result } = renderHook(() => useCategories())
+    const oldName = result.current.categories[0]
+    const existing = result.current.categories[1]
+
+    let renameResult
+    act(() => {
+      renameResult = result.current.renameCategory(oldName, `  ${existing}  `)
+    })
+
+    expect(renameResult).toBe(false)
+    expect(result.current.categories).toContain(oldName)
+  })
+
   it('should toggle category collapsed state', () => {
     const { result } = renderHook(() => useCategories())
     const category = result.current.categories[0]
@@ -163,6 +190,20 @@ describe('useCategories', () => {
 
     expect(importResult.success).toBe(true)
     expect(result.current.categories).toEqual(imported)
+  })
+
+  it('should trim imported categories and drop empty entries', () => {
+    const { result } = renderHook(() => useCategories())
+    const imported = ['  Imported 1  ', '', '  ', 'Imported 2', '  Imported 3 ']
+
+    let importResult
+    act(() => {
+      importResult = result.current.importCategories(imported)
+    })
+
+    expect(importResult.success).toBe(true)
+    expect(importResult.count).toBe(3)
+    expect(result.current.categories).toEqual(['Imported 1', 'Imported 2', 'Imported 3'])
   })
 
   it('should persist categories to localStorage', () => {

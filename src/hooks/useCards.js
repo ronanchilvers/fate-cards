@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { safeGetJSON, safeSetJSON } from '../utils/storage'
 import { normalizeCards } from '../utils/cardSchema'
+import { normalizeColorToHex } from '../utils/colors'
 import { STORAGE_KEYS } from '../constants'
 import { defaultSampleCard } from '../data/defaults'
 import { cardTemplates } from '../data/cardTemplates'
@@ -42,11 +43,25 @@ export function useCards({ getCategoryColor } = {}) {
    * @param {string} color - Optional color override
    * @returns {Object} The new card
    */
+  const resolveCardColor = useCallback((category, overrideColor = null) => {
+    if (overrideColor) {
+      const normalizedOverride = normalizeColorToHex(overrideColor)
+      if (normalizedOverride) return normalizedOverride
+    }
+
+    if (getCategoryColor) {
+      const normalizedCategory = normalizeColorToHex(getCategoryColor(category))
+      if (normalizedCategory) return normalizedCategory
+    }
+
+    return '#1f2937'
+  }, [getCategoryColor])
+
   const addCard = useCallback((category, color = null) => {
     const newCard = {
       id: crypto.randomUUID(),
       category,
-      color: color || (getCategoryColor ? getCategoryColor(category) : '#1f2937'),
+      color: resolveCardColor(category, color),
       title: 'New Card',
       subtitle: '',
       elements: [],
@@ -54,7 +69,7 @@ export function useCards({ getCategoryColor } = {}) {
     }
     setCards(prev => [...prev, newCard])
     return newCard
-  }, [getCategoryColor])
+  }, [resolveCardColor])
 
   /**
    * Add a card from a template
@@ -69,13 +84,13 @@ export function useCards({ getCategoryColor } = {}) {
     const newCard = {
       id: crypto.randomUUID(),
       category,
-      color: color || (getCategoryColor ? getCategoryColor(category) : '#1f2937'),
+      color: resolveCardColor(category, color),
       layout: 'auto',
       ...templateData
     }
     setCards(prev => [...prev, newCard])
     return newCard
-  }, [getCategoryColor])
+  }, [resolveCardColor])
 
   /**
    * Update a card
@@ -143,10 +158,13 @@ export function useCards({ getCategoryColor } = {}) {
   const moveCardToCategory = useCallback((cardId, newCategory, newColor = null) => {
     setCards(prev => prev.map(card => {
       if (card.id === cardId) {
+        const resolvedColor = newColor
+          ? normalizeColorToHex(newColor) || card.color
+          : card.color
         return {
           ...card,
           category: newCategory,
-          color: newColor || card.color
+          color: resolvedColor
         }
       }
       return card
