@@ -3,6 +3,23 @@ import { safeGetJSON, safeSetJSON } from '../utils/storage'
 import { STORAGE_KEYS } from '../constants'
 import { defaultSkills } from '../data/defaults'
 
+const normalizeSkillsList = (skills) => {
+  if (!Array.isArray(skills)) return null
+  const seen = new Set()
+  const normalized = []
+
+  skills.forEach(skill => {
+    if (typeof skill !== 'string') return
+    const trimmed = skill.trim()
+    if (!trimmed || seen.has(trimmed)) return
+    seen.add(trimmed)
+    normalized.push(trimmed)
+  })
+
+  if (normalized.length === 0) return null
+  return normalized.sort((a, b) => a.localeCompare(b))
+}
+
 /**
  * Custom hook for managing skills list
  * Handles CRUD operations and localStorage persistence
@@ -16,8 +33,9 @@ export function useSkills() {
   // Load skills from localStorage on mount
   useEffect(() => {
     const savedSkills = safeGetJSON(STORAGE_KEYS.SKILLS)
-    if (savedSkills && Array.isArray(savedSkills)) {
-      setSkills(savedSkills)
+    const normalizedSkills = normalizeSkillsList(savedSkills)
+    if (normalizedSkills) {
+      setSkills(normalizedSkills)
     }
     setIsLoaded(true)
   }, [])

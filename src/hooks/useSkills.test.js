@@ -22,6 +22,14 @@ describe('useSkills', () => {
     expect(result.current.skills).toEqual(savedSkills)
   })
 
+  it('should normalize skills loaded from localStorage', () => {
+    const savedSkills = ['  Shoot ', '', 'Athletics', 'Fight ', 'Shoot', 'Athletics']
+    localStorage.setItem(STORAGE_KEYS.SKILLS, JSON.stringify(savedSkills))
+
+    const { result } = renderHook(() => useSkills())
+    expect(result.current.skills).toEqual(['Athletics', 'Fight', 'Shoot'])
+  })
+
   it('should add a new skill alphabetically', () => {
     const { result } = renderHook(() => useSkills())
     

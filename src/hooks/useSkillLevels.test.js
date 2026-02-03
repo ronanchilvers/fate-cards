@@ -25,6 +25,24 @@ describe('useSkillLevels', () => {
     expect(result.current.skillLevels).toEqual(savedLevels)
   })
 
+  it('should normalize skill levels loaded from localStorage', () => {
+    const savedLevels = [
+      { label: '  Great ', value: 4 },
+      { label: '', value: 2 },
+      { label: 'Good', value: 3 },
+      { label: 'Great', value: 4 },
+      { label: '  Fair ', value: 2 }
+    ]
+    localStorage.setItem(STORAGE_KEYS.SKILL_LEVELS, JSON.stringify(savedLevels))
+
+    const { result } = renderHook(() => useSkillLevels())
+    expect(result.current.skillLevels).toEqual([
+      { label: 'Great', value: 4 },
+      { label: 'Good', value: 3 },
+      { label: 'Fair', value: 2 }
+    ])
+  })
+
   it('should add skill level at top with highest value', () => {
     const { result } = renderHook(() => useSkillLevels())
     const maxBefore = Math.max(...result.current.skillLevels.map(l => l.value))

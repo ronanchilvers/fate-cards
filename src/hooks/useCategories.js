@@ -4,6 +4,22 @@ import { STORAGE_KEYS } from '../constants'
 import { defaultCategories } from '../data/defaults'
 import { getCategoryColor } from '../utils/colors'
 
+const normalizeCategoryList = (categories) => {
+  if (!Array.isArray(categories)) return null
+  const seen = new Set()
+  const normalized = []
+
+  categories.forEach(category => {
+    if (typeof category !== 'string') return
+    const trimmed = category.trim()
+    if (!trimmed || seen.has(trimmed)) return
+    seen.add(trimmed)
+    normalized.push(trimmed)
+  })
+
+  return normalized.length > 0 ? normalized : null
+}
+
 /**
  * Custom hook for managing card categories
  * Handles CRUD operations, collapsed state, and localStorage persistence
@@ -20,8 +36,9 @@ export function useCategories() {
     const savedCategories = safeGetJSON(STORAGE_KEYS.CATEGORIES)
     const savedCollapsed = safeGetJSON(STORAGE_KEYS.COLLAPSED_CATEGORIES)
     
-    if (savedCategories && Array.isArray(savedCategories)) {
-      setCategories(savedCategories)
+    const normalizedCategories = normalizeCategoryList(savedCategories)
+    if (normalizedCategories) {
+      setCategories(normalizedCategories)
     }
     if (savedCollapsed && Array.isArray(savedCollapsed)) {
       setCollapsedCategories(savedCollapsed)

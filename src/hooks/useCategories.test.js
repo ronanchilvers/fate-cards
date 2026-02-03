@@ -22,6 +22,14 @@ describe('useCategories', () => {
     expect(result.current.categories).toEqual(saved)
   })
 
+  it('should normalize categories loaded from localStorage', () => {
+    const saved = [' PCs ', '', 'NPCs', 'PCs', '  ', 'Scenes', 'Scenes']
+    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(saved))
+
+    const { result } = renderHook(() => useCategories())
+    expect(result.current.categories).toEqual(['PCs', 'NPCs', 'Scenes'])
+  })
+
   it('should load collapsed state from localStorage', () => {
     const categories = ['Cat1', 'Cat2', 'Cat3']
     const collapsed = ['Cat2']
