@@ -11,8 +11,10 @@ import ElementWrapper from './ElementWrapper'
  * @param {boolean} props.isLocked - Whether card is locked
  * @param {Function} props.onUpdate - Called with updates object
  * @param {Function} props.onDelete - Called to delete element
+ * @param {boolean} props.showDragHandle - Whether to show drag handle
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpdate, onDelete }) {
+function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
   // Defensive: ensure items is an array
   const items = element.items || []
   
@@ -41,6 +43,8 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
         title="Skills" 
         isLocked={isLocked} 
         onDelete={onDelete}
+        showDragHandle={showDragHandle}
+        dragHandleProps={dragHandleProps}
       >
         {existingLevels.map(level => {
           const levelSkills = skillsByRating[level.value] || []
@@ -70,6 +74,8 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
       title="Skills" 
       isLocked={isLocked} 
       onDelete={onDelete}
+      showDragHandle={showDragHandle}
+      dragHandleProps={dragHandleProps}
     >
       {existingLevels.map(level => {
         const levelSkills = skillsByRating[level.value] || []

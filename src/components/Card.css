@@ -204,6 +204,30 @@
   gap: 16px;
 }
 
+.card-element-drag-wrapper.dragging {
+  opacity: 0.65;
+}
+
+.card-element-drag-wrapper.drag-over .card-element {
+  outline: 2px dashed #c53030;
+  outline-offset: 2px;
+}
+
+.card-elements-dropzone {
+  display: none;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.card-elements-dropzone.active {
+  display: block;
+}
+
+.card-elements-dropzone.drag-over {
+  background: rgba(197, 48, 48, 0.12);
+  border: 1px dashed #c53030;
+}
+
 .card-element {
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -224,6 +248,19 @@
   margin-bottom: 10px;
 }
 
+.element-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.element-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .element-header h4 {
   margin: 0;
   font-size: 0.9rem;
@@ -231,6 +268,44 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.element-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  padding: 0;
+  cursor: grab;
+  flex-shrink: 0;
+  touch-action: none;
+}
+
+.element-drag-handle:active {
+  cursor: grabbing;
+}
+
+.element-drag-handle-icon {
+  width: 12px;
+  height: 12px;
+  background-image: linear-gradient(
+    to bottom,
+    #888 0,
+    #888 2px,
+    transparent 2px,
+    transparent 5px,
+    #888 5px,
+    #888 7px,
+    transparent 7px,
+    transparent 10px,
+    #888 10px,
+    #888 12px
+  );
+  background-size: 100% 12px;
 }
 
 .element-delete-btn {

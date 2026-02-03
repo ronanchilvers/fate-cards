@@ -9,6 +9,8 @@
  * @param {Function} props.onDelete - Called when delete button clicked
  * @param {React.ReactNode} props.headerExtra - Extra content for header (optional)
  * @param {string} props.className - Additional CSS classes (optional)
+ * @param {boolean} props.showDragHandle - Whether to show drag handle (optional)
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button (optional)
  */
 function ElementWrapper({ 
   title, 
@@ -16,22 +18,44 @@ function ElementWrapper({
   isLocked, 
   onDelete,
   headerExtra = null,
-  className = ''
+  className = '',
+  showDragHandle = false,
+  dragHandleProps = {}
 }) {
+  const resolvedDragHandleProps = {
+    'data-drag-handle': true,
+    type: 'button',
+    ...dragHandleProps
+  }
+
   return (
     <div className={`card-element ${isLocked ? 'locked' : ''} ${className}`.trim()}>
       <div className="element-header">
-        <h4>{title}</h4>
-        {headerExtra}
-        {!isLocked && onDelete && (
-          <button 
-            onClick={onDelete}
-            className="element-delete-btn"
-            aria-label={`Delete ${title}`}
-          >
-            ×
-          </button>
-        )}
+        <div className="element-header-left">
+          {showDragHandle && (
+            <button
+              className="element-drag-handle"
+              aria-label={`Drag ${title}`}
+              title="Drag to reorder"
+              {...resolvedDragHandleProps}
+            >
+              <span className="element-drag-handle-icon" aria-hidden="true" />
+            </button>
+          )}
+          <h4>{title}</h4>
+        </div>
+        <div className="element-header-actions">
+          {headerExtra}
+          {!isLocked && onDelete && (
+            <button 
+              onClick={onDelete}
+              className="element-delete-btn"
+              aria-label={`Delete ${title}`}
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
       {children}
     </div>

@@ -9,8 +9,10 @@ import ElementWrapper from './ElementWrapper'
  * @param {boolean} props.isLocked - Whether card is locked
  * @param {Function} props.onUpdate - Called with updates object
  * @param {Function} props.onDelete - Called to delete element
+ * @param {boolean} props.showDragHandle - Whether to show drag handle
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function TroubleElement({ element, isLocked, onUpdate, onDelete }) {
+function TroubleElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
   const handleTextChange = (e) => {
     onUpdate({ text: e.target.value })
   }
@@ -20,6 +22,8 @@ function TroubleElement({ element, isLocked, onUpdate, onDelete }) {
       title="Trouble" 
       isLocked={isLocked} 
       onDelete={onDelete}
+      showDragHandle={showDragHandle}
+      dragHandleProps={dragHandleProps}
     >
       <input
         type="text"
