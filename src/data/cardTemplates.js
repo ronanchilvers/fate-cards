@@ -10,6 +10,7 @@ import {
   createTroubleElement,
   createAspectsElement,
   createSkillsElement,
+  createInventoryElement,
   createStressTracksElement,
   createConsequencesElement,
   createNoteElement,
@@ -28,6 +29,7 @@ export const standardPC = () => ({
     createTroubleElement(),
     createAspectsElement(3),
     createSkillsElement(),
+    createInventoryElement(),
     createStressTracksElement(),
     createConsequencesElement(),
     createFatePointsElement()

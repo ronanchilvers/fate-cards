@@ -29,6 +29,7 @@ describe('standardPC template', () => {
     expect(types).toContain('trouble')
     expect(types).toContain('aspects')
     expect(types).toContain('skills')
+    expect(types).toContain('inventory')
     expect(types).toContain('stress-tracks')
     expect(types).toContain('consequences')
     expect(types).toContain('fate-points')

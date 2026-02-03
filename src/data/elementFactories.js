@@ -48,6 +48,19 @@ export const createSkillsElement = (items = []) => ({
 })
 
 /**
+ * Creates a new inventory element
+ * @param {Array} items - Initial inventory items
+ * @returns {Object} Inventory element structure
+ */
+export const createInventoryElement = (items = null) => ({
+  id: crypto.randomUUID(),
+  type: ELEMENT_TYPES.INVENTORY,
+  items: items || [
+    { id: crypto.randomUUID(), name: '' }
+  ]
+})
+
+/**
  * Creates a new stress tracks element
  * @param {Array} tracks - Custom tracks configuration
  * @returns {Object} Stress tracks element structure
@@ -137,6 +150,7 @@ export const createElementByType = (type) => {
     [ELEMENT_TYPES.TROUBLE]: createTroubleElement,
     [ELEMENT_TYPES.ASPECTS]: createAspectsElement,
     [ELEMENT_TYPES.SKILLS]: createSkillsElement,
+    [ELEMENT_TYPES.INVENTORY]: createInventoryElement,
     [ELEMENT_TYPES.STRESS_TRACKS]: createStressTracksElement,
     [ELEMENT_TYPES.CONSEQUENCES]: createConsequencesElement,
     [ELEMENT_TYPES.NOTE]: createNoteElement,
