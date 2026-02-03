@@ -5,14 +5,7 @@
  * ensuring data integrity and providing safe defaults for missing fields.
  */
 
-/**
- * Validates if a string is a valid hex color code
- * @param {string} color - The color string to validate
- * @returns {boolean} True if valid hex color, false otherwise
- */
-function isValidHexColor(color) {
-  return typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color)
-}
+import { normalizeColorToHex } from './colors'
 
 /**
  * Normalizes a single card object, ensuring all required fields exist with valid values
@@ -50,10 +43,9 @@ export function normalizeCard(card) {
     ? card.category
     : 'PCs'
 
-  // Ensure color is a valid hex string (default: '#1f2937')
-  const color = isValidHexColor(card.color)
-    ? card.color
-    : '#1f2937'
+  // Ensure color is a valid hex or HSL string, normalized to hex (default: '#1f2937')
+  const normalizedColor = normalizeColorToHex(card.color)
+  const color = normalizedColor || '#1f2937'
 
   // Ensure layout is one of the allowed values (default: 'auto')
   const allowedLayouts = ['auto', 'single-column', '2-column']

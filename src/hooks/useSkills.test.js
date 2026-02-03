@@ -89,6 +89,20 @@ describe('useSkills', () => {
     expect(result.current.skills).toEqual(defaultSkills)
   })
 
+  it('should trim imported skills and drop empty entries', () => {
+    const { result } = renderHook(() => useSkills())
+    const importedSkills = ['  Skill A  ', '', '  ', 'Skill B', '  Skill C ']
+
+    let importResult
+    act(() => {
+      importResult = result.current.importSkills(importedSkills)
+    })
+
+    expect(importResult.success).toBe(true)
+    expect(importResult.count).toBe(3)
+    expect(result.current.skills).toEqual(['Skill A', 'Skill B', 'Skill C'])
+  })
+
   it('should import valid skills', () => {
     const { result } = renderHook(() => useSkills())
     const importedSkills = ['Skill A', 'Skill B', 'Skill C']
