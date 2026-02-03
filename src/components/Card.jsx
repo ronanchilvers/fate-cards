@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Card.css'
 import { getPaleBackground, getMidToneBackground, normalizeColorToHex } from '../utils/colors'
 import { createElementByType } from '../data/elementFactories'
@@ -11,6 +11,10 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
   const [isLocked, setIsLocked] = useState(card.locked || false)
   const [draggedElementId, setDraggedElementId] = useState(null)
   const [dragOverElementId, setDragOverElementId] = useState(null)
+  const [pointerDragId, setPointerDragId] = useState(null)
+  const elementRefs = useRef(new Map())
+  const pointerDragIdRef = useRef(null)
+  const dragHandlePressedRef = useRef(false)
   
   // Sync locked state when card prop changes
   useEffect(() => {
@@ -21,6 +25,8 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     if (isLocked) {
       setDraggedElementId(null)
       setDragOverElementId(null)
+      setPointerDragId(null)
+      pointerDragIdRef.current = null
     }
   }, [isLocked])
   
@@ -95,12 +101,42 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     })
   }
 
+  const moveElementToIndex = (sourceId, insertIndex) => {
+    if (!sourceId || insertIndex == null) return
+    const elements = card.elements || []
+    const fromIndex = elements.findIndex(el => el.id === sourceId)
+    if (fromIndex === -1) return
+
+    const clampedIndex = Math.max(0, Math.min(insertIndex, elements.length))
+    let adjustedIndex = clampedIndex
+    if (fromIndex < clampedIndex) {
+      adjustedIndex = clampedIndex - 1
+    }
+
+    if (adjustedIndex === fromIndex) return
+
+    const nextElements = [...elements]
+    const [moved] = nextElements.splice(fromIndex, 1)
+    const finalIndex = Math.max(0, Math.min(adjustedIndex, nextElements.length))
+    nextElements.splice(finalIndex, 0, moved)
+
+    updateCard({ elements: nextElements })
+  }
+
+  const resetDragState = () => {
+    setDraggedElementId(null)
+    setDragOverElementId(null)
+    setPointerDragId(null)
+    pointerDragIdRef.current = null
+  }
+
   const handleDragStart = (event, elementId) => {
     if (isLocked) return
-    if (event.target.closest('input, textarea, select, button')) {
+    if (!dragHandlePressedRef.current) {
       event.preventDefault()
       return
     }
+    dragHandlePressedRef.current = false
     setDraggedElementId(elementId)
     setDragOverElementId(null)
     event.dataTransfer.effectAllowed = 'move'
@@ -127,23 +163,13 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     }
 
     const elements = card.elements || []
-    const fromIndex = elements.findIndex(el => el.id === sourceId)
-    const toIndex = elements.findIndex(el => el.id === elementId)
-
-    if (fromIndex === -1 || toIndex === -1) {
-      setDragOverElementId(null)
-      setDraggedElementId(null)
+    const insertIndex = elements.findIndex(el => el.id === elementId)
+    if (insertIndex === -1) {
+      resetDragState()
       return
     }
-
-    const nextElements = [...elements]
-    const [moved] = nextElements.splice(fromIndex, 1)
-    const insertIndex = fromIndex < toIndex ? toIndex - 1 : toIndex
-    nextElements.splice(insertIndex, 0, moved)
-
-    updateCard({ elements: nextElements })
-    setDragOverElementId(null)
-    setDraggedElementId(null)
+    moveElementToIndex(sourceId, insertIndex)
+    resetDragState()
   }
 
   const handleDropAtEnd = (event) => {
@@ -157,25 +183,82 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
     }
 
     const elements = card.elements || []
-    const fromIndex = elements.findIndex(el => el.id === sourceId)
-    if (fromIndex === -1) {
-      setDragOverElementId(null)
-      setDraggedElementId(null)
-      return
-    }
-
-    const nextElements = [...elements]
-    const [moved] = nextElements.splice(fromIndex, 1)
-    nextElements.push(moved)
-
-    updateCard({ elements: nextElements })
-    setDragOverElementId(null)
-    setDraggedElementId(null)
+    moveElementToIndex(sourceId, elements.length)
+    resetDragState()
   }
 
   const handleDragEnd = () => {
+    resetDragState()
+  }
+
+  const getPointerInsertIndex = (clientX, clientY) => {
+    const elements = card.elements || []
+    const rects = elements
+      .map((element, index) => {
+        const node = elementRefs.current.get(element.id)
+        if (!node) return null
+        return { id: element.id, index, rect: node.getBoundingClientRect() }
+      })
+      .filter(Boolean)
+
+    if (rects.length === 0) return null
+
+    const columnCandidates = rects.filter(({ rect }) => clientX >= rect.left && clientX <= rect.right)
+    const candidates = columnCandidates.length > 0 ? columnCandidates : rects
+
+    candidates.sort((a, b) => a.rect.top - b.rect.top)
+
+    let lastCandidate = null
+    for (const candidate of candidates) {
+      const midpoint = candidate.rect.top + candidate.rect.height / 2
+      if (clientY < midpoint) {
+        return candidate.index
+      }
+      lastCandidate = candidate
+    }
+
+    return lastCandidate ? lastCandidate.index + 1 : null
+  }
+
+  const getInsertPreviewId = (insertIndex) => {
+    const elements = card.elements || []
+    if (insertIndex == null) return null
+    if (insertIndex >= elements.length) return 'end'
+    return elements[insertIndex]?.id || null
+  }
+
+  const handlePointerDown = (event, elementId) => {
+    if (isLocked || event.pointerType === 'mouse') return
+    event.preventDefault()
+    event.stopPropagation()
+    pointerDragIdRef.current = elementId
+    setPointerDragId(elementId)
+    setDraggedElementId(elementId)
     setDragOverElementId(null)
-    setDraggedElementId(null)
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handlePointerMove = (event) => {
+    if (!pointerDragIdRef.current) return
+    event.preventDefault()
+    const insertIndex = getPointerInsertIndex(event.clientX, event.clientY)
+    const previewId = getInsertPreviewId(insertIndex)
+    const nextTarget = previewId === pointerDragIdRef.current ? null : previewId
+    setDragOverElementId(nextTarget)
+  }
+
+  const handlePointerUp = (event) => {
+    if (!pointerDragIdRef.current) return
+    event.preventDefault()
+    const sourceId = pointerDragIdRef.current
+    const insertIndex = getPointerInsertIndex(event.clientX, event.clientY)
+    moveElementToIndex(sourceId, insertIndex)
+    resetDragState()
+  }
+
+  const handlePointerCancel = () => {
+    if (!pointerDragIdRef.current) return
+    resetDragState()
   }
 
   /**
@@ -213,6 +296,22 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         onDelete={() => deleteElement(element.id)}
         skills={skills}
         skillLevels={skillLevels}
+        showDragHandle={!isLocked}
+        dragHandleProps={!isLocked ? {
+          onMouseDown: () => {
+            dragHandlePressedRef.current = true
+          },
+          onMouseUp: () => {
+            dragHandlePressedRef.current = false
+          },
+          onMouseLeave: () => {
+            dragHandlePressedRef.current = false
+          },
+          onPointerDown: (event) => handlePointerDown(event, element.id),
+          onPointerMove: handlePointerMove,
+          onPointerUp: handlePointerUp,
+          onPointerCancel: handlePointerCancel
+        } : undefined}
       />
     )
   }
@@ -320,6 +419,13 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
                 }}
                 onDrop={(event) => handleDrop(event, element.id)}
                 onDragEnd={handleDragEnd}
+                ref={(node) => {
+                  if (node) {
+                    elementRefs.current.set(element.id, node)
+                  } else {
+                    elementRefs.current.delete(element.id)
+                  }
+                }}
               >
                 {renderElement(element)}
               </div>
@@ -328,7 +434,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
               <div
                 className={[
                   'card-elements-dropzone',
-                  draggedElementId ? 'active' : '',
+                  draggedElementId || pointerDragId ? 'active' : '',
                   dragOverElementId === 'end' ? 'drag-over' : ''
                 ].filter(Boolean).join(' ')}
                 onDragOver={(event) => handleDragOver(event, 'end')}

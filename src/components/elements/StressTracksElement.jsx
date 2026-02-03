@@ -9,8 +9,10 @@ import ElementWrapper from './ElementWrapper'
  * @param {boolean} props.isLocked - Whether card is locked
  * @param {Function} props.onUpdate - Called with updates object
  * @param {Function} props.onDelete - Called to delete element
+ * @param {boolean} props.showDragHandle - Whether to show drag handle
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function StressTracksElement({ element, isLocked, onUpdate, onDelete }) {
+function StressTracksElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
   // Defensive: ensure tracks is an array
   const tracks = element.tracks || []
 
@@ -82,6 +84,8 @@ function StressTracksElement({ element, isLocked, onUpdate, onDelete }) {
       title="Stress Tracks"
       isLocked={isLocked}
       onDelete={onDelete}
+      showDragHandle={showDragHandle}
+      dragHandleProps={dragHandleProps}
     >
       {tracks.map((track, trackIndex) => (
         <div key={trackIndex} className="stress-track">

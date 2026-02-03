@@ -9,8 +9,10 @@ import ElementWrapper from './ElementWrapper'
  * @param {boolean} props.isLocked - Whether card is locked
  * @param {Function} props.onUpdate - Called with updates object
  * @param {Function} props.onDelete - Called to delete element
+ * @param {boolean} props.showDragHandle - Whether to show drag handle
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function ConsequencesElement({ element, isLocked, onUpdate, onDelete }) {
+function ConsequencesElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
   const items = element.items || []
 
   const handleLabelChange = (index, newLabel) => {
@@ -39,6 +41,8 @@ function ConsequencesElement({ element, isLocked, onUpdate, onDelete }) {
       title="Consequences" 
       isLocked={isLocked} 
       onDelete={onDelete}
+      showDragHandle={showDragHandle}
+      dragHandleProps={dragHandleProps}
     >
       {items.map((consequence, index) => (
         <div key={index} className="consequence-item">

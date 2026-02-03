@@ -9,8 +9,10 @@ import ElementWrapper from './ElementWrapper'
  * @param {boolean} props.isLocked - Whether card is locked
  * @param {Function} props.onUpdate - Called with updates object
  * @param {Function} props.onDelete - Called to delete element
+ * @param {boolean} props.showDragHandle - Whether to show drag handle
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function AspectsElement({ element, isLocked, onUpdate, onDelete }) {
+function AspectsElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
   const handleItemChange = (index, value) => {
     const newItems = [...(element.items || [])]
     newItems[index] = value
@@ -33,6 +35,8 @@ function AspectsElement({ element, isLocked, onUpdate, onDelete }) {
       title="Aspects" 
       isLocked={isLocked} 
       onDelete={onDelete}
+      showDragHandle={showDragHandle}
+      dragHandleProps={dragHandleProps}
     >
       {items.map((item, index) => (
         <div key={index} className="aspect-item">

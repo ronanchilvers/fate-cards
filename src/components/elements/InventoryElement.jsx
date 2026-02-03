@@ -9,8 +9,10 @@ import ElementWrapper from './ElementWrapper'
  * @param {boolean} props.isLocked - Whether card is locked
  * @param {Function} props.onUpdate - Called with updates object
  * @param {Function} props.onDelete - Called to delete element
+ * @param {boolean} props.showDragHandle - Whether to show drag handle
+ * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function InventoryElement({ element, isLocked, onUpdate, onDelete }) {
+function InventoryElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
   const items = Array.isArray(element.items) ? element.items : []
 
   const updateItems = (nextItems) => {
@@ -40,6 +42,8 @@ function InventoryElement({ element, isLocked, onUpdate, onDelete }) {
       title="Inventory"
       isLocked={isLocked}
       onDelete={onDelete}
+      showDragHandle={showDragHandle}
+      dragHandleProps={dragHandleProps}
     >
       {items.map((item, index) => {
         const name = typeof item?.name === 'string' ? item.name : ''
