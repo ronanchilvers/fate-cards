@@ -1,8 +1,8 @@
 .card {
   width: 350px;
-  background-color: white;
+  background-color: var(--white);
   border: 3px solid;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: visible;
   position: relative;
   align-self: flex-start;
@@ -80,8 +80,8 @@
 .card-title-input {
   font-size: 1.1rem;
   font-weight: 600;
-  background: white;
-  color: #333;
+  background: var(--white);
+  color: var(--gray-700);
   border: none;
   padding: 4px 8px;
   border-radius: 3px;
@@ -124,13 +124,13 @@
 .card-subtitle-bar {
   padding: 10px 16px;
   font-size: 0.9rem;
-  color: #1a202c;
+  color: var(--slate-800);
   font-weight: 500;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .card-placeholder {
-  color: #999;
+  color: var(--gray-500);
   font-style: italic;
   font-size: 0.9rem;
   text-align: center;
@@ -142,9 +142,9 @@
   position: absolute;
   top: 60px;
   right: 16px;
-  background: white;
-  border: 2px solid #333;
-  border-radius: 8px;
+  background: var(--white);
+  border: 2px solid var(--gray-700);
+  border-radius: var(--radius-lg);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 100;
   min-width: 250px;
@@ -155,22 +155,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--gray-300);
   background-color: #f8f8f8;
-  border-radius: 6px 6px 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .element-menu-header h4 {
   margin: 0;
   font-size: 1rem;
-  color: #333;
+  color: var(--gray-700);
 }
 
 .element-menu-header button {
   background: none;
   border: none;
   cursor: pointer;
-  color: #666;
+  color: var(--gray-600);
   padding: 0;
   line-height: 1;
   display: inline-flex;
@@ -190,16 +190,16 @@
 .element-menu-options button {
   text-align: left;
   padding: 10px 12px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.2s;
 }
 
 .element-menu-options button:hover {
-  background-color: #f0f0f0;
+  background-color: var(--gray-200);
 }
 
 /* Card Elements */
@@ -214,7 +214,7 @@
 }
 
 .card-element-drag-wrapper.drag-over .card-element {
-  outline: 2px dashed #c53030;
+  outline: 2px dashed var(--red-700);
   outline-offset: 2px;
 }
 
@@ -230,12 +230,12 @@
 
 .card-elements-dropzone.drag-over {
   background: rgba(197, 48, 48, 0.12);
-  border: 1px dashed #c53030;
+  border: 1px dashed var(--red-700);
 }
 
 .card-element {
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
   padding: 12px;
   background-color: rgba(255, 255, 255, 0.5);
 }
@@ -269,7 +269,7 @@
 .element-header h4 {
   margin: 0;
   font-size: 0.9rem;
-  color: #c53030;
+  color: var(--red-700);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -281,9 +281,9 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-300);
+  background: var(--white);
   padding: 0;
   cursor: grab;
   flex-shrink: 0;
@@ -300,14 +300,9 @@
   color: #888;
 }
 
-.element-delete-btn {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
+:where(.element-delete-btn, .aspect-delete-btn, .inventory-delete-btn, .skill-delete-btn, .remove-level-btn, .consequence-delete-btn) {
   padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -315,17 +310,13 @@
   height: 24px;
 }
 
-.element-delete-btn:hover {
-  color: #c53030;
-}
-
 .element-input {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
-  background: white;
+  background: var(--white);
 }
 
 .card-element.locked .element-input {
@@ -337,12 +328,12 @@
 .element-textarea {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-family: inherit;
   resize: vertical;
-  background: white;
+  background: var(--white);
 }
 
 .card-element.locked .element-textarea {
@@ -368,43 +359,23 @@
   justify-content: center;
 }
 
-.aspect-delete-btn {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.aspect-delete-btn:hover {
-  color: #c53030;
-}
-
 .add-item-btn {
   width: 100%;
   padding: 8px;
-  background: white;
-  border: 1px dashed #999;
-  border-radius: 4px;
+  background: var(--white);
+  border: 1px dashed var(--gray-500);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--gray-600);
   transition: all 0.2s;
   margin-top: 8px;
 }
 
 .add-item-btn:hover {
-  border-color: #666;
-  color: #333;
-  background-color: #f5f5f5;
+  border-color: var(--gray-600);
+  color: var(--gray-700);
+  background-color: var(--gray-100);
 }
 
 /* Inventory */
@@ -416,35 +387,8 @@
   padding-left: 8px;
 }
 
-.inventory-bullet {
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
 .inventory-name {
   flex: 1;
-}
-
-.inventory-delete-btn {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.inventory-delete-btn:hover {
-  color: #c53030;
 }
 
 /* Skills */
@@ -458,14 +402,14 @@
 
 .skill-level-label {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--gray-600);
   font-weight: 600;
   white-space: nowrap;
 }
 
 .skill-level-list {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--gray-700);
   line-height: 1.4;
 }
 
@@ -473,7 +417,7 @@
 .skill-level-section {
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--slate-200);
 }
 
 .skill-level-section:last-child {
@@ -492,30 +436,10 @@
 .skill-level-header h5 {
   margin: 0;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--gray-600);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-}
-
-.remove-level-btn {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.remove-level-btn:hover {
-  color: #c53030;
 }
 
 .skill-item {
@@ -528,86 +452,66 @@
 .skill-name-select {
   flex: 1;
   padding: 6px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
-  background: white;
+  background: var(--white);
   cursor: pointer;
-  color: #333;
+  color: var(--gray-700);
 }
 
 .skill-name-select:focus {
   outline: none;
-  border-color: #999;
-}
-
-.skill-delete-btn {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.skill-delete-btn:hover {
-  color: #c53030;
+  border-color: var(--gray-500);
 }
 
 .add-skill-to-level-btn {
   width: 100%;
   padding: 6px;
   background: none;
-  border: 1px dashed #ddd;
-  border-radius: 4px;
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--gray-500);
   transition: all 0.2s;
   margin-top: 4px;
 }
 
 .add-skill-to-level-btn:hover {
-  border-color: #999;
-  color: #666;
-  background-color: #f7fafc;
+  border-color: var(--gray-500);
+  color: var(--gray-600);
+  background-color: var(--slate-50);
 }
 
 .add-level-section {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 2px solid #e2e8f0;
+  border-top: 2px solid var(--slate-200);
 }
 
 .add-level-select {
   width: 100%;
   padding: 8px 12px;
-  border: 1px dashed #999;
-  border-radius: 4px;
+  border: 1px dashed var(--gray-500);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  background: white;
-  color: #666;
+  background: var(--white);
+  color: var(--gray-600);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .add-level-select:hover {
-  border-color: #666;
-  color: #333;
-  background-color: #f7fafc;
+  border-color: var(--gray-600);
+  color: var(--gray-700);
+  background-color: var(--slate-50);
 }
 
 .add-level-select:focus {
   outline: none;
   border-style: solid;
-  border-color: #2c5282;
+  border-color: var(--blue-700);
 }
 
 /* Stress Tracks */
@@ -630,24 +534,24 @@
 .stress-track label {
   display: block;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--gray-600);
   font-weight: 500;
 }
 
 .stress-track-name-input {
   flex: 1;
   padding: 4px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  background: white;
-  color: #666;
+  background: var(--white);
+  color: var(--gray-600);
   font-weight: 500;
 }
 
 .stress-track-name-input:focus {
   outline: none;
-  border-color: #999;
+  border-color: var(--gray-500);
 }
 
 .stress-track-controls {
@@ -659,10 +563,10 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #666;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--gray-600);
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -671,8 +575,8 @@
 }
 
 .stress-control-btn:hover:not(:disabled) {
-  background-color: #f0f0f0;
-  border-color: #999;
+  background-color: var(--gray-200);
+  border-color: var(--gray-500);
 }
 
 .stress-control-btn:disabled {
@@ -681,22 +585,22 @@
 }
 
 .stress-delete-btn {
-  color: #c53030;
+  color: var(--red-700);
 }
 
 .stress-delete-btn:hover:not(:disabled) {
   background-color: #fff5f5;
-  border-color: #c53030;
+  border-color: var(--red-700);
 }
 
 .add-stress-track-btn {
   width: 100%;
   padding: 8px;
   margin-top: 8px;
-  border: 1px dashed #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #666;
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--gray-600);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -704,9 +608,9 @@
 }
 
 .add-stress-track-btn:hover {
-  background-color: #f7fafc;
-  border-color: #999;
-  color: #333;
+  background-color: var(--slate-50);
+  border-color: var(--gray-500);
+  color: var(--gray-700);
 }
 
 .stress-boxes {
@@ -717,24 +621,24 @@
 .stress-box {
   width: 36px;
   height: 36px;
-  border: 2px solid #333;
-  border-radius: 4px;
+  border: 2px solid var(--gray-700);
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
-  background: white;
+  background: var(--white);
   transition: all 0.2s;
 }
 
 .stress-box:hover {
-  background-color: #f0f0f0;
+  background-color: var(--gray-200);
 }
 
 .stress-box.checked {
-  background-color: #333;
+  background-color: var(--gray-700);
   color: white;
 }
 
@@ -743,11 +647,11 @@
 }
 
 .stress-box.locked:hover {
-  background-color: #f0f0f0;
+  background-color: var(--gray-200);
 }
 
 .stress-box.locked.checked:hover {
-  background-color: #333;
+  background-color: var(--gray-700);
 }
 
 .stress-box-value {
@@ -796,46 +700,24 @@
 .consequence-item label {
   display: block;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--gray-600);
   font-weight: 500;
 }
 
 .consequence-label-input {
   flex: 1;
   padding: 4px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  background: white;
-  color: #666;
+  background: var(--white);
+  color: var(--gray-600);
   font-weight: 500;
 }
 
 .consequence-label-input:focus {
   outline: none;
-  border-color: #999;
-}
-
-
-
-.consequence-delete-btn {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.consequence-delete-btn:hover {
-  color: #c53030;
+  border-color: var(--gray-500);
 }
 
 /* Fate Points */
@@ -855,11 +737,11 @@
 }
 
 .fate-point.filled {
-  color: #333;
+  color: var(--gray-700);
 }
 
 .fate-point.empty {
-  color: #ddd;
+  color: var(--gray-300);
 }
 
 .fate-points-controls {
@@ -872,9 +754,9 @@
 .fate-points-controls button {
   width: 32px;
   height: 32px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  background: var(--white);
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
@@ -883,19 +765,19 @@
 }
 
 .fate-points-controls button:hover {
-  background-color: #f0f0f0;
-  border-color: #999;
+  background-color: var(--gray-200);
+  border-color: var(--gray-500);
 }
 
 .fate-points-controls span {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--gray-600);
   font-weight: 500;
 }
 
 .refresh-label {
   font-size: 0.9rem;
-  color: #c53030;
+  color: var(--red-700);
   font-weight: 500;
   opacity: 0.5;
 }
@@ -903,28 +785,28 @@
 .refresh-input {
   width: 40px;
   padding: 6px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   text-align: center;
-  background: white;
-  color: #333;
+  background: var(--white);
+  color: var(--gray-700);
   font-weight: 400;
   transition: all 0.2s;
 }
 
 .refresh-input:focus {
   outline: none;
-  border-color: #ddd;
-  background: white;
+  border-color: var(--gray-300);
+  background: var(--white);
 }
 
 /* Disabled/Locked States */
 .element-input:disabled,
 .element-textarea:disabled,
 .skill-rating:disabled {
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--gray-100);
+  color: var(--gray-700);
   cursor: default;
   opacity: 1;
 }
@@ -933,7 +815,7 @@
 .card-element.locked .element-textarea:disabled,
 .card-element.locked .skill-rating:disabled {
   background-color: transparent;
-  color: #333;
+  color: var(--gray-700);
 }
 
 .card-header h3 {
@@ -961,35 +843,25 @@
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #4a5568;
+  color: var(--slate-600);
   margin-bottom: 8px;
 }
 
 .dark-mode .settings-field label {
-  color: #a0aec0;
+  color: var(--slate-400);
 }
 
 .settings-input,
 .settings-select {
   width: 100%;
   padding: 10px 12px;
-  border: 2px solid #e2e8f0;
-  border-radius: 6px;
   font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-
-.dark-mode .settings-input,
-.dark-mode .settings-select {
-  background: #1a202c;
-  color: #e2e8f0;
-  border-color: #4a5568;
 }
 
 .settings-input:focus,
 .settings-select:focus {
   outline: none;
-  border-color: #2c5282;
+  border-color: var(--blue-700);
 }
 
 /* Color Palette */
@@ -1002,7 +874,7 @@
 .color-swatch {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   border: 3px solid transparent;
   transition: all 0.2s;
@@ -1014,13 +886,13 @@
 }
 
 .color-swatch.selected {
-  border-color: white;
-  box-shadow: 0 0 0 2px #2c5282;
+  border-color: var(--white);
+  box-shadow: 0 0 0 2px var(--blue-700);
   transform: scale(1.1);
 }
 
 .dark-mode .color-swatch.selected {
-  border-color: #1a202c;
+  border-color: var(--slate-800);
 }
 
 .settings-actions {
@@ -1028,9 +900,9 @@
   gap: 12px;
   justify-content: flex-end;
   padding-top: 20px;
-  border-top: 2px solid #e2e8f0;
+  border-top: 2px solid var(--slate-200);
 }
 
 .dark-mode .settings-actions {
-  border-top-color: #4a5568;
+  border-top-color: var(--slate-600);
 }

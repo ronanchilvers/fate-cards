@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import './Card.css'
+import './modals/ModalBase.css'
 import { getPaleBackground, getMidToneBackground, normalizeColorToHex } from '../utils/colors'
 import { createElementByType } from '../data/elementFactories'
 import { ELEMENT_COMPONENTS } from './elements'
