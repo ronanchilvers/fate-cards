@@ -52,7 +52,7 @@ function InventoryElement({ element, isLocked, onUpdate, onDelete, showDragHandl
 
         return (
           <div key={key} className="inventory-item">
-            <span className="inventory-bullet" aria-hidden="true">•</span>
+            <Icon name="aspectBullet" className="aspect-bullet" size={12} aria-hidden="true" />
             <input
               type="text"
               value={name}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Icon from '../icons/Icon'
+import './ModalBase.css'
 import './TemplateModal.css'
 
 /**

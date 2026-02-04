@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Icon from '../icons/Icon'
+import './ModalBase.css'
 
 /**
  * Modal for adding a new category

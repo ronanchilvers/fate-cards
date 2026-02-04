@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Icon from '../icons/Icon'
+import './ModalBase.css'
 
 /**
  * Modal for managing the skills list
