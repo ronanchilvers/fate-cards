@@ -45,7 +45,7 @@ describe('TemplateModal', () => {
 
   it('should call onClose when close button clicked', () => {
     render(<TemplateModal {...defaultProps} />)
-    fireEvent.click(screen.getByText('×'))
+    fireEvent.click(screen.getByRole('button', { name: /close modal/i }))
     expect(defaultProps.onClose).toHaveBeenCalled()
   })
 

@@ -38,18 +38,18 @@ describe('NoteElement', () => {
 
   it('should hide delete button when locked', () => {
     render(<NoteElement {...defaultProps} isLocked={true} />)
-    expect(screen.queryByText('×')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /delete note/i })).not.toBeInTheDocument()
   })
 
   it('should show delete button when unlocked', () => {
     render(<NoteElement {...defaultProps} />)
-    expect(screen.getByText('×')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /delete note/i })).toBeInTheDocument()
   })
 
   it('should call onDelete when delete clicked', () => {
     const onDelete = vi.fn()
     render(<NoteElement {...defaultProps} onDelete={onDelete} />)
-    fireEvent.click(screen.getByText('×'))
+    fireEvent.click(screen.getByRole('button', { name: /delete note/i }))
     expect(onDelete).toHaveBeenCalled()
   })
 

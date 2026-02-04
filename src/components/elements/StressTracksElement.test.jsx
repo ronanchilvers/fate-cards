@@ -66,7 +66,7 @@ describe('StressTracksElement', () => {
     const onUpdate = vi.fn()
     render(<StressTracksElement {...defaultProps} onUpdate={onUpdate} />)
     
-    const plusButton = screen.getByRole('button', { name: '+' })
+    const plusButton = screen.getByRole('button', { name: /add box/i })
     fireEvent.click(plusButton)
     
     expect(onUpdate).toHaveBeenCalled()
@@ -78,9 +78,7 @@ describe('StressTracksElement', () => {
     const onUpdate = vi.fn()
     render(<StressTracksElement {...defaultProps} onUpdate={onUpdate} />)
     
-    const minusButtons = screen.getAllByRole('button').filter(
-      btn => btn.textContent === '−'
-    )
+    const minusButtons = screen.getAllByRole('button', { name: /remove box/i })
     fireEvent.click(minusButtons[0])
     
     expect(onUpdate).toHaveBeenCalled()
@@ -92,10 +90,7 @@ describe('StressTracksElement', () => {
     const onUpdate = vi.fn()
     render(<StressTracksElement {...defaultProps} onUpdate={onUpdate} />)
     
-    const deleteButtons = screen.getAllByRole('button').filter(
-      btn => btn.className.includes('stress-delete-btn')
-    )
-    fireEvent.click(deleteButtons[0])
+    fireEvent.click(screen.getByRole('button', { name: 'Delete track' }))
     
     expect(onUpdate).toHaveBeenCalled()
     const call = onUpdate.mock.calls[0][0]
@@ -124,10 +119,8 @@ describe('StressTracksElement', () => {
     }
     render(<StressTracksElement {...defaultProps} element={oneBoxElement} />)
     
-    const minusButtons = screen.getAllByRole('button').filter(
-      btn => btn.textContent === '−'
-    )
-    expect(minusButtons[0]).toBeDisabled()
+    const minusButton = screen.getByRole('button', { name: /remove box/i })
+    expect(minusButton).toBeDisabled()
   })
 
   it('should show add track button when unlocked', () => {
@@ -149,7 +142,7 @@ describe('StressTracksElement', () => {
   it('should hide controls when locked', () => {
     render(<StressTracksElement {...defaultProps} isLocked={true} />)
     expect(screen.queryByText('+ Add Track')).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: '+' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /add box/i })).not.toBeInTheDocument()
   })
 
   it('should show track names as labels when locked', () => {

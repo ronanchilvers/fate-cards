@@ -11,8 +11,8 @@ describe('FatePointsElement', () => {
   }
 
   it('should render correct number of fate point tokens', () => {
-    render(<FatePointsElement {...defaultProps} />)
-    const filled = screen.getAllByText('●')
+    const { container } = render(<FatePointsElement {...defaultProps} />)
+    const filled = container.querySelectorAll('.fate-point.filled')
     expect(filled).toHaveLength(3)
   })
 
@@ -24,14 +24,14 @@ describe('FatePointsElement', () => {
   it('should decrement current when minus clicked', () => {
     const onUpdate = vi.fn()
     render(<FatePointsElement {...defaultProps} onUpdate={onUpdate} />)
-    fireEvent.click(screen.getByText('-'))
+    fireEvent.click(screen.getByRole('button', { name: /decrease fate points/i }))
     expect(onUpdate).toHaveBeenCalledWith({ current: 2 })
   })
 
   it('should increment current when plus clicked', () => {
     const onUpdate = vi.fn()
     render(<FatePointsElement {...defaultProps} onUpdate={onUpdate} />)
-    fireEvent.click(screen.getByText('+'))
+    fireEvent.click(screen.getByRole('button', { name: /increase fate points/i }))
     expect(onUpdate).toHaveBeenCalledWith({ current: 4 })
   })
 
@@ -44,21 +44,21 @@ describe('FatePointsElement', () => {
 
   it('should show empty tokens when current < refresh', () => {
     const props = { ...defaultProps, element: { ...defaultProps.element, current: 1 } }
-    render(<FatePointsElement {...props} />)
-    expect(screen.getAllByText('●')).toHaveLength(1)
-    expect(screen.getAllByText('○')).toHaveLength(2)
+    const { container } = render(<FatePointsElement {...props} />)
+    expect(container.querySelectorAll('.fate-point.filled')).toHaveLength(1)
+    expect(container.querySelectorAll('.fate-point.empty')).toHaveLength(2)
   })
 
   it('should show extra tokens when current > refresh', () => {
     const props = { ...defaultProps, element: { ...defaultProps.element, current: 5, refresh: 3 } }
-    render(<FatePointsElement {...props} />)
-    expect(screen.getAllByText('●')).toHaveLength(5)
+    const { container } = render(<FatePointsElement {...props} />)
+    expect(container.querySelectorAll('.fate-point.filled')).toHaveLength(5)
   })
 
   it('should hide controls when locked', () => {
     render(<FatePointsElement {...defaultProps} isLocked={true} />)
-    expect(screen.queryByText('-')).not.toBeInTheDocument()
-    expect(screen.queryByText('+')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /decrease fate points/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /increase fate points/i })).not.toBeInTheDocument()
   })
 
   it('should show refresh label when locked', () => {
@@ -87,14 +87,14 @@ describe('FatePointsElement', () => {
     const onUpdate = vi.fn()
     const props = { ...defaultProps, element: { ...defaultProps.element, current: 0 } }
     render(<FatePointsElement {...props} onUpdate={onUpdate} />)
-    fireEvent.click(screen.getByText('-'))
+    fireEvent.click(screen.getByRole('button', { name: /decrease fate points/i }))
     expect(onUpdate).toHaveBeenCalledWith({ current: 0 })
   })
 
   it('should allow increment beyond refresh', () => {
     const onUpdate = vi.fn()
     render(<FatePointsElement {...defaultProps} onUpdate={onUpdate} />)
-    fireEvent.click(screen.getByText('+'))
+    fireEvent.click(screen.getByRole('button', { name: /increase fate points/i }))
     expect(onUpdate).toHaveBeenCalledWith({ current: 4 })
   })
 
@@ -135,15 +135,15 @@ describe('FatePointsElement', () => {
   })
 
   it('should update on prop change', () => {
-    const { rerender } = render(<FatePointsElement {...defaultProps} />)
-    expect(screen.getAllByText('●')).toHaveLength(3)
+    const { rerender, container } = render(<FatePointsElement {...defaultProps} />)
+    expect(container.querySelectorAll('.fate-point.filled')).toHaveLength(3)
     
     const newProps = {
       ...defaultProps,
       element: { ...defaultProps.element, current: 5, refresh: 5 }
     }
     rerender(<FatePointsElement {...newProps} />)
-    expect(screen.getAllByText('●')).toHaveLength(5)
+    expect(container.querySelectorAll('.fate-point.filled')).toHaveLength(5)
   })
 
   it('should handle non-numeric input', () => {

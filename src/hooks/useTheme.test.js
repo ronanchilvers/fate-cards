@@ -72,17 +72,17 @@ describe('useTheme', () => {
     act(() => {
       result.current.setThemeMode(THEME_MODES.LIGHT)
     })
-    expect(result.current.getThemeIcon()).toBe('☀️')
+    expect(result.current.getThemeIcon()).toBe('themeLight')
 
     act(() => {
       result.current.setThemeMode(THEME_MODES.DARK)
     })
-    expect(result.current.getThemeIcon()).toBe('🌙')
+    expect(result.current.getThemeIcon()).toBe('themeDark')
 
     act(() => {
       result.current.setThemeMode(THEME_MODES.AUTO)
     })
-    expect(result.current.getThemeIcon()).toBe('🌓')
+    expect(result.current.getThemeIcon()).toBe('themeAuto')
   })
 
   it('should return correct title for each theme mode', () => {
