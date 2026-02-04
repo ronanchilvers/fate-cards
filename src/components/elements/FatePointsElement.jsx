@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Fate Points element renderer
@@ -91,7 +92,9 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
       </div>
       {!isLocked && (
         <div className="fate-points-controls">
-          <button onClick={handleDecrement}>-</button>
+          <button onClick={handleDecrement} aria-label="Decrease fate points">
+            <Icon name="remove" size={16} aria-hidden="true" />
+          </button>
           <span>{element.current || 0} / </span>
           <input
             type="number"
@@ -101,7 +104,9 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
             onChange={handleRefreshChange}
             className="refresh-input"
           />
-          <button onClick={handleIncrement}>+</button>
+          <button onClick={handleIncrement} aria-label="Increase fate points">
+            <Icon name="add" size={16} aria-hidden="true" />
+          </button>
         </div>
       )}
     </ElementWrapper>

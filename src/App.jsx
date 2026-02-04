@@ -2,6 +2,7 @@ import { useState, useRef, useMemo } from 'react'
 import './App.css'
 import Card from './components/Card'
 import ErrorBoundary from './components/ErrorBoundary'
+import Icon from './components/icons/Icon'
 import { 
   TemplateModal, 
   CategoryModal, 
@@ -240,25 +241,32 @@ function App() {
         </button>
         <div className={`app-actions ${showMobileMenu ? 'mobile-open' : ''}`}>
           <button onClick={() => { openTemplateMenu(); setShowMobileMenu(false); }} className="action-btn add-card-header">
-            ➕ Card
+            <Icon name="add" className="action-icon" aria-hidden="true" />
+            Card
           </button>
           <button onClick={() => { setShowAddCategory(true); setShowMobileMenu(false); }} className="action-btn category-btn">
-            ➕ Category
+            <Icon name="add" className="action-icon" aria-hidden="true" />
+            Category
           </button>
           <button onClick={() => { setShowSkillsAdmin(true); setShowMobileMenu(false); }} className="action-btn skills-btn">
-            🎯 Skills
+            <Icon name="skills" className="action-icon" aria-hidden="true" />
+            Skills
           </button>
           <button onClick={() => { setShowSkillLevelsAdmin(true); setShowMobileMenu(false); }} className="action-btn skills-btn">
-            📊 Skill Levels
+            <Icon name="skillLevels" className="action-icon" aria-hidden="true" />
+            Skill Levels
           </button>
           <button onClick={() => { exportCards(); setShowMobileMenu(false); }} className="action-btn export-btn">
-            💾 Export
+            <Icon name="export" className="action-icon" aria-hidden="true" />
+            Export
           </button>
           <button onClick={() => { triggerImport(); setShowMobileMenu(false); }} className="action-btn import-btn">
-            📁 Import
+            <Icon name="import" className="action-icon" aria-hidden="true" />
+            Import
           </button>
           <button onClick={() => { resetAllData(); setShowMobileMenu(false); }} className="action-btn reset-btn">
-            🔄 Reset
+            <Icon name="reset" className="action-icon" aria-hidden="true" />
+            Reset
           </button>
           <input
             ref={fileInputRef}
@@ -271,8 +279,9 @@ function App() {
             onClick={() => { theme.cycleThemeMode(); setShowMobileMenu(false); }}
             className="action-btn darkmode-btn"
             title={theme.getThemeTitle()}
+            aria-label={theme.getThemeTitle()}
           >
-            {theme.getThemeIcon()}
+            <Icon name={theme.getThemeIcon()} aria-hidden="true" />
           </button>
         </div>
       </header>
@@ -289,9 +298,12 @@ function App() {
               onClick={() => categoriesHook.toggleCategoryCollapse(category)}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: categoriesHook.isCategoryCollapsed(category) ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
-                  ▼
-                </span>
+                <Icon
+                  name={categoriesHook.isCategoryCollapsed(category) ? 'chevronRight' : 'chevronDown'}
+                  className="category-toggle-icon"
+                  size={18}
+                  aria-hidden="true"
+                />
                 <h2>{category}</h2>
               </div>
               <button
@@ -301,8 +313,9 @@ function App() {
                 }}
                 className="delete-category-btn"
                 title={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
+                aria-label={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
               >
-                ×
+                <Icon name="delete" className="delete-category-icon" aria-hidden="true" />
               </button>
             </div>
 

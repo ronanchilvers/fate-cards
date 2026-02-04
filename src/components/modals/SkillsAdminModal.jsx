@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../icons/Icon'
 
 /**
  * Modal for managing the skills list
@@ -61,7 +62,9 @@ function SkillsAdminModal({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Manage Skills</h3>
-          <button onClick={onClose} className="modal-close">×</button>
+          <button onClick={onClose} className="modal-close" aria-label="Close modal">
+            <Icon name="close" size={20} aria-hidden="true" />
+          </button>
         </div>
         <div className="skills-admin-body">
           <p className="skills-admin-description">
@@ -78,7 +81,7 @@ function SkillsAdminModal({
                     title="Delete skill"
                     aria-label={`Delete skill ${skill}`}
                   >
-                    ×
+                    <Icon name="delete" aria-hidden="true" />
                   </button>
                 </div>
               ))

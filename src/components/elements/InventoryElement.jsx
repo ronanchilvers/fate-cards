@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Inventory element renderer
@@ -65,7 +66,7 @@ function InventoryElement({ element, isLocked, onUpdate, onDelete, showDragHandl
                 className="inventory-delete-btn"
                 aria-label={`Delete inventory item ${index + 1}`}
               >
-                ×
+                <Icon name="delete" size={14} aria-hidden="true" />
               </button>
             )}
           </div>

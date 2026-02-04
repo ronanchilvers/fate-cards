@@ -66,11 +66,11 @@ export function useTheme() {
     })
   }, [])
 
-  // Get appropriate icon for current theme mode
+  // Get appropriate icon key for current theme mode
   const getThemeIcon = useCallback(() => {
-    if (themeMode === THEME_MODES.LIGHT) return '☀️'
-    if (themeMode === THEME_MODES.DARK) return '🌙'
-    return '🌓'
+    if (themeMode === THEME_MODES.LIGHT) return 'themeLight'
+    if (themeMode === THEME_MODES.DARK) return 'themeDark'
+    return 'themeAuto'
   }, [themeMode])
 
   // Get tooltip text for theme button

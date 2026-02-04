@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Consequences element renderer
@@ -61,7 +62,7 @@ function ConsequencesElement({ element, isLocked, onUpdate, onDelete, showDragHa
                   className="consequence-delete-btn"
                   aria-label={`Delete consequence ${index + 1}`}
                 >
-                  ×
+                  <Icon name="delete" size={14} aria-hidden="true" />
                 </button>
               </>
             ) : (
