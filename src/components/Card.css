@@ -409,6 +409,14 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+  padding-left: 8px;
+}
+
+.inventory-bullet {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .inventory-name {
