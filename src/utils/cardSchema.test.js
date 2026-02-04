@@ -134,6 +134,27 @@ describe('normalizeCard - element normalization', () => {
     expect(result.elements[0].items).toEqual([])
   })
 
+  it('normalizes inventory elements to ensure items have ids and names', () => {
+    const input = {
+      id: 'inventory-card',
+      elements: [
+        {
+          id: 'inventory-1',
+          type: ELEMENT_TYPES.INVENTORY,
+          items: [{ name: 'Rope' }, { id: 'item-2', name: 123 }, null]
+        }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    const items = result.elements[0].items
+    expect(items).toHaveLength(2)
+    expect(typeof items[0].id).toBe('string')
+    expect(items[0].name).toBe('Rope')
+    expect(items[1].id).toBe('item-2')
+    expect(items[1].name).toBe('')
+  })
+
   it('normalizes stress tracks to ensure tracks contain boxes', () => {
     const input = {
       id: 'stress-card',

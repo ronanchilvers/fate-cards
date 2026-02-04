@@ -77,6 +77,19 @@ const normalizeConsequences = (items) => {
   }, [])
 }
 
+const normalizeInventoryItems = (items) => {
+  if (!Array.isArray(items)) return []
+  return items.reduce((acc, item) => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) return acc
+    const id = typeof item.id === 'string' && item.id.trim()
+      ? item.id
+      : crypto.randomUUID()
+    const name = typeof item.name === 'string' ? item.name : ''
+    acc.push({ id, name })
+    return acc
+  }, [])
+}
+
 const normalizeElement = (element) => {
   if (!element || typeof element !== 'object' || Array.isArray(element)) {
     return null
@@ -112,6 +125,14 @@ const normalizeElement = (element) => {
       id,
       type,
       items: normalizeSkillItems(element.items)
+    }
+  }
+
+  if (type === ELEMENT_TYPES.INVENTORY) {
+    return {
+      id,
+      type,
+      items: normalizeInventoryItems(element.items)
     }
   }
 
