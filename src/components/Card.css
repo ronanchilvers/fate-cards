@@ -4,7 +4,6 @@
   border: 3px solid;
   border-radius: 8px;
   overflow: visible;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   position: relative;
   align-self: flex-start;
 }
