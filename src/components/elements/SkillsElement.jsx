@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Skills element renderer
@@ -92,8 +93,9 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
                 }}
                 className="remove-level-btn"
                 title="Remove this level"
+                aria-label={`Remove ${level.label}`}
               >
-                ×
+                <Icon name="delete" size={14} aria-hidden="true" />
               </button>
             </div>
             {levelSkills.map((skill, skillIndex) => {
@@ -122,8 +124,9 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
                       onUpdate({ items: newItems })
                     }}
                     className="skill-delete-btn"
+                    aria-label="Remove skill"
                   >
-                    ×
+                    <Icon name="delete" size={14} aria-hidden="true" />
                   </button>
                 </div>
               )

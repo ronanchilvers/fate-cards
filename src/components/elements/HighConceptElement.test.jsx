@@ -38,18 +38,18 @@ describe('HighConceptElement', () => {
 
   it('should hide delete button when locked', () => {
     render(<HighConceptElement {...defaultProps} isLocked={true} />)
-    expect(screen.queryByText('×')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /delete high concept/i })).not.toBeInTheDocument()
   })
 
   it('should show delete button when unlocked', () => {
     render(<HighConceptElement {...defaultProps} />)
-    expect(screen.getByText('×')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /delete high concept/i })).toBeInTheDocument()
   })
 
   it('should call onDelete when delete clicked', () => {
     const onDelete = vi.fn()
     render(<HighConceptElement {...defaultProps} onDelete={onDelete} />)
-    fireEvent.click(screen.getByText('×'))
+    fireEvent.click(screen.getByRole('button', { name: /delete high concept/i }))
     expect(onDelete).toHaveBeenCalled()
   })
 

@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Aspects element renderer
@@ -40,7 +41,7 @@ function AspectsElement({ element, isLocked, onUpdate, onDelete, showDragHandle,
     >
       {items.map((item, index) => (
         <div key={index} className="aspect-item">
-          <span className="aspect-bullet">📋</span>
+          <Icon name="aspectBullet" className="aspect-bullet" size={12} aria-hidden="true" />
           <input
             type="text"
             value={item || ''}
@@ -55,7 +56,7 @@ function AspectsElement({ element, isLocked, onUpdate, onDelete, showDragHandle,
               className="aspect-delete-btn"
               aria-label={`Delete aspect ${index + 1}`}
             >
-              ×
+              <Icon name="delete" size={14} aria-hidden="true" />
             </button>
           )}
         </div>

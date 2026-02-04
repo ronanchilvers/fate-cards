@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Fate Points element renderer
@@ -44,7 +45,15 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
           onClick={isLocked ? handleDecrement : undefined}
           style={isLocked ? { cursor: 'pointer' } : undefined}
         >
-          ●
+          <Icon
+            name="fatePoint"
+            className="fate-point-icon"
+            size={32}
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth={1}
+            aria-hidden="true"
+          />
         </div>
       )
     }
@@ -52,7 +61,17 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
     // Empty tokens up to refresh
     for (let i = 0; i < empty; i++) {
       tokens.push(
-        <div key={`empty-${i}`} className="fate-point empty">○</div>
+        <div key={`empty-${i}`} className="fate-point empty">
+          <Icon
+            name="fatePoint"
+            className="fate-point-icon"
+            size={32}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          />
+        </div>
       )
     }
 
@@ -65,7 +84,15 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
           onClick={isLocked ? handleDecrement : undefined}
           style={isLocked ? { cursor: 'pointer' } : undefined}
         >
-          ●
+          <Icon
+            name="fatePoint"
+            className="fate-point-icon"
+            size={32}
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth={1}
+            aria-hidden="true"
+          />
         </div>
       )
     }
@@ -91,7 +118,9 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
       </div>
       {!isLocked && (
         <div className="fate-points-controls">
-          <button onClick={handleDecrement}>-</button>
+          <button onClick={handleDecrement} aria-label="Decrease fate points">
+            <Icon name="remove" size={16} aria-hidden="true" />
+          </button>
           <span>{element.current || 0} / </span>
           <input
             type="number"
@@ -101,7 +130,9 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
             onChange={handleRefreshChange}
             className="refresh-input"
           />
-          <button onClick={handleIncrement}>+</button>
+          <button onClick={handleIncrement} aria-label="Increase fate points">
+            <Icon name="add" size={16} aria-hidden="true" />
+          </button>
         </div>
       )}
     </ElementWrapper>

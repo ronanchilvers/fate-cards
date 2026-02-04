@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../icons/Icon'
 import './TemplateModal.css'
 
 /**
@@ -51,25 +52,25 @@ function TemplateModal({
   const templates = [
     {
       key: 'standard-pc',
-      icon: '👤',
+      icon: 'templateStandard',
       title: 'Standard PC',
       description: 'Full character sheet with all Fate Core elements'
     },
     {
       key: 'quick-npc',
-      icon: '🎭',
+      icon: 'templateQuick',
       title: 'Quick NPC',
       description: 'Simplified character for NPCs and minor characters'
     },
     {
       key: 'scene',
-      icon: '🏛️',
+      icon: 'templateScene',
       title: 'Scene',
       description: 'Location or situation aspects and description'
     },
     {
       key: 'blank',
-      icon: '📄',
+      icon: 'templateBlank',
       title: 'Blank Card',
       description: 'Empty card, build your own'
     }
@@ -80,7 +81,9 @@ function TemplateModal({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Add Card</h3>
-          <button onClick={onClose} className="modal-close">×</button>
+          <button onClick={onClose} className="modal-close" aria-label="Close modal">
+            <Icon name="close" size={20} aria-hidden="true" />
+          </button>
         </div>
         <div className="template-selection">
           <div className="template-options">
@@ -90,7 +93,9 @@ function TemplateModal({
                 onClick={() => setSelectedTemplate(template.key)}
                 className={`template-option ${selectedTemplate === template.key ? 'selected' : ''}`}
               >
-                <div className="template-icon">{template.icon}</div>
+                <div className="template-icon">
+                  <Icon name={template.icon} size={32} aria-hidden="true" />
+                </div>
                 <div className="template-info">
                   <h4>{template.title}</h4>
                   <p>{template.description}</p>

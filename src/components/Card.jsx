@@ -4,6 +4,7 @@ import { getPaleBackground, getMidToneBackground, normalizeColorToHex } from '..
 import { createElementByType } from '../data/elementFactories'
 import { ELEMENT_COMPONENTS } from './elements'
 import { ELEMENT_TYPES } from '../constants'
+import Icon from './icons/Icon'
 
 function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
@@ -277,8 +278,9 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
               <button 
                 onClick={() => deleteElement(element.id)}
                 className="element-delete-btn"
+                aria-label="Delete element"
               >
-                ×
+                <Icon name="delete" size={16} aria-hidden="true" />
               </button>
             )}
           </div>
@@ -326,8 +328,9 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
                 onClick={() => onDelete(card.id)}
                 className="card-icon-btn"
                 title="Delete card"
+                aria-label="Delete card"
               >
-                ✖
+                <Icon name="delete" size={16} aria-hidden="true" />
               </button>
             )}
           </div>
@@ -341,15 +344,17 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
                   onClick={() => setShowElementMenu(!showElementMenu)}
                   className="card-icon-btn card-add-btn"
                   title="Add element"
+                  aria-label="Add element"
                 >
-                  +
+                  <Icon name="add" size={18} aria-hidden="true" />
                 </button>
                 <button 
                   onClick={() => onDuplicate(card)}
                   className="card-icon-btn"
                   title="Duplicate card"
+                  aria-label="Duplicate card"
                 >
-                  📋
+                  <Icon name="duplicate" size={16} aria-hidden="true" />
                 </button>
               </>
             )}
@@ -358,16 +363,18 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
                 onClick={openSettings}
                 className="card-icon-btn"
                 title="Card settings"
+                aria-label="Card settings"
               >
-                ⚙️
+                <Icon name="settings" size={16} aria-hidden="true" />
               </button>
             )}
             <button 
               onClick={toggleLock}
               className="card-icon-btn"
               title={isLocked ? "Unlock card" : "Lock card"}
+              aria-label={isLocked ? "Unlock card" : "Lock card"}
             >
-              {isLocked ? '🔒' : '🔓'}
+              <Icon name={isLocked ? 'lock' : 'unlock'} size={16} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -376,7 +383,9 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         <div className="element-menu">
           <div className="element-menu-header">
             <h4>Add Element</h4>
-            <button onClick={() => setShowElementMenu(false)}>×</button>
+            <button onClick={() => setShowElementMenu(false)} aria-label="Close element menu">
+              <Icon name="close" size={16} aria-hidden="true" />
+            </button>
           </div>
           <div className="element-menu-options">
             <button onClick={() => addElement(ELEMENT_TYPES.ASPECTS)}>Aspects List</button>
@@ -451,7 +460,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
 
           {card.elements.length === 0 && !isLocked && (
             <p className="card-placeholder">
-              Click the + button to add elements to this card
+              Click the Add Element button to add elements to this card
             </p>
           )}
         </div>
@@ -462,7 +471,9 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
           <div className="modal-content card-settings-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Card Properties</h3>
-              <button onClick={() => setShowSettings(false)} className="modal-close">×</button>
+              <button onClick={() => setShowSettings(false)} className="modal-close" aria-label="Close modal">
+                <Icon name="close" size={20} aria-hidden="true" />
+              </button>
             </div>
             <div className="card-settings-body">
               <div className="settings-field">

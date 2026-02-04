@@ -38,18 +38,18 @@ describe('TroubleElement', () => {
 
   it('should hide delete button when locked', () => {
     render(<TroubleElement {...defaultProps} isLocked={true} />)
-    expect(screen.queryByText('×')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /delete trouble/i })).not.toBeInTheDocument()
   })
 
   it('should show delete button when unlocked', () => {
     render(<TroubleElement {...defaultProps} />)
-    expect(screen.getByText('×')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /delete trouble/i })).toBeInTheDocument()
   })
 
   it('should call onDelete when delete clicked', () => {
     const onDelete = vi.fn()
     render(<TroubleElement {...defaultProps} onDelete={onDelete} />)
-    fireEvent.click(screen.getByText('×'))
+    fireEvent.click(screen.getByRole('button', { name: /delete trouble/i }))
     expect(onDelete).toHaveBeenCalled()
   })
 

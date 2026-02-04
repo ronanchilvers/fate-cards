@@ -1,4 +1,5 @@
 import {
+  AlertTriangle,
   BarChart3,
   ChevronDown,
   ChevronRight,
@@ -49,5 +50,7 @@ export const iconMap = {
   templateQuick: Users,
   templateScene: MapPin,
   templateBlank: File,
-  aspectBullet: Circle
+  aspectBullet: Circle,
+  fatePoint: Circle,
+  warning: AlertTriangle
 }

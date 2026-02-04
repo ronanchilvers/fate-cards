@@ -1,4 +1,5 @@
 import ElementWrapper from './ElementWrapper'
+import Icon from '../icons/Icon'
 
 /**
  * Stress Tracks element renderer
@@ -107,23 +108,26 @@ function StressTracksElement({ element, isLocked, onUpdate, onDelete, showDragHa
                   onClick={() => handleAddBox(trackIndex)}
                   className="stress-control-btn"
                   title="Add box"
+                  aria-label="Add box"
                 >
-                  +
+                  <Icon name="add" size={14} aria-hidden="true" />
                 </button>
                 <button
                   onClick={() => handleRemoveBox(trackIndex)}
                   className="stress-control-btn"
                   title="Remove box"
                   disabled={(track.boxes || []).length <= 1}
+                  aria-label="Remove box"
                 >
-                  −
+                  <Icon name="remove" size={14} aria-hidden="true" />
                 </button>
                 <button
                   onClick={() => handleDeleteTrack(trackIndex)}
                   className="stress-control-btn stress-delete-btn"
                   title="Delete track"
+                  aria-label="Delete track"
                 >
-                  ×
+                  <Icon name="delete" size={14} aria-hidden="true" />
                 </button>
               </div>
             )}

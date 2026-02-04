@@ -1,3 +1,5 @@
+import Icon from '../icons/Icon'
+
 /**
  * ElementWrapper - Base component providing common element structure
  * Includes header with title and delete button
@@ -39,7 +41,7 @@ function ElementWrapper({
               title="Drag to reorder"
               {...resolvedDragHandleProps}
             >
-              <span className="element-drag-handle-icon" aria-hidden="true" />
+              <Icon name="dragHandle" className="element-drag-handle-icon" size={14} aria-hidden="true" />
             </button>
           )}
           <h4>{title}</h4>
@@ -52,7 +54,7 @@ function ElementWrapper({
               className="element-delete-btn"
               aria-label={`Delete ${title}`}
             >
-              ×
+              <Icon name="delete" size={16} aria-hidden="true" />
             </button>
           )}
         </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import Icon from '../icons/Icon'
 
 /**
  * Modal for adding a new category
@@ -55,7 +56,9 @@ function CategoryModal({ isOpen, onClose, onAddCategory }) {
       <div className="modal-content small-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Add New Category</h3>
-          <button onClick={onClose} className="modal-close">×</button>
+          <button onClick={onClose} className="modal-close" aria-label="Close modal">
+            <Icon name="close" size={20} aria-hidden="true" />
+          </button>
         </div>
         <div className="modal-body">
           <input

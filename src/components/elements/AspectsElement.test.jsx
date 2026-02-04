@@ -139,9 +139,9 @@ describe('AspectsElement', () => {
     expect(onUpdate).toHaveBeenCalledTimes(2)
   })
 
-  it('should show aspect bullet emoji', () => {
-    render(<AspectsElement {...defaultProps} />)
-    const bullets = screen.getAllByText('📋')
+  it('should show aspect bullet icon', () => {
+    const { container } = render(<AspectsElement {...defaultProps} />)
+    const bullets = container.querySelectorAll('.aspect-bullet')
     expect(bullets.length).toBe(2)
   })
 

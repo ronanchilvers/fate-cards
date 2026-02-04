@@ -1,4 +1,5 @@
 import React from 'react'
+import Icon from './icons/Icon'
 
 /**
  * Error Boundary component that catches JavaScript errors anywhere in the child
@@ -39,7 +40,10 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="error-boundary-fallback">
           <div className="error-boundary-content">
-            <h2>⚠️ Something went wrong</h2>
+            <h2 className="error-boundary-title">
+              <Icon name="warning" className="error-boundary-icon" aria-hidden="true" />
+              Something went wrong
+            </h2>
             <p>We're sorry, but something unexpected happened. You can try refreshing the page or resetting this section.</p>
             
             <div className="error-boundary-actions">

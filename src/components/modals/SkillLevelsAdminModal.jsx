@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../icons/Icon'
 
 /**
  * Modal for managing skill levels (the Fate ladder)
@@ -75,7 +76,9 @@ function SkillLevelsAdminModal({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Manage Skill Levels</h3>
-          <button onClick={onClose} className="modal-close">×</button>
+          <button onClick={onClose} className="modal-close" aria-label="Close modal">
+            <Icon name="close" size={20} aria-hidden="true" />
+          </button>
         </div>
         <div className="skills-admin-body">
           <p className="skills-admin-description">
@@ -104,7 +107,7 @@ function SkillLevelsAdminModal({
                     title="Delete skill level"
                     aria-label={`Delete skill level ${level.label}`}
                   >
-                    ×
+                    <Icon name="delete" aria-hidden="true" />
                   </button>
                 </div>
               ))
