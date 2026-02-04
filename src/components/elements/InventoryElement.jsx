@@ -52,6 +52,7 @@ function InventoryElement({ element, isLocked, onUpdate, onDelete, showDragHandl
 
         return (
           <div key={key} className="inventory-item">
+            <span className="inventory-bullet" aria-hidden="true">•</span>
             <input
               type="text"
               value={name}
