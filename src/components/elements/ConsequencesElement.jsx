@@ -47,7 +47,7 @@ function ConsequencesElement({ element, isLocked, onUpdate, onDelete, showDragHa
     >
       {items.map((consequence, index) => (
         <div key={index} className="consequence-item">
-          <div className="consequence-label-row">
+          <div className={`consequence-label-row${isLocked ? ' is-locked' : ''}`}>
             {!isLocked ? (
               <>
                 <input
@@ -66,14 +66,17 @@ function ConsequencesElement({ element, isLocked, onUpdate, onDelete, showDragHa
                 </button>
               </>
             ) : (
-              <label>{consequence.label || ''}</label>
+              <div className="consequence-heading">
+                <Icon name="aspectBullet" className="aspect-bullet" size={12} aria-hidden="true" />
+                <span className="consequence-label">{consequence.label || ''}</span>
+              </div>
             )}
           </div>
           <input
             type="text"
             value={consequence.text || ''}
             onChange={(e) => handleTextChange(index, e.target.value)}
-            className="element-input"
+            className={`element-input${isLocked ? ' consequence-text-locked' : ''}`}
             placeholder="Consequence description"
             disabled={isLocked}
           />
