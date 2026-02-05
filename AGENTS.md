@@ -2,11 +2,17 @@
 
 
 ## Commands (run early when relevant)
-**NB:** The development environment uses asdf to manage multiple versions of node.js. You will need to query asdf to find the correct shims and binary locations for running the following commands. In addition, use of `npq-hero` is preferred for security reasons.
+Some important points first:
+- Use of `npq-hero` instead of `npm` is preferred
+- Both `npq-hero` and `npm` may have been installed using `asdf`. The `asdf` binary can be found in the `bin` directory in the user's home directory.
+- If the `npq-hero` or `npm` binaries are not found, it may be necessary to query `asdf` for the correct location and run them directly.
+
+Common commands:
 - Install deps: `npq-hero ci`
 - Dev server: `npq-hero run dev`
 - Build: `npq-hero run build`
 - Preview build: `npq-hero run preview`
+
 
 ## Project knowledge
 - **Tech stack:** React 18, Vite 5, JavaScript (ESM)
