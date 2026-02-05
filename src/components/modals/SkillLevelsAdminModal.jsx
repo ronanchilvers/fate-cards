@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Icon from '../icons/Icon'
 import './ModalBase.css'
+import { useToast } from '../../hooks'
 
 /**
  * Modal for managing skill levels (the Fate ladder)
@@ -24,6 +25,7 @@ function SkillLevelsAdminModal({
   onUpdateLabel
 }) {
   const [newLevelName, setNewLevelName] = useState('')
+  const toast = useToast()
 
   // Reset state when modal closes
   useEffect(() => {
@@ -64,8 +66,14 @@ function SkillLevelsAdminModal({
     }
   }
 
-  const handleDelete = (level) => {
-    if (window.confirm(`Are you sure you want to delete the skill level "${level.label}"?`)) {
+  const handleDelete = async (level) => {
+    const confirmed = await toast.confirm({
+      title: 'Delete skill level',
+      message: `Are you sure you want to delete the skill level "${level.label}"?`,
+      confirmLabel: 'Ok',
+      tone: 'danger'
+    })
+    if (confirmed) {
       onDeleteLevel(level.value)
     }
   }

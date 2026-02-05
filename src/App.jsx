@@ -14,13 +14,15 @@ import {
   useSkills, 
   useSkillLevels, 
   useCategories, 
-  useCards 
+  useCards,
+  useToast
 } from './hooks'
 import { FILE_CONSTRAINTS, STORAGE_KEYS } from './constants'
 
 function App() {
   // Custom hooks for state management
   const theme = useTheme()
+  const toast = useToast()
   const skillsHook = useSkills()
   const skillLevelsHook = useSkillLevels()
   const categoriesHook = useCategories()
@@ -199,30 +201,56 @@ function App() {
     fileInputRef.current?.click()
   }
 
-  const resetAllData = () => {
-    if (window.confirm('Are you sure you want to reset all data? This will delete all cards, restore default skills and skill levels, and cannot be undone.')) {
-      cardsHook.resetCards()
-      categoriesHook.resetCategories()
-      skillsHook.resetSkills()
-      skillLevelsHook.resetSkillLevels()
-      theme.resetTheme()
-      setLastExportFilename('')
-      localStorage.removeItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
-    }
+  const resetAllData = async () => {
+    const confirmed = await toast.confirm({
+      title: 'Reset all data',
+      message: 'Are you sure you want to reset all data? This will delete all cards, restore default skills and skill levels, and cannot be undone.',
+      confirmLabel: 'Ok',
+      tone: 'danger'
+    })
+    if (!confirmed) return
+
+    cardsHook.resetCards()
+    categoriesHook.resetCategories()
+    skillsHook.resetSkills()
+    skillLevelsHook.resetSkillLevels()
+    theme.resetTheme()
+    setLastExportFilename('')
+    localStorage.removeItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
   }
 
-  const handleDeleteCategory = (categoryName) => {
+  const handleDeleteCategory = async (categoryName) => {
     const cardCount = cardCounts.get(categoryName) || 0
     if (cardCount > 0) {
       alert(`Cannot delete category "${categoryName}" because it contains ${cardCount} card(s). Please move or delete the cards first.`)
       return
     }
 
-    if (window.confirm(`Are you sure you want to delete the category "${categoryName}"?`)) {
-      const result = categoriesHook.deleteCategory(categoryName, cardCount)
-      if (!result.success && result.message) {
-        alert(result.message)
-      }
+    const confirmed = await toast.confirm({
+      title: 'Delete category',
+      message: `Are you sure you want to delete the category "${categoryName}"?`,
+      confirmLabel: 'Ok',
+      tone: 'danger'
+    })
+    if (!confirmed) return
+
+    const result = categoriesHook.deleteCategory(categoryName, cardCount)
+    if (!result.success && result.message) {
+      alert(result.message)
+    }
+  }
+
+  const handleDeleteCard = async (cardId, cardTitle) => {
+    const confirmed = await toast.confirm({
+      title: 'Delete card',
+      message: cardTitle
+        ? `Are you sure you want to delete "${cardTitle}"?`
+        : 'Are you sure you want to delete this card?',
+      confirmLabel: 'Ok',
+      tone: 'danger'
+    })
+    if (confirmed) {
+      cardsHook.deleteCard(cardId)
     }
   }
 
@@ -264,10 +292,10 @@ function App() {
             <Icon name="import" className="action-icon" aria-hidden="true" />
             Import
           </button>
-          <button onClick={() => { resetAllData(); setShowMobileMenu(false); }} className="action-btn reset-btn">
-            <Icon name="reset" className="action-icon" aria-hidden="true" />
-            Reset
-          </button>
+            <button onClick={() => { void resetAllData(); setShowMobileMenu(false); }} className="action-btn reset-btn">
+              <Icon name="reset" className="action-icon" aria-hidden="true" />
+              Reset
+            </button>
           <input
             ref={fileInputRef}
             type="file"
@@ -306,15 +334,15 @@ function App() {
                 />
                 <h2>{category}</h2>
               </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleDeleteCategory(category)
-                }}
-                className="delete-category-btn"
-                title={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
-                aria-label={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
-              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    void handleDeleteCategory(category)
+                  }}
+                  className="delete-category-btn"
+                  title={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
+                  aria-label={cardCount > 0 ? 'Cannot delete category with cards' : 'Delete category'}
+                >
                 <Icon name="delete" className="delete-category-icon" aria-hidden="true" />
               </button>
             </div>
@@ -328,14 +356,16 @@ function App() {
                     </p>
                   ) : (
                     cardsForCategory.map(card => (
-                      <Card
-                        key={card.id}
-                        card={card}
-                        onUpdate={cardsHook.updateCard}
-                        onDelete={cardsHook.deleteCard}
-                        onDuplicate={cardsHook.duplicateCard}
-                        skills={skillsHook.skills}
-                        skillLevels={skillLevelsHook.skillLevels}
+                        <Card
+                          key={card.id}
+                          card={card}
+                          onUpdate={cardsHook.updateCard}
+                          onDelete={(cardId) => {
+                            void handleDeleteCard(cardId, card.title)
+                          }}
+                          onDuplicate={cardsHook.duplicateCard}
+                          skills={skillsHook.skills}
+                          skillLevels={skillLevelsHook.skillLevels}
                         categories={categoriesHook.categories}
                       />
                     ))
@@ -374,9 +404,7 @@ function App() {
         skills={skillsHook.skills}
         onAddSkill={skillsHook.addSkill}
         onDeleteSkill={(skillName) => {
-          if (window.confirm(`Are you sure you want to delete the skill "${skillName}"?`)) {
-            skillsHook.deleteSkill(skillName)
-          }
+          skillsHook.deleteSkill(skillName)
         }}
       />
 
@@ -389,9 +417,7 @@ function App() {
         onDeleteLevel={(levelValue) => {
           const level = skillLevelsHook.getSkillLevelByValue(levelValue)
           if (!level) return
-          if (window.confirm(`Are you sure you want to delete the skill level "${level.label}"?`)) {
-            skillLevelsHook.deleteSkillLevel(levelValue)
-          }
+          skillLevelsHook.deleteSkillLevel(levelValue)
         }}
         onUpdateLabel={skillLevelsHook.updateSkillLevelLabel}
       />
