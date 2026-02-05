@@ -394,23 +394,38 @@
 /* Skills */
 /* Locked view - compact grouped display */
 .skill-level-group {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   display: flex;
-  gap: 6px;
-  align-items: baseline;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.skill-level-label {
+.skill-level-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-level-name {
   font-size: 0.85rem;
   color: var(--gray-600);
   font-weight: 600;
-  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.skill-level-rating {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  font-weight: 600;
 }
 
 .skill-level-list {
   font-size: 0.9rem;
   color: var(--gray-700);
   line-height: 1.4;
+  padding-left: 20px;
 }
 
 /* Unlocked view - organized by level sections */
@@ -697,11 +712,32 @@
   margin-bottom: 4px;
 }
 
+.consequence-label-row.is-locked {
+  margin-bottom: 6px;
+}
+
 .consequence-item label {
   display: block;
   font-size: 0.85rem;
   color: var(--gray-600);
   font-weight: 500;
+}
+
+.consequence-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.consequence-label {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  font-weight: 600;
+}
+
+.consequence-text-locked {
+  margin-left: 20px;
+  width: calc(100% - 20px);
 }
 
 .consequence-label-input {

@@ -20,10 +20,15 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
   const items = element.items || []
   
   // Build formatted skill levels
-  const allSkillLevels = (skillLevels || []).map(level => ({
-    value: level.value,
-    label: `${level.label} (${level.value >= 0 ? '+' : ''}${level.value})`
-  }))
+  const allSkillLevels = (skillLevels || []).map(level => {
+    const ratingLabel = `${level.value >= 0 ? '+' : ''}${level.value}`
+    return {
+      value: level.value,
+      label: level.label,
+      ratingLabel,
+      displayLabel: `${level.label} (${ratingLabel})`
+    }
+  })
 
   // Get unique rating levels that exist in items
   const existingRatings = [...new Set(items.map(skill => skill.rating || 0))].sort((a, b) => b - a)
@@ -53,10 +58,14 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
           
           return (
             <div key={level.value} className="skill-level-group">
-              <span className="skill-level-label">{level.label}:</span>
-              <span className="skill-level-list">
+              <div className="skill-level-heading">
+                <Icon name="aspectBullet" className="aspect-bullet" size={12} aria-hidden="true" />
+                <span className="skill-level-name">{level.label}</span>
+                <span className="skill-level-rating">{level.ratingLabel}</span>
+              </div>
+              <div className="skill-level-list">
                 {levelSkills.map(skill => skill.name || '---').join(', ')}
-              </span>
+              </div>
             </div>
           )
         })}
@@ -84,7 +93,7 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
         return (
           <div key={level.value} className="skill-level-section">
             <div className="skill-level-header">
-              <h5>{level.label}</h5>
+              <h5>{level.displayLabel}</h5>
               <button
                 onClick={() => {
                   // Remove all skills at this level
@@ -93,7 +102,7 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
                 }}
                 className="remove-level-btn"
                 title="Remove this level"
-                aria-label={`Remove ${level.label}`}
+                aria-label={`Remove ${level.displayLabel}`}
               >
                 <Icon name="delete" size={14} aria-hidden="true" />
               </button>
@@ -160,7 +169,7 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
           >
             <option value="" disabled>+ Add Level</option>
             {availableLevels.map(level => (
-              <option key={level.value} value={level.value}>{level.label}</option>
+              <option key={level.value} value={level.value}>{level.displayLabel}</option>
             ))}
           </select>
         </div>
