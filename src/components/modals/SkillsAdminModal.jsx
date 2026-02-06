@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Icon from '../icons/Icon'
 import './ModalBase.css'
+import { useToast } from '../../hooks'
 
 /**
  * Modal for managing the skills list
@@ -20,6 +21,7 @@ function SkillsAdminModal({
   onDeleteSkill 
 }) {
   const [newSkillName, setNewSkillName] = useState('')
+  const toast = useToast()
 
   // Reset state when modal closes
   useEffect(() => {
@@ -50,8 +52,14 @@ function SkillsAdminModal({
     }
   }
 
-  const handleDelete = (skillName) => {
-    if (window.confirm(`Are you sure you want to delete the skill "${skillName}"?`)) {
+  const handleDelete = async (skillName) => {
+    const confirmed = await toast.confirm({
+      title: 'Delete skill',
+      message: `Are you sure you want to delete the skill "${skillName}"?`,
+      confirmLabel: 'Ok',
+      tone: 'danger'
+    })
+    if (confirmed) {
       onDeleteSkill(skillName)
     }
   }

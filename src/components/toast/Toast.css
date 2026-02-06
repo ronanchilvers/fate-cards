@@ -1,0 +1,120 @@
+.toast-viewport {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast-viewport:empty {
+  display: none;
+}
+
+.toast-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 16px;
+  z-index: 2000;
+  pointer-events: auto;
+}
+
+.toast-confirm-viewport {
+  width: min(560px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toast-item {
+  min-width: 240px;
+  max-width: 360px;
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  color: var(--slate-700);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast-confirm-viewport .toast-item {
+  width: 100%;
+  max-width: 100%;
+}
+
+.dark-mode .toast-item {
+  background: var(--slate-700);
+  border-color: var(--slate-600);
+  color: var(--slate-100);
+}
+
+.toast-item[data-tone='danger'] {
+  border-left: 4px solid var(--red-700);
+}
+
+.toast-item[data-tone='warning'] {
+  border-left: 4px solid var(--yellow-500);
+}
+
+.toast-item[data-tone='info'] {
+  border-left: 4px solid var(--blue-700);
+}
+
+.toast-item[data-tone='success'] {
+  border-left: 4px solid var(--slate-500);
+}
+
+.toast-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.toast-message {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.toast-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.toast-close {
+  border: 1px solid var(--slate-300);
+  background: transparent;
+  color: inherit;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.toast-close:hover {
+  border-color: var(--slate-400);
+}
+
+.dark-mode .toast-close {
+  border-color: var(--slate-500);
+}
+
+.toast-primary {
+  background: var(--blue-700);
+  border-color: var(--blue-700);
+  color: var(--white);
+}
+
+.toast-primary:hover {
+  background: var(--blue-800);
+  border-color: var(--blue-800);
+}
