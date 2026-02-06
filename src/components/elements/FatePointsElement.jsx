@@ -46,12 +46,12 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
           style={isLocked ? { cursor: 'pointer' } : undefined}
         >
           <Icon
-            name="fatePoint"
+            name="fatePointFilled"
             className="fate-point-icon"
-            size={32}
-            fill="currentColor"
+            size={40}
+            fill="none"
             stroke="currentColor"
-            strokeWidth={1}
+            strokeWidth={2}
             aria-hidden="true"
           />
         </div>
@@ -63,12 +63,12 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
       tokens.push(
         <div key={`empty-${i}`} className="fate-point empty">
           <Icon
-            name="fatePoint"
+            name="fatePointEmpty"
             className="fate-point-icon"
-            size={32}
+            size={40}
             fill="none"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={0.75}
             aria-hidden="true"
           />
         </div>
@@ -85,12 +85,12 @@ function FatePointsElement({ element, isLocked, onUpdate, onDelete, showDragHand
           style={isLocked ? { cursor: 'pointer' } : undefined}
         >
           <Icon
-            name="fatePoint"
+            name="fatePointFilled"
             className="fate-point-icon"
-            size={32}
-            fill="currentColor"
+            size={40}
+            fill="none"
             stroke="currentColor"
-            strokeWidth={1}
+            strokeWidth={2}
             aria-hidden="true"
           />
         </div>

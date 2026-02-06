@@ -4,6 +4,9 @@ import {
   ChevronDown,
   ChevronRight,
   Circle,
+  CircleDashed,
+  CircleCheckBig,
+  CirclePlus,
   Copy,
   Download,
   File,
@@ -52,5 +55,7 @@ export const iconMap = {
   templateBlank: File,
   aspectBullet: Circle,
   fatePoint: Circle,
+  fatePointFilled: CircleCheckBig,
+  fatePointEmpty: Circle,
   warning: AlertTriangle
 }

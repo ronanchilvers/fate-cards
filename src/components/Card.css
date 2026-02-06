@@ -773,11 +773,12 @@
 }
 
 .fate-point.filled {
-  color: var(--gray-700);
+  color: inherit;
 }
 
 .fate-point.empty {
-  color: var(--gray-300);
+  color: inherit;
+  opacity: 0.25;
 }
 
 .fate-points-controls {
