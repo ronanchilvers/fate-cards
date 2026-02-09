@@ -92,6 +92,18 @@ const disposeMaterials = (materials) => {
   })
 }
 
+const canUseWebGL = () => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return false
+  if (!('HTMLCanvasElement' in window)) return false
+  try {
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    return Boolean(context)
+  } catch (error) {
+    return false
+  }
+}
+
 const getDiceValue = (quaternion) => {
   const up = new THREE.Vector3(0, 1, 0)
   let bestIndex = 0
@@ -142,6 +154,7 @@ function FateDiceRoller({
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
+    if (!canUseWebGL()) return
 
     const scene = new THREE.Scene()
     sceneRef.current = scene
