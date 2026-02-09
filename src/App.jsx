@@ -1,8 +1,9 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useCallback } from 'react'
 import './App.css'
 import Card from './components/Card'
 import ErrorBoundary from './components/ErrorBoundary'
 import Icon from './components/icons/Icon'
+import FateDiceRoller from './components/FateDiceRoller'
 import { 
   TemplateModal, 
   CategoryModal, 
@@ -36,6 +37,9 @@ function App() {
   const [showSkillsAdmin, setShowSkillsAdmin] = useState(false)
   const [showSkillLevelsAdmin, setShowSkillLevelsAdmin] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [diceRollId, setDiceRollId] = useState(0)
+  const [isDiceRolling, setIsDiceRolling] = useState(false)
+  const [diceDismissId, setDiceDismissId] = useState(0)
 
   // Template modal state
   // File input ref for import
@@ -219,6 +223,24 @@ function App() {
     localStorage.removeItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
   }
 
+  const handleRollDice = () => {
+    if (isDiceRolling) return
+    setIsDiceRolling(true)
+    setDiceRollId((current) => current + 1)
+    setShowMobileMenu(false)
+  }
+
+  const handleDiceResult = useCallback((total) => {
+    const value = Number.isFinite(total) ? total : 0
+    const label = value > 0 ? `+${value}` : `${value}`
+    toast.alert({
+      title: 'Fate Dice Result',
+      message: `Total: ${label}`,
+      duration: 30000,
+      onDismiss: () => setDiceDismissId((current) => current + 1)
+    })
+  }, [toast])
+
   const handleDeleteCategory = async (categoryName) => {
     const cardCount = cardCounts.get(categoryName) || 0
     if (cardCount > 0) {
@@ -284,6 +306,15 @@ function App() {
             <Icon name="skillLevels" className="action-icon" aria-hidden="true" />
             Skill Levels
           </button>
+          <button
+            onClick={handleRollDice}
+            className="action-btn roll-dice-btn"
+            disabled={isDiceRolling}
+            aria-disabled={isDiceRolling}
+          >
+            <Icon name="rollDice" className="action-icon" aria-hidden="true" />
+            Roll Fate Dice
+          </button>
           <button onClick={() => { exportCards(); setShowMobileMenu(false); }} className="action-btn export-btn">
             <Icon name="export" className="action-icon" aria-hidden="true" />
             Export
@@ -313,6 +344,14 @@ function App() {
           </button>
         </div>
       </header>
+
+      <FateDiceRoller
+        rollId={diceRollId}
+        onRollingChange={setIsDiceRolling}
+        onResult={handleDiceResult}
+        isDark={theme.isDark}
+        dismissId={diceDismissId}
+      />
 
       {categoriesHook.categories.map(category => {
         const cardsForCategory = cardsByCategory.get(category) || []

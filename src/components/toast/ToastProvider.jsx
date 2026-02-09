@@ -21,7 +21,13 @@ const ToastProvider = ({ children }) => {
 
   const removeToast = useCallback((toastId) => {
     if (!toastId) return
-    setToasts(prev => prev.filter(toast => toast.id !== toastId))
+    setToasts(prev => {
+      const toast = prev.find(item => item.id === toastId)
+      if (toast?.onDismiss) {
+        toast.onDismiss()
+      }
+      return prev.filter(item => item.id !== toastId)
+    })
     const timeoutId = timersRef.current.get(toastId)
     if (timeoutId) {
       clearTimeout(timeoutId)
@@ -37,11 +43,12 @@ const ToastProvider = ({ children }) => {
 
     const tone = typeof payload.tone === 'string' ? payload.tone : 'info'
     const duration = Number.isFinite(payload.duration) ? payload.duration : 5000
+    const onDismiss = typeof payload.onDismiss === 'function' ? payload.onDismiss : null
     const id = `toast-${idRef.current++}`
 
     setToasts(prev => ([
       ...prev,
-      { id, kind: 'alert', title, message, tone }
+      { id, kind: 'alert', title, message, tone, onDismiss }
     ]))
 
     if (duration > 0) {
