@@ -346,6 +346,7 @@ function App() {
         rollId={diceRollId}
         onRollingChange={setIsDiceRolling}
         onResult={handleDiceResult}
+        isDark={theme.isDark}
       />
 
       {categoriesHook.categories.map(category => {

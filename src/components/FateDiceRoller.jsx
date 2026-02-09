@@ -33,22 +33,21 @@ const SYMBOL_VALUES = {
   blank: 0
 }
 
-const createFaceTexture = (symbol) => {
+const createFaceTexture = (symbol, isDark) => {
   const canvas = document.createElement('canvas')
   const size = 256
   canvas.width = size
   canvas.height = size
   const ctx = canvas.getContext('2d')
 
-  ctx.fillStyle = '#f7f5ef'
+  const faceColor = isDark ? '#f8f8f5' : '#101010'
+  const symbolColor = isDark ? '#101010' : '#f8f8f5'
+
+  ctx.fillStyle = faceColor
   ctx.fillRect(0, 0, size, size)
 
-  ctx.strokeStyle = '#2a2a2a'
-  ctx.lineWidth = 14
-  ctx.strokeRect(18, 18, size - 36, size - 36)
-
   if (symbol !== 'blank') {
-    ctx.strokeStyle = '#111111'
+    ctx.strokeStyle = symbolColor
     ctx.lineWidth = 22
     ctx.lineCap = 'round'
     const center = size / 2
@@ -72,20 +71,27 @@ const createFaceTexture = (symbol) => {
   return texture
 }
 
-const createDiceMaterials = () => {
+const createDiceMaterials = (isDark, opacity = 1) => {
   return FACE_SYMBOLS.map((symbol) => {
-    const texture = createFaceTexture(symbol)
+    const texture = createFaceTexture(symbol, isDark)
     return new THREE.MeshStandardMaterial({
       map: texture,
       roughness: 0.35,
       metalness: 0.15,
       transparent: true,
-      opacity: 1
+      opacity
     })
   })
 }
 
 const randomInRange = (min, max) => min + Math.random() * (max - min)
+
+const disposeMaterials = (materials) => {
+  materials.forEach((material) => {
+    material.map?.dispose()
+    material.dispose()
+  })
+}
 
 const getDiceValue = (quaternion) => {
   const up = new THREE.Vector3(0, 1, 0)
@@ -105,7 +111,7 @@ const getDiceValue = (quaternion) => {
   return SYMBOL_VALUES[symbol] ?? 0
 }
 
-function FateDiceRoller({ rollId, onRollingChange, onResult }) {
+function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
   const containerRef = useRef(null)
   const sceneRef = useRef(null)
   const cameraRef = useRef(null)
@@ -196,7 +202,7 @@ function FateDiceRoller({ rollId, onRollingChange, onResult }) {
     const geometry = new THREE.BoxGeometry(DICE_SIZE, DICE_SIZE, DICE_SIZE)
     geometryRef.current = geometry
 
-    const materials = createDiceMaterials()
+    const materials = createDiceMaterials(isDark)
     materialsRef.current = materials
 
     for (let i = 0; i < DICE_COUNT; i += 1) {
@@ -285,10 +291,7 @@ function FateDiceRoller({ rollId, onRollingChange, onResult }) {
       diceRef.current = []
       wallBodiesRef.current.forEach((body) => world.removeBody(body))
       wallBodiesRef.current = []
-      materialsRef.current.forEach((material) => {
-        material.map?.dispose()
-        material.dispose()
-      })
+      disposeMaterials(materialsRef.current)
       geometry.dispose()
       groundGeometry.dispose()
       groundMaterial.dispose()
@@ -298,6 +301,18 @@ function FateDiceRoller({ rollId, onRollingChange, onResult }) {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (!isReady || materialsRef.current.length === 0) return
+    const currentOpacity = materialsRef.current[0]?.opacity ?? 1
+    const nextMaterials = createDiceMaterials(isDark, currentOpacity)
+    disposeMaterials(materialsRef.current)
+    materialsRef.current = nextMaterials
+
+    diceRef.current.forEach(({ mesh }) => {
+      mesh.material = nextMaterials
+    })
+  }, [isDark, isReady])
 
   useEffect(() => {
     if (!rollId || !isReady) return
