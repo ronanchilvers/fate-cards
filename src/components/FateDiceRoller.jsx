@@ -15,8 +15,9 @@ const SETTLE_FRAMES = 18
 const FADE_DELAY_MS = 3000
 const FADE_DURATION_MS = 700
 const MAX_DELTA = 1 / 30
-const WALL_HEIGHT = DICE_SIZE * 4
-const WALL_THICKNESS = Math.max(DICE_SIZE * 0.6, 0.2)
+const WALL_HEIGHT = DICE_SIZE * 12
+const WALL_THICKNESS = Math.max(DICE_SIZE * 1.2, 0.4)
+const BOUNDS_PAD = DICE_SIZE * 0.7
 
 const createFaceTexture = (symbol) => {
   const canvas = document.createElement('canvas')
@@ -133,6 +134,8 @@ function FateDiceRoller({ rollId, onRollingChange }) {
       gravity: new CANNON.Vec3(0, GRAVITY, 0)
     })
     world.allowSleep = true
+    world.broadphase = new CANNON.SAPBroadphase(world)
+    world.solver.iterations = 8
     worldRef.current = world
 
     const diceMaterial = new CANNON.Material('dice')
@@ -320,10 +323,30 @@ function FateDiceRoller({ rollId, onRollingChange }) {
       const delta = Math.min((time - lastTime) / 1000, MAX_DELTA)
       lastTimeRef.current = time
 
-      worldRef.current.step(1 / 60, delta * SIM_SPEED, 3)
+      worldRef.current.step(1 / 60, delta * SIM_SPEED, 6)
 
       let isMoving = false
+      const { halfWidth, halfDepth } = boundsRef.current
+      const limitX = halfWidth - BOUNDS_PAD
+      const limitZ = halfDepth - BOUNDS_PAD
+
       diceRef.current.forEach(({ mesh, body }) => {
+        if (body.position.x > limitX) {
+          body.position.x = limitX
+          if (body.velocity.x > 0) body.velocity.x *= -0.5
+        } else if (body.position.x < -limitX) {
+          body.position.x = -limitX
+          if (body.velocity.x < 0) body.velocity.x *= -0.5
+        }
+
+        if (body.position.z > limitZ) {
+          body.position.z = limitZ
+          if (body.velocity.z > 0) body.velocity.z *= -0.5
+        } else if (body.position.z < -limitZ) {
+          body.position.z = -limitZ
+          if (body.velocity.z < 0) body.velocity.z *= -0.5
+        }
+
         mesh.position.set(body.position.x, body.position.y, body.position.z)
         mesh.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w)
 
