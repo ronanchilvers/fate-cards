@@ -4,7 +4,7 @@ import Icon from '../icons/Icon'
 /**
  * Stress Tracks element renderer
  * Manages multiple stress tracks with toggleable boxes
- * 
+ *
  * @param {Object} props
  * @param {Object} props.element - Element data {id, type, tracks: Array<{name, boxes: Array<{checked, value}>}>}
  * @param {boolean} props.isLocked - Whether card is locked
@@ -72,8 +72,8 @@ function StressTracksElement({ element, isLocked, onUpdate, onDelete, showDragHa
         name: 'New Track',
         boxes: [
           { checked: false, value: 1 },
-          { checked: false, value: 2 },
-          { checked: false, value: 3 }
+          { checked: false, value: 1 },
+          { checked: false, value: 1 }
         ]
       }
     ]

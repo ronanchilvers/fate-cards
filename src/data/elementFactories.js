@@ -73,18 +73,16 @@ export const createStressTracksElement = (tracks = null) => ({
       name: 'Physical Stress',
       boxes: [
         { checked: false, value: 1 },
-        { checked: false, value: 2 },
-        { checked: false, value: 3 },
-        { checked: false, value: 4 }
+        { checked: false, value: 1 },
+        { checked: false, value: 1 }
       ]
     },
     {
       name: 'Mental Stress',
       boxes: [
         { checked: false, value: 1 },
-        { checked: false, value: 2 },
-        { checked: false, value: 3 },
-        { checked: false, value: 4 }
+        { checked: false, value: 1 },
+        { checked: false, value: 1 }
       ]
     }
   ]
