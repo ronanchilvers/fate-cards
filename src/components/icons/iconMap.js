@@ -53,6 +53,7 @@ export const iconMap = {
   templateQuick: Users,
   templateScene: MapPin,
   templateBlank: File,
+  rollDice: CircleDashed,
   aspectBullet: Circle,
   fatePoint: Circle,
   fatePointFilled: CircleCheckBig,

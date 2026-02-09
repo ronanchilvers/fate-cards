@@ -243,6 +243,20 @@
   color: white;
 }
 
+.action-btn:disabled,
+.action-btn[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.roll-dice-btn {
+  background: rgba(20, 20, 20, 0.08);
+}
+
+.dark-mode .roll-dice-btn {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .darkmode-btn:hover {
   background: var(--slate-600);
   border-color: var(--slate-600);
