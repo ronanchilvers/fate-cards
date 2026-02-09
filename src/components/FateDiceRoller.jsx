@@ -4,7 +4,7 @@ import * as CANNON from 'cannon-es'
 import './FateDiceRoller.css'
 
 const DICE_COUNT = 4
-const DICE_SIZE = 1
+const DICE_SIZE = 0.5
 const VIEW_SIZE = 7
 const CAMERA_HEIGHT = 9
 const LINEAR_THRESHOLD = 0.12
@@ -13,6 +13,8 @@ const SETTLE_FRAMES = 18
 const FADE_DELAY_MS = 3000
 const FADE_DURATION_MS = 700
 const MAX_DELTA = 1 / 30
+const WALL_HEIGHT = DICE_SIZE * 4
+const WALL_THICKNESS = Math.max(DICE_SIZE * 0.6, 0.2)
 
 const createFaceTexture = (symbol) => {
   const canvas = document.createElement('canvas')
@@ -78,6 +80,7 @@ function FateDiceRoller({ rollId, onRollingChange }) {
   const diceRef = useRef([])
   const materialsRef = useRef([])
   const geometryRef = useRef(null)
+  const wallBodiesRef = useRef([])
   const animationRef = useRef(null)
   const lastTimeRef = useRef(null)
   const settleFramesRef = useRef(0)
@@ -133,8 +136,8 @@ function FateDiceRoller({ rollId, onRollingChange }) {
     const diceMaterial = new CANNON.Material('dice')
     const groundPhysMaterial = new CANNON.Material('ground')
     const contactMaterial = new CANNON.ContactMaterial(diceMaterial, groundPhysMaterial, {
-      friction: 0.4,
-      restitution: 0.15
+      friction: 0.35,
+      restitution: 0.18
     })
     world.defaultContactMaterial = contactMaterial
     world.addContactMaterial(contactMaterial)
@@ -163,14 +166,47 @@ function FateDiceRoller({ rollId, onRollingChange }) {
         shape: new CANNON.Box(new CANNON.Vec3(DICE_SIZE / 2, DICE_SIZE / 2, DICE_SIZE / 2)),
         material: diceMaterial
       })
-      body.linearDamping = 0.28
-      body.angularDamping = 0.32
+      body.linearDamping = 0.18
+      body.angularDamping = 0.22
       body.allowSleep = true
       body.sleepSpeedLimit = 0.08
       body.sleepTimeLimit = 0.2
       world.addBody(body)
 
       diceRef.current.push({ mesh, body })
+    }
+
+    const syncWalls = (halfWidth, halfDepth) => {
+      const worldInstance = worldRef.current
+      if (!worldInstance) return
+
+      wallBodiesRef.current.forEach((body) => worldInstance.removeBody(body))
+      wallBodiesRef.current = []
+
+      const halfWallHeight = WALL_HEIGHT / 2
+      const wallX = halfWidth + WALL_THICKNESS
+      const wallZ = halfDepth + WALL_THICKNESS
+
+      const wallShapeZ = new CANNON.Box(new CANNON.Vec3(halfWidth + WALL_THICKNESS, halfWallHeight, WALL_THICKNESS))
+      const wallShapeX = new CANNON.Box(new CANNON.Vec3(WALL_THICKNESS, halfWallHeight, halfDepth + WALL_THICKNESS))
+
+      const wallConfigs = [
+        { shape: wallShapeZ, position: new CANNON.Vec3(0, halfWallHeight, wallZ) },
+        { shape: wallShapeZ, position: new CANNON.Vec3(0, halfWallHeight, -wallZ) },
+        { shape: wallShapeX, position: new CANNON.Vec3(wallX, halfWallHeight, 0) },
+        { shape: wallShapeX, position: new CANNON.Vec3(-wallX, halfWallHeight, 0) }
+      ]
+
+      wallConfigs.forEach(({ shape, position }) => {
+        const wall = new CANNON.Body({
+          mass: 0,
+          shape,
+          material: groundPhysMaterial
+        })
+        wall.position.copy(position)
+        worldInstance.addBody(wall)
+        wallBodiesRef.current.push(wall)
+      })
     }
 
     const handleResize = () => {
@@ -189,6 +225,8 @@ function FateDiceRoller({ rollId, onRollingChange }) {
       camera.top = halfHeight
       camera.bottom = -halfHeight
       camera.updateProjectionMatrix()
+
+      syncWalls(halfWidth, halfHeight)
     }
 
     handleResize()
@@ -202,6 +240,8 @@ function FateDiceRoller({ rollId, onRollingChange }) {
         cancelAnimationFrame(animationRef.current)
       }
       diceRef.current = []
+      wallBodiesRef.current.forEach((body) => world.removeBody(body))
+      wallBodiesRef.current = []
       materialsRef.current.forEach((material) => {
         material.map?.dispose()
         material.dispose()
@@ -235,14 +275,14 @@ function FateDiceRoller({ rollId, onRollingChange }) {
 
       body.position.set(x, y, z)
       body.velocity.set(
-        randomInRange(-2.2, 2.2),
-        randomInRange(0.2, 1.8),
-        randomInRange(-2.2, 2.2)
+        randomInRange(-3.6, 3.6),
+        randomInRange(1.2, 3.2),
+        randomInRange(-3.6, 3.6)
       )
       body.angularVelocity.set(
-        randomInRange(-4.5, 4.5),
-        randomInRange(-4.5, 4.5),
-        randomInRange(-4.5, 4.5)
+        randomInRange(-7.5, 7.5),
+        randomInRange(-7.5, 7.5),
+        randomInRange(-7.5, 7.5)
       )
       body.quaternion.setFromEuler(
         Math.random() * Math.PI * 2,
