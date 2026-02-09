@@ -229,6 +229,15 @@ function App() {
     setShowMobileMenu(false)
   }
 
+  const handleDiceResult = (total) => {
+    const value = Number.isFinite(total) ? total : 0
+    const label = value > 0 ? `+${value}` : `${value}`
+    toast.alert({
+      title: 'Fate Dice Result',
+      message: `Total: ${label}`
+    })
+  }
+
   const handleDeleteCategory = async (categoryName) => {
     const cardCount = cardCounts.get(categoryName) || 0
     if (cardCount > 0) {
@@ -336,6 +345,7 @@ function App() {
       <FateDiceRoller
         rollId={diceRollId}
         onRollingChange={setIsDiceRolling}
+        onResult={handleDiceResult}
       />
 
       {categoriesHook.categories.map(category => {

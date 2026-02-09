@@ -18,6 +18,20 @@ const MAX_DELTA = 1 / 30
 const WALL_HEIGHT = DICE_SIZE * 12
 const WALL_THICKNESS = Math.max(DICE_SIZE * 1.2, 0.4)
 const BOUNDS_PAD = DICE_SIZE * 0.7
+const FACE_SYMBOLS = ['plus', 'minus', 'blank', 'plus', 'minus', 'blank']
+const FACE_NORMALS = [
+  new THREE.Vector3(1, 0, 0),
+  new THREE.Vector3(-1, 0, 0),
+  new THREE.Vector3(0, 1, 0),
+  new THREE.Vector3(0, -1, 0),
+  new THREE.Vector3(0, 0, 1),
+  new THREE.Vector3(0, 0, -1)
+]
+const SYMBOL_VALUES = {
+  plus: 1,
+  minus: -1,
+  blank: 0
+}
 
 const createFaceTexture = (symbol) => {
   const canvas = document.createElement('canvas')
@@ -59,8 +73,7 @@ const createFaceTexture = (symbol) => {
 }
 
 const createDiceMaterials = () => {
-  const faces = ['plus', 'minus', 'blank', 'plus', 'minus', 'blank']
-  return faces.map((symbol) => {
+  return FACE_SYMBOLS.map((symbol) => {
     const texture = createFaceTexture(symbol)
     return new THREE.MeshStandardMaterial({
       map: texture,
@@ -74,7 +87,25 @@ const createDiceMaterials = () => {
 
 const randomInRange = (min, max) => min + Math.random() * (max - min)
 
-function FateDiceRoller({ rollId, onRollingChange }) {
+const getDiceValue = (quaternion) => {
+  const up = new THREE.Vector3(0, 1, 0)
+  let bestIndex = 0
+  let bestDot = -Infinity
+
+  FACE_NORMALS.forEach((normal, index) => {
+    const worldNormal = normal.clone().applyQuaternion(quaternion)
+    const dot = worldNormal.dot(up)
+    if (dot > bestDot) {
+      bestDot = dot
+      bestIndex = index
+    }
+  })
+
+  const symbol = FACE_SYMBOLS[bestIndex]
+  return SYMBOL_VALUES[symbol] ?? 0
+}
+
+function FateDiceRoller({ rollId, onRollingChange, onResult }) {
   const containerRef = useRef(null)
   const sceneRef = useRef(null)
   const cameraRef = useRef(null)
@@ -90,6 +121,7 @@ function FateDiceRoller({ rollId, onRollingChange }) {
   const settledRef = useRef(false)
   const settledAtRef = useRef(0)
   const fadeStartRef = useRef(0)
+  const resultSentRef = useRef(false)
   const isRollingRef = useRef(false)
   const boundsRef = useRef({ halfWidth: 4, halfDepth: 4 })
   const [isVisible, setIsVisible] = useState(false)
@@ -316,6 +348,7 @@ function FateDiceRoller({ rollId, onRollingChange }) {
     settledRef.current = false
     settledAtRef.current = 0
     fadeStartRef.current = 0
+    resultSentRef.current = false
     settleFramesRef.current = 0
     lastTimeRef.current = null
     setIsVisible(true)
@@ -372,6 +405,13 @@ function FateDiceRoller({ rollId, onRollingChange }) {
           if (settleFramesRef.current >= SETTLE_FRAMES) {
             settledRef.current = true
             settledAtRef.current = time
+            if (!resultSentRef.current) {
+              const total = diceRef.current.reduce((sum, { mesh }) => {
+                return sum + getDiceValue(mesh.quaternion)
+              }, 0)
+              resultSentRef.current = true
+              onResult?.(total)
+            }
           }
         }
       }
