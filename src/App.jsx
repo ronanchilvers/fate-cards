@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useCallback } from 'react'
 import './App.css'
 import Card from './components/Card'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -230,7 +230,7 @@ function App() {
     setShowMobileMenu(false)
   }
 
-  const handleDiceResult = (total) => {
+  const handleDiceResult = useCallback((total) => {
     const value = Number.isFinite(total) ? total : 0
     const label = value > 0 ? `+${value}` : `${value}`
     toast.alert({
@@ -239,7 +239,7 @@ function App() {
       duration: 30000,
       onDismiss: () => setDiceDismissId((current) => current + 1)
     })
-  }
+  }, [toast])
 
   const handleDeleteCategory = async (categoryName) => {
     const cardCount = cardCounts.get(categoryName) || 0
