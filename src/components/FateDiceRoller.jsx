@@ -147,6 +147,12 @@ function FateDiceRoller({ rollId, onRollingChange }) {
     world.defaultContactMaterial = contactMaterial
     world.addContactMaterial(contactMaterial)
 
+    const diceContactMaterial = new CANNON.ContactMaterial(diceMaterial, diceMaterial, {
+      friction: 0.2,
+      restitution: 0.45
+    })
+    world.addContactMaterial(diceContactMaterial)
+
     const groundBody = new CANNON.Body({
       mass: 0,
       shape: new CANNON.Plane(),
