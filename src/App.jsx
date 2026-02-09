@@ -39,6 +39,7 @@ function App() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [diceRollId, setDiceRollId] = useState(0)
   const [isDiceRolling, setIsDiceRolling] = useState(false)
+  const [diceDismissId, setDiceDismissId] = useState(0)
 
   // Template modal state
   // File input ref for import
@@ -234,7 +235,9 @@ function App() {
     const label = value > 0 ? `+${value}` : `${value}`
     toast.alert({
       title: 'Fate Dice Result',
-      message: `Total: ${label}`
+      message: `Total: ${label}`,
+      duration: 30000,
+      onDismiss: () => setDiceDismissId((current) => current + 1)
     })
   }
 
@@ -347,6 +350,7 @@ function App() {
         onRollingChange={setIsDiceRolling}
         onResult={handleDiceResult}
         isDark={theme.isDark}
+        dismissId={diceDismissId}
       />
 
       {categoriesHook.categories.map(category => {

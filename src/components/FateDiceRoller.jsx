@@ -12,7 +12,6 @@ const SIM_SPEED = 1.8
 const LINEAR_THRESHOLD = 0.12
 const ANGULAR_THRESHOLD = 0.18
 const SETTLE_FRAMES = 18
-const FADE_DELAY_MS = 3000
 const FADE_DURATION_MS = 700
 const MAX_DELTA = 1 / 30
 const WALL_HEIGHT = DICE_SIZE * 12
@@ -111,7 +110,13 @@ const getDiceValue = (quaternion) => {
   return SYMBOL_VALUES[symbol] ?? 0
 }
 
-function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
+function FateDiceRoller({
+  rollId,
+  onRollingChange,
+  onResult,
+  isDark = false,
+  dismissId = 0
+}) {
   const containerRef = useRef(null)
   const sceneRef = useRef(null)
   const cameraRef = useRef(null)
@@ -125,8 +130,9 @@ function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
   const lastTimeRef = useRef(null)
   const settleFramesRef = useRef(0)
   const settledRef = useRef(false)
-  const settledAtRef = useRef(0)
   const fadeStartRef = useRef(0)
+  const fadeRequestedRef = useRef(false)
+  const fadeRequestedAtRef = useRef(0)
   const resultSentRef = useRef(false)
   const isRollingRef = useRef(false)
   const boundsRef = useRef({ halfWidth: 4, halfDepth: 4 })
@@ -315,6 +321,13 @@ function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
   }, [isDark, isReady])
 
   useEffect(() => {
+    if (!dismissId) return
+    if (!isRollingRef.current || !settledRef.current) return
+    fadeRequestedRef.current = true
+    fadeRequestedAtRef.current = performance.now()
+  }, [dismissId])
+
+  useEffect(() => {
     if (!rollId || !isReady) return
     if (!worldRef.current) return
 
@@ -361,8 +374,9 @@ function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
 
     isRollingRef.current = true
     settledRef.current = false
-    settledAtRef.current = 0
     fadeStartRef.current = 0
+    fadeRequestedRef.current = false
+    fadeRequestedAtRef.current = 0
     resultSentRef.current = false
     settleFramesRef.current = 0
     lastTimeRef.current = null
@@ -419,7 +433,6 @@ function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
           settleFramesRef.current += 1
           if (settleFramesRef.current >= SETTLE_FRAMES) {
             settledRef.current = true
-            settledAtRef.current = time
             if (!resultSentRef.current) {
               const total = diceRef.current.reduce((sum, { mesh }) => {
                 return sum + getDiceValue(mesh.quaternion)
@@ -432,9 +445,8 @@ function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
       }
 
       if (settledRef.current) {
-        const sinceSettled = time - settledAtRef.current
-        if (sinceSettled >= FADE_DELAY_MS && !fadeStartRef.current) {
-          fadeStartRef.current = time
+        if (fadeRequestedRef.current && !fadeStartRef.current) {
+          fadeStartRef.current = fadeRequestedAtRef.current || time
         }
 
         if (fadeStartRef.current) {
@@ -465,7 +477,7 @@ function FateDiceRoller({ rollId, onRollingChange, onResult, isDark = false }) {
       cancelAnimationFrame(animationRef.current)
     }
     animationRef.current = requestAnimationFrame(animate)
-  }, [rollId, onRollingChange])
+  }, [rollId, onRollingChange, onResult])
 
   return (
     <div className={`fate-dice-roller ${isVisible ? 'is-visible' : ''}`} aria-hidden="true">
