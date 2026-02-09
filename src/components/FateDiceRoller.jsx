@@ -7,6 +7,8 @@ const DICE_COUNT = 4
 const DICE_SIZE = 0.5
 const VIEW_SIZE = 7
 const CAMERA_HEIGHT = 9
+const GRAVITY = -18
+const SIM_SPEED = 1.8
 const LINEAR_THRESHOLD = 0.12
 const ANGULAR_THRESHOLD = 0.18
 const SETTLE_FRAMES = 18
@@ -128,7 +130,7 @@ function FateDiceRoller({ rollId, onRollingChange }) {
     scene.add(groundMesh)
 
     const world = new CANNON.World({
-      gravity: new CANNON.Vec3(0, -9.82, 0)
+      gravity: new CANNON.Vec3(0, GRAVITY, 0)
     })
     world.allowSleep = true
     worldRef.current = world
@@ -166,8 +168,8 @@ function FateDiceRoller({ rollId, onRollingChange }) {
         shape: new CANNON.Box(new CANNON.Vec3(DICE_SIZE / 2, DICE_SIZE / 2, DICE_SIZE / 2)),
         material: diceMaterial
       })
-      body.linearDamping = 0.18
-      body.angularDamping = 0.22
+      body.linearDamping = 0.12
+      body.angularDamping = 0.16
       body.allowSleep = true
       body.sleepSpeedLimit = 0.08
       body.sleepTimeLimit = 0.2
@@ -275,14 +277,14 @@ function FateDiceRoller({ rollId, onRollingChange }) {
 
       body.position.set(x, y, z)
       body.velocity.set(
-        randomInRange(-3.6, 3.6),
-        randomInRange(1.2, 3.2),
-        randomInRange(-3.6, 3.6)
+        randomInRange(-6, 6),
+        randomInRange(2.4, 5),
+        randomInRange(-6, 6)
       )
       body.angularVelocity.set(
-        randomInRange(-7.5, 7.5),
-        randomInRange(-7.5, 7.5),
-        randomInRange(-7.5, 7.5)
+        randomInRange(-12, 12),
+        randomInRange(-12, 12),
+        randomInRange(-12, 12)
       )
       body.quaternion.setFromEuler(
         Math.random() * Math.PI * 2,
@@ -318,7 +320,7 @@ function FateDiceRoller({ rollId, onRollingChange }) {
       const delta = Math.min((time - lastTime) / 1000, MAX_DELTA)
       lastTimeRef.current = time
 
-      worldRef.current.step(1 / 60, delta, 3)
+      worldRef.current.step(1 / 60, delta * SIM_SPEED, 3)
 
       let isMoving = false
       diceRef.current.forEach(({ mesh, body }) => {
