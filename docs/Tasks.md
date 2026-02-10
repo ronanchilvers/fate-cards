@@ -1,0 +1,13 @@
+# Tasks to work on
+
+- When selecting a task for development always create an implementation planning document in `docs/plans` with a filename matching the task
+- Do not work on the implementation plan until the user has approved it
+- When a task has been completed, make sure that the relevant items here are checked off
+- When completing a task, add a completion timestamp (format Y-m-d h:m) to the relevant task here
+
+## 1 - Realistic Dice
+- [ ] 1.1 - Chamfered edges
+- [ ] 1.2 - Bitmap texture
+
+## 2 - Toasts
+- [ ] Add an alert with visible timeout bar
