@@ -1,0 +1,96 @@
+.floating-dice-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--slate-700);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+              0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.dark-mode .floating-dice-button {
+  background: var(--slate-200);
+  color: var(--slate-900);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+              0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.floating-dice-button:hover:not(.is-disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
+              0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode .floating-dice-button:hover:not(.is-disabled) {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
+              0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+.floating-dice-button:active:not(.is-disabled),
+.floating-dice-button.is-pressed:not(.is-disabled) {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
+              0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.floating-dice-button:focus-visible {
+  outline: 2px solid var(--slate-500);
+  outline-offset: 2px;
+}
+
+.dark-mode .floating-dice-button:focus-visible {
+  outline-color: var(--slate-400);
+}
+
+.floating-dice-button.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.floating-dice-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .floating-dice-button {
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .floating-dice-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .floating-dice-button {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .floating-dice-icon {
+    width: 24px;
+    height: 24px;
+  }
+}

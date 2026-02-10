@@ -4,6 +4,7 @@ import Card from './components/Card'
 import ErrorBoundary from './components/ErrorBoundary'
 import Icon from './components/icons/Icon'
 import FateDiceRoller from './components/FateDiceRoller'
+import FloatingDiceButton from './components/FloatingDiceButton'
 import { 
   TemplateModal, 
   CategoryModal, 
@@ -306,15 +307,6 @@ function App() {
             <Icon name="skillLevels" className="action-icon" aria-hidden="true" />
             Skill Levels
           </button>
-          <button
-            onClick={handleRollDice}
-            className="action-btn roll-dice-btn"
-            disabled={isDiceRolling}
-            aria-disabled={isDiceRolling}
-          >
-            <Icon name="rollDice" className="action-icon" aria-hidden="true" />
-            Roll Fate Dice
-          </button>
           <button onClick={() => { exportCards(); setShowMobileMenu(false); }} className="action-btn export-btn">
             <Icon name="export" className="action-icon" aria-hidden="true" />
             Export
@@ -353,6 +345,12 @@ function App() {
         dismissId={diceDismissId}
       />
 
+
+      <FloatingDiceButton
+        onClick={handleRollDice}
+        disabled={isDiceRolling}
+        isDark={theme.isDark}
+      />
       {categoriesHook.categories.map(category => {
         const cardsForCategory = cardsByCategory.get(category) || []
         const cardCount = cardCounts.get(category) || 0
