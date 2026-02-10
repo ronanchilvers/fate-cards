@@ -29,6 +29,15 @@
   width: 350px;
 }
 
+@media (max-width: 450px) {
+  .card,
+  .card.two-column,
+  .card.auto-column {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 @media (min-width: 800px) {
   .card.auto-column {
     width: 720px;

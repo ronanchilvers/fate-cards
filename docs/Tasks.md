@@ -23,4 +23,4 @@
   - On mobile (less than 450px width) make the toast full width, minus 1rem on either side
 
 ## 3 - Cards
-- [ ] 3.1 - When width <=450px, card width should be 100%
+- [x] 3.1 - When width <=450px, card width should be 100% (2026-02-10 21:42)
