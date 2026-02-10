@@ -42,8 +42,8 @@ const createFaceTexture = (symbol, isDark) => {
   canvas.height = size
   const ctx = canvas.getContext('2d')
 
-  const faceColor = isDark ? '#f8f8f5' : '#101010'
-  const symbolColor = isDark ? '#101010' : '#f8f8f5'
+  const faceColor = isDark ? '#060c23' : '#dee1ed'
+  const symbolColor = isDark ? '#dee1ed' : '#060c23'
 
   ctx.fillStyle = faceColor
   ctx.fillRect(0, 0, size, size)
