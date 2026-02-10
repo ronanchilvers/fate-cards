@@ -73,10 +73,10 @@ const createFaceTexture = (symbol, isDark) => {
 const createDiceMaterials = (isDark, opacity = 1) => {
   return FACE_SYMBOLS.map((symbol) => {
     const texture = createFaceTexture(symbol, isDark)
-    return new THREE.MeshStandardMaterial({
+    return new THREE.MeshPhongMaterial({
       map: texture,
-      roughness: 0.35,
-      metalness: 0.15,
+      shininess: 80,
+      specular: 0xffffff,
       transparent: true,
       opacity
     })
@@ -171,10 +171,17 @@ function FateDiceRoller({
     camera.lookAt(0, 0, 0)
     cameraRef.current = camera
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.85)
-    const directional = new THREE.DirectionalLight(0xffffff, 0.6)
-    directional.position.set(4, 10, 2)
-    scene.add(ambient, directional)
+    const ambient = new THREE.AmbientLight(0xffffff, 0.4)
+    
+    // Main directional light at 45 degrees to the right
+    const mainLight = new THREE.DirectionalLight(0xffffff, 0.8)
+    mainLight.position.set(6, 8, 4)
+    
+    // Add a second light for fill and better highlights
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3)
+    fillLight.position.set(-3, 5, -2)
+    
+    scene.add(ambient, mainLight, fillLight)
 
     const groundGeometry = new THREE.PlaneGeometry(20, 20)
     const groundMaterial = new THREE.MeshStandardMaterial({
