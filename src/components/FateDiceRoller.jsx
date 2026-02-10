@@ -162,6 +162,8 @@ function FateDiceRoller({
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setClearColor(0x000000, 0)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.VSMShadowMap
     rendererRef.current = renderer
     container.appendChild(renderer.domElement)
 
@@ -171,27 +173,40 @@ function FateDiceRoller({
     camera.lookAt(0, 0, 0)
     cameraRef.current = camera
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.4)
-    
+    const ambient = new THREE.AmbientLight(0xffffff, 0.25)
+
     // Main directional light at 45 degrees to the right
     const mainLight = new THREE.DirectionalLight(0xffffff, 0.8)
     mainLight.position.set(6, 8, 4)
-    
+
+    mainLight.castShadow = true
+    mainLight.shadow.mapSize.width = 2048
+    mainLight.shadow.mapSize.height = 2048
+    mainLight.shadow.camera.left = -8
+    mainLight.shadow.camera.right = 8
+    mainLight.shadow.camera.top = 8
+    mainLight.shadow.camera.bottom = -8
+    mainLight.shadow.camera.near = 0.5
+    mainLight.shadow.camera.far = 20
+    mainLight.shadow.bias = -0.0001
+    mainLight.shadow.radius = 4
+
     // Add a second light for fill and better highlights
     const fillLight = new THREE.DirectionalLight(0xffffff, 0.3)
     fillLight.position.set(-3, 5, -2)
-    
+
     scene.add(ambient, mainLight, fillLight)
 
     const groundGeometry = new THREE.PlaneGeometry(20, 20)
     const groundMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.05
+      opacity: 0.18
     })
     const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial)
     groundMesh.rotation.x = -Math.PI / 2
     groundMesh.position.y = 0
+    groundMesh.receiveShadow = true
     scene.add(groundMesh)
 
     const world = new CANNON.World({
@@ -234,6 +249,7 @@ function FateDiceRoller({
     for (let i = 0; i < DICE_COUNT; i += 1) {
       const mesh = new THREE.Mesh(geometry, materials)
       mesh.visible = false
+      mesh.castShadow = true
       scene.add(mesh)
 
       const body = new CANNON.Body({
@@ -362,7 +378,7 @@ function FateDiceRoller({
     diceRef.current.forEach(({ mesh, body }, index) => {
       const x = randomInRange(-halfWidth + margin, halfWidth - margin)
       const z = randomInRange(-halfDepth + margin, halfDepth - margin)
-      const y = DICE_SIZE * 3 + index * 0.4
+      const y = DICE_SIZE * 8 + index * 0.5
 
       body.position.set(x, y, z)
       body.velocity.set(
