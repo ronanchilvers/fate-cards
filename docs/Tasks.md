@@ -21,3 +21,6 @@
 - [x] 2.2 - For alert toasts only (those with just an 'Ok' button) (2026-02-10 21:29)
   - Move the toast about 2rem from the viewport bottom and 1rem in from the right hand side
   - On mobile (less than 450px width) make the toast full width, minus 1rem on either side
+
+## 3 - Cards
+- [ ] 3.1 - When width <=450px, card width should be 100%
