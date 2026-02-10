@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
+import { RoundedBoxGeometry } from 'three-stdlib'
 import './FateDiceRoller.css'
 
 const DICE_COUNT = 4
@@ -17,6 +18,8 @@ const MAX_DELTA = 1 / 30
 const WALL_HEIGHT = DICE_SIZE * 12
 const WALL_THICKNESS = Math.max(DICE_SIZE * 1.2, 0.4)
 const BOUNDS_PAD = DICE_SIZE * 0.7
+const CHAMFER_SEGMENTS = 3
+const CHAMFER_RADIUS = DICE_SIZE * 0.08
 const FACE_SYMBOLS = ['plus', 'minus', 'blank', 'plus', 'minus', 'blank']
 const FACE_NORMALS = [
   new THREE.Vector3(1, 0, 0),
@@ -240,7 +243,7 @@ function FateDiceRoller({
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
     world.addBody(groundBody)
 
-    const geometry = new THREE.BoxGeometry(DICE_SIZE, DICE_SIZE, DICE_SIZE)
+    const geometry = new RoundedBoxGeometry(DICE_SIZE, DICE_SIZE, DICE_SIZE, CHAMFER_SEGMENTS, CHAMFER_RADIUS)
     geometryRef.current = geometry
 
     const materials = createDiceMaterials(isDark)

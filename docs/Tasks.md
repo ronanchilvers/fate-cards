@@ -6,7 +6,7 @@
 - When completing a task, add a completion timestamp (format Y-m-d h:m) to the relevant task here
 
 ## 1 - Realistic Dice
-- [ ] 1.1 - Chamfered edges
+- [x] 1.1 - Chamfered edges (2026-02-10 20:32)
 - [ ] 1.2 - Bitmap texture
 
 ## 2 - Toasts
