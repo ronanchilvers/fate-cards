@@ -78,8 +78,8 @@ const createDiceMaterials = (isDark, opacity = 1) => {
     const texture = createFaceTexture(symbol, isDark)
     return new THREE.MeshPhongMaterial({
       map: texture,
-      shininess: 80,
-      specular: 0xffffff,
+      shininess: isDark ? 90 : 25,
+      specular: isDark ? 0x1a2650 : 0xf0f3ff,
       transparent: true,
       opacity
     })
