@@ -13,11 +13,11 @@
   - Light mode: Face #dee1ed, Symbols #060c23
 
 ## 2 - Toasts
-- [ ] 2.1 - Change the toast appearance to:
+- [x] 2.1 - Change the toast appearance to (2026-02-10 21:29):
   - Border radius - 5px
   - Dark background - #333333
   - White text: #FEFEFE
   - Remove the left hand border accent
-- [ ] 2.2 - For alert toasts only (those with just an 'Ok' button)
+- [x] 2.2 - For alert toasts only (those with just an 'Ok' button) (2026-02-10 21:29)
   - Move the toast about 2rem from the viewport bottom and 1rem in from the right hand side
   - On mobile (less than 450px width) make the toast full width, minus 1rem on either side
