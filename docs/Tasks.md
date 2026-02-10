@@ -8,6 +8,9 @@
 ## 1 - Realistic Dice
 - [x] 1.1 - Chamfered edges (2026-02-10 20:32)
 - [ ] 1.2 - Bitmap texture
+- [ ] 1.3 - Update the dice colours as follows:
+  - Dark mode: Face #060c23, Symbols #dee1ed
+  - Light mode: Face #dee1ed, Symbols #060c23
 
 ## 2 - Toasts
 - [ ] Add an alert with visible timeout bar
