@@ -48,7 +48,7 @@ const ToastProvider = ({ children }) => {
 
     setToasts(prev => ([
       ...prev,
-      { id, kind: 'alert', title, message, tone, onDismiss }
+      { id, kind: 'alert', title, message, tone, onDismiss, duration: duration > 0 ? duration : null }
     ]))
 
     if (duration > 0) {

@@ -237,7 +237,7 @@ function App() {
     toast.alert({
       title: 'Fate Dice Result',
       message: `Total: ${label}`,
-      duration: 30000,
+      duration: 10000,
       onDismiss: () => setDiceDismissId((current) => current + 1)
     })
   }, [toast])

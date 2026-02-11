@@ -50,6 +50,7 @@ const ToastContainer = ({ toasts, onDismiss, onConfirmChoice }) => {
       <div className="toast-viewport" aria-live="polite" aria-atomic="true">
         {alertToasts.map((toast, index) => {
           const tone = toast?.tone ?? 'info'
+          const duration = toast?.duration
 
           return (
             <div
@@ -57,19 +58,16 @@ const ToastContainer = ({ toasts, onDismiss, onConfirmChoice }) => {
               className="toast-item"
               role="status"
               data-tone={tone}
+              onClick={() => onDismiss && toast?.id && onDismiss(toast.id)}
+              style={{ cursor: onDismiss && toast?.id ? 'pointer' : 'default' }}
             >
               {toast?.title ? <div className="toast-title">{toast.title}</div> : null}
               {toast?.message ? <div className="toast-message">{toast.message}</div> : null}
-              {onDismiss && toast?.id ? (
-                <div className="toast-actions">
-                  <button
-                    type="button"
-                    className="toast-close"
-                    onClick={() => onDismiss(toast.id)}
-                  >
-                    Ok
-                  </button>
-                </div>
+              {duration > 0 ? (
+                <div 
+                  className="toast-progress-bar" 
+                  style={{ animationDuration: `${duration}ms` }}
+                />
               ) : null}
             </div>
           )

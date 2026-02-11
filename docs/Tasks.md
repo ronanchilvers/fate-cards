@@ -21,7 +21,7 @@
 - [x] 2.2 - For alert toasts only (those with just an 'Ok' button) (2026-02-10 21:29)
   - Move the toast about 2rem from the viewport bottom and 1rem in from the right hand side
   - On mobile (less than 450px width) make the toast full width, minus 1rem on either side
-- [ ] 2.3 - Implement an alternative alert toast which vanishes after a specified timeout.
+- [x] 2.3 - Implement an alternative alert toast which vanishes after a specified timeout. (2026-02-11 19:50)
   - The toast should have a coloured progress bar at the bottom which fills up as the timeout approaches
   - The progress bar should be thin and red
 
