@@ -3,7 +3,8 @@ import { ToastContext } from '../components/toast/ToastProvider'
 
 const fallbackToast = {
   alert: () => null,
-  confirm: () => Promise.resolve(false)
+  confirm: () => Promise.resolve(false),
+  diceResult: () => null
 }
 
 export const useToast = () => {

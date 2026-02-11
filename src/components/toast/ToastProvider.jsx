@@ -59,6 +59,29 @@ const ToastProvider = ({ children }) => {
     return id
   }, [removeToast])
 
+  const diceResult = useCallback((options) => {
+    const payload = options ?? {}
+    const breakdown = typeof payload.breakdown === 'string' ? payload.breakdown : ''
+    const total = typeof payload.total === 'string' ? payload.total : ''
+    if (!breakdown && !total) return null
+
+    const duration = Number.isFinite(payload.duration) ? payload.duration : 10000
+    const onDismiss = typeof payload.onDismiss === 'function' ? payload.onDismiss : null
+    const id = `toast-${idRef.current++}`
+
+    setToasts(prev => ([
+      ...prev,
+      { id, kind: 'diceResult', breakdown, total, onDismiss, duration: duration > 0 ? duration : null }
+    ]))
+
+    if (duration > 0) {
+      const timeoutId = setTimeout(() => removeToast(id), duration)
+      timersRef.current.set(id, timeoutId)
+    }
+
+    return id
+  }, [removeToast])
+
   const clearConfirmToast = useCallback((toastId) => {
     if (!toastId) return
     setToasts(prev => prev.filter(toast => toast.id !== toastId))
@@ -125,7 +148,7 @@ const ToastProvider = ({ children }) => {
     resolveConfirm(didConfirm)
   }, [resolveConfirm])
 
-  const value = useMemo(() => ({ alert, confirm }), [alert, confirm])
+  const value = useMemo(() => ({ alert, confirm, diceResult }), [alert, confirm, diceResult])
 
   return (
     <ToastContext.Provider value={value}>

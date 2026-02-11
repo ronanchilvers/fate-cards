@@ -3,7 +3,8 @@ import './Toast.css'
 const ToastContainer = ({ toasts, onDismiss, onConfirmChoice }) => {
   const safeToasts = Array.isArray(toasts) ? toasts : []
   const confirmToasts = safeToasts.filter(toast => toast?.kind === 'confirm')
-  const alertToasts = safeToasts.filter(toast => toast?.kind !== 'confirm')
+  const diceResultToasts = safeToasts.filter(toast => toast?.kind === 'diceResult')
+  const alertToasts = safeToasts.filter(toast => toast?.kind !== 'confirm' && toast?.kind !== 'diceResult')
 
   return (
     <>
@@ -48,6 +49,31 @@ const ToastContainer = ({ toasts, onDismiss, onConfirmChoice }) => {
       ) : null}
 
       <div className="toast-viewport" aria-live="polite" aria-atomic="true">
+        {diceResultToasts.map((toast, index) => {
+          const duration = toast?.duration
+
+          return (
+            <div
+              key={toast?.id ?? index}
+              className="toast-item toast-dice-result"
+              role="status"
+              onClick={() => onDismiss && toast?.id && onDismiss(toast.id)}
+              style={{ cursor: onDismiss && toast?.id ? 'pointer' : 'default' }}
+            >
+              <div className="dice-result-heading">Dice Roll</div>
+              <div className="dice-result-content">
+                <span className="dice-result-breakdown">{toast?.breakdown ?? ''}</span>
+                <span className="dice-result-total">{toast?.total ?? ''}</span>
+              </div>
+              {duration > 0 ? (
+                <div 
+                  className="toast-progress-bar" 
+                  style={{ animationDuration: `${duration}ms` }}
+                />
+              ) : null}
+            </div>
+          )
+        })}
         {alertToasts.map((toast, index) => {
           const tone = toast?.tone ?? 'info'
           const duration = toast?.duration

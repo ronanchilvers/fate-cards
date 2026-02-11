@@ -7,7 +7,7 @@ import { ELEMENT_COMPONENTS } from './elements'
 import { ELEMENT_TYPES } from '../constants'
 import Icon from './icons/Icon'
 
-function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories }) {
+function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories, onRollDice }) {
   const [showElementMenu, setShowElementMenu] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [isLocked, setIsLocked] = useState(card.locked || false)
@@ -299,6 +299,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         onDelete={() => deleteElement(element.id)}
         skills={skills}
         skillLevels={skillLevels}
+        onRollDice={onRollDice}
         showDragHandle={!isLocked}
         dragHandleProps={!isLocked ? {
           onMouseDown: () => {

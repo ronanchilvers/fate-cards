@@ -121,6 +121,37 @@
   }
 }
 
+/* Dice result toast */
+.toast-dice-result {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px 18px;
+}
+
+.dice-result-heading {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.dice-result-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.dice-result-breakdown {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+.dice-result-total {
+  color: #FEFEFE;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
 @media (max-width: 450px) {
   .toast-viewport {
     left: 2rem;

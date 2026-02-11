@@ -41,6 +41,8 @@ function App() {
   const [diceRollId, setDiceRollId] = useState(0)
   const [isDiceRolling, setIsDiceRolling] = useState(false)
   const [diceDismissId, setDiceDismissId] = useState(0)
+  const [pendingSkillBonus, setPendingSkillBonus] = useState(null)
+  const pendingSkillBonusRef = useRef(null)
 
   // Template modal state
   // File input ref for import
@@ -224,22 +226,43 @@ function App() {
     localStorage.removeItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
   }
 
-  const handleRollDice = () => {
+  const handleRollDice = (skillBonus = null) => {
     if (isDiceRolling) return
     setIsDiceRolling(true)
+    pendingSkillBonusRef.current = skillBonus
+    setPendingSkillBonus(skillBonus)
     setDiceRollId((current) => current + 1)
     setShowMobileMenu(false)
   }
 
-  const handleDiceResult = useCallback((total) => {
-    const value = Number.isFinite(total) ? total : 0
-    const label = value > 0 ? `+${value}` : `${value}`
-    toast.alert({
-      title: 'Fate Dice Result',
-      message: `Total: ${label}`,
+  const handleDiceResult = useCallback((diceTotal) => {
+    const diceValue = Number.isFinite(diceTotal) ? diceTotal : 0
+    const skillBonus = pendingSkillBonusRef.current ?? 0
+    const finalTotal = diceValue + skillBonus
+    
+    const diceLabel = diceValue > 0 ? `+${diceValue}` : `${diceValue}`
+    const bonusLabel = skillBonus > 0 ? `+${skillBonus}` : `${skillBonus}`
+    const finalLabel = finalTotal > 0 ? `+${finalTotal}` : `${finalTotal}`
+    
+    let breakdown = ''
+    let total = ''
+    
+    if (skillBonus !== null && skillBonus !== 0) {
+      breakdown = `${diceLabel} + ${bonusLabel}`
+    }
+    total = finalLabel
+    
+    toast.diceResult({
+      breakdown,
+      total,
       duration: 10000,
-      onDismiss: () => setDiceDismissId((current) => current + 1)
+      onDismiss: () => {
+        setDiceDismissId((current) => current + 1)
+        pendingSkillBonusRef.current = null
+      }
     })
+    
+    pendingSkillBonusRef.current = null
   }, [toast])
 
   const handleDeleteCategory = async (categoryName) => {
@@ -404,6 +427,7 @@ function App() {
                           skills={skillsHook.skills}
                           skillLevels={skillLevelsHook.skillLevels}
                         categories={categoriesHook.categories}
+                          onRollDice={handleRollDice}
                       />
                     ))
                   )}

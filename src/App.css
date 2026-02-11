@@ -605,3 +605,31 @@
   outline: none;
   border-color: var(--blue-700);
 }
+
+/* Clickable skill rating button */
+.skill-level-rating.clickable {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+.skill-level-rating.clickable:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.skill-level-rating.clickable:active {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.dark-mode .skill-level-rating.clickable:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .skill-level-rating.clickable:active {
+  background-color: rgba(255, 255, 255, 0.2);
+}

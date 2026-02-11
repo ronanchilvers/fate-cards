@@ -93,5 +93,43 @@ setToasts(prev => ([
 - Positioned at bottom to not interfere with content
 - Animation timing is linear for predictable progress indication
 
+## Additional Changes (Post-Implementation)
+
+### Dice Roll Duration
+- Changed from 30 seconds to 15 seconds
+- Further reduced to 10 seconds for better UX
+
+### Toast Interaction Enhancement
+- **Removed:** 'Ok' button from auto-dismissing toasts
+- **Added:** Click-to-dismiss on entire toast area
+- **Added:** Hover effect on clickable toasts
+- **Why:** Cleaner UI, larger click target, more intuitive
+
+**ToastContainer.jsx changes:**
+```jsx
+// Removed the button and actions div
+// Added onClick handler directly to toast-item
+<div
+  className="toast-item"
+  role="status"
+  data-tone={tone}
+  onClick={() => onDismiss && toast?.id && onDismiss(toast.id)}
+  style={{ cursor: onDismiss && toast?.id ? 'pointer' : 'default' }}
+>
+```
+
+**Toast.css changes:**
+```css
+.toast-item {
+  /* ... existing styles ... */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.toast-viewport .toast-item:hover {
+  background: #2a2a2a;
+  border-color: #5a5a5a;
+}
+```
+
 ## Next Steps
 None required - feature is complete and working as specified.

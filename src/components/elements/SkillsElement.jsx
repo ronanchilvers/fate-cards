@@ -15,7 +15,7 @@ import Icon from '../icons/Icon'
  * @param {boolean} props.showDragHandle - Whether to show drag handle
  * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
+function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps, onRollDice }) {
   // Defensive: ensure items is an array
   const items = element.items || []
   
@@ -61,7 +61,18 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
               <div className="skill-level-heading">
                 <Icon name="aspectBullet" className="aspect-bullet" size={12} aria-hidden="true" />
                 <span className="skill-level-name">{level.label}</span>
-                <span className="skill-level-rating">{level.ratingLabel}</span>
+                {onRollDice ? (
+                  <button
+                    className="skill-level-rating clickable"
+                    onClick={() => onRollDice(level.value)}
+                    title={`Roll dice with ${level.ratingLabel} skill bonus`}
+                    aria-label={`Roll dice with ${level.displayLabel}`}
+                  >
+                    {level.ratingLabel}
+                  </button>
+                ) : (
+                  <span className="skill-level-rating">{level.ratingLabel}</span>
+                )}
               </div>
               <div className="skill-level-list">
                 {levelSkills.map(skill => skill.name || '---').join(', ')}
