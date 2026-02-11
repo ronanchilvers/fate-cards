@@ -136,6 +136,39 @@
   gap: 12px;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.darkmode-toggle-btn {
+  padding: 0.4rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.dark-mode .darkmode-toggle-btn {
+  color: var(--slate-200);
+}
+
+.darkmode-toggle-btn:hover {
+  background: #CCC;
+}
+
+.dark-mode .darkmode-toggle-btn:hover {
+  background: var(--slate-700);
+}
+
 .hamburger-btn {
   display: none;
   flex-direction: column;
@@ -181,6 +214,10 @@
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 9;
     gap: 8px;
+  }
+
+  .header-controls {
+    order: 3;
   }
 
   .dark-mode .app-actions {

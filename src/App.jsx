@@ -304,15 +304,6 @@ function App() {
     <div className={`app ${theme.isDark ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>Fate RPG Cards</h1>
-        <button
-          className="hamburger-btn"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-          aria-label="Toggle menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
         <div className={`app-actions ${showMobileMenu ? 'mobile-open' : ''}`}>
           <button onClick={() => { openTemplateMenu(); setShowMobileMenu(false); }} className="action-btn add-card-header">
             <Icon name="add" className="action-icon" aria-hidden="true" />
@@ -349,13 +340,24 @@ function App() {
             onChange={importCards}
             style={{ display: 'none' }}
           />
+        </div>
+        <div className="header-controls">
           <button
-            onClick={() => { theme.cycleThemeMode(); setShowMobileMenu(false); }}
-            className="action-btn darkmode-btn"
+            onClick={theme.cycleThemeMode}
+            className="darkmode-toggle-btn"
             title={theme.getThemeTitle()}
             aria-label={theme.getThemeTitle()}
           >
-            <Icon name={theme.getThemeIcon()} aria-hidden="true" />
+            <Icon name={theme.getThemeIcon()} size={24} aria-hidden="true" />
+          </button>
+          <button
+            className="hamburger-btn"
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
       </header>

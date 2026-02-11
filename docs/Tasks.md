@@ -30,7 +30,7 @@
 - [x] 3.2 - For the Skills element, allow clicking the skill rating (+4, +3, etc) to roll the dice, automatically adding the skill rating to the end result. (2026-02-11 20:02)
 
 ## 4 - Navigation
-- [ ] 4.1 - The dark mode toggle shouldn't be absorbed into the hamburger menu
+- [x] 4.1 - The dark mode toggle shouldn't be absorbed into the hamburger menu (2026-02-11 21:54)
   - The icon should be larger - 24x24px
   - The icon should stay on the left hand end of the header bar
   - It should move right to allow the hamburger menu trigger to fit to the left of it when it shows
