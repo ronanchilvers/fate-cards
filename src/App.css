@@ -437,6 +437,14 @@
   padding: 24px;
 }
 
+@media (max-width: 450px) {
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+
 .category-input {
   width: 100%;
   padding: 12px;
@@ -453,6 +461,18 @@
   display: flex;
   gap: 12px;
   justify-content: flex-end;
+}
+
+@media (max-width: 450px) {
+  .modal-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .modal-actions .cancel-btn,
+  .modal-actions .confirm-btn {
+    width: 100%;
+  }
 }
 
 .cancel-btn,
@@ -499,6 +519,16 @@
   padding: 24px;
   max-height: 60vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 450px) {
+  .skills-admin-body {
+    max-height: none;
+    height: calc(100vh - 2rem - 80px);
+    flex: 1;
+  }
 }
 
 .skills-admin-description {
@@ -519,6 +549,13 @@
   border-radius: var(--radius-md);
   padding: 12px;
   background: var(--slate-50);
+}
+
+@media (max-width: 450px) {
+  .skills-list {
+    flex: 1;
+    max-height: none;
+  }
 }
 
 .dark-mode .skills-list {
@@ -566,6 +603,26 @@
   gap: 12px;
   padding-top: 20px;
   border-top: 2px solid var(--slate-200);
+}
+
+@media (max-width: 450px) {
+  .add-skill-section {
+    flex-direction: column;
+  }
+  
+  .add-skill-section .skill-input,
+  .add-skill-section .add-skill-btn {
+    width: 100%;
+  }
+  
+  .add-skill-section > div {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .add-skill-section > div .add-skill-btn {
+    width: 100%;
+  }
 }
 
 .skill-input {

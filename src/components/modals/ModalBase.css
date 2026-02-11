@@ -18,6 +18,20 @@
   }
 }
 
+@media (max-width: 450px) {
+  .modal-overlay {
+    padding: 1rem;
+  }
+
+  .modal-content {
+    width: 100%;
+    min-height: calc(100vh - 2rem);
+    max-height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .modal-content {
   background: var(--modal-bg);
   color: var(--modal-text);

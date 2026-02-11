@@ -42,4 +42,4 @@
   - There should be a 0.5rem right margin on the action icons
 
 ## 5 - Modals
-- [ ] 5.1 - In mobile mode, the footer form elements in modals (Add buttons, text inputs, etc) should stack vertically otherwise the overflow the right modal edge
+- [x] 5.1 - In mobile mode, the footer form elements in modals (Add buttons, text inputs, etc) should stack vertically otherwise the overflow the right modal edge (2026-02-11 22:23)
