@@ -34,7 +34,7 @@
   - The icon should be larger - 24x24px
   - The icon should stay on the left hand end of the header bar
   - It should move right to allow the hamburger menu trigger to fit to the left of it when it shows
-- [ ] 4.2 - Update the styling of the navigation items in the hamburger menu
+- [x] 4.2 - Update the styling of the navigation items in the hamburger menu (2026-02-11 22:01)
   - They should be right aligned
   - The font size should be 1.5rem
   - The padding should be 0.5rem, 1rem
