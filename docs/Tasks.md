@@ -28,3 +28,15 @@
 ## 3 - Cards
 - [x] 3.1 - When width <=450px, card width should be 100% (2026-02-10 21:42)
 - [x] 3.2 - For the Skills element, allow clicking the skill rating (+4, +3, etc) to roll the dice, automatically adding the skill rating to the end result. (2026-02-11 20:02)
+
+## 4 - Navigation
+- [ ] 4.1 - The dark mode toggle shouldn't be absorbed into the hamburger menu
+  - The icon should be larger - 24x24px
+  - The icon should stay on the left hand end of the header bar
+  - It should move right to allow the hamburger menu trigger to fit to the left of it when it shows
+- [ ] 4.2 - Update the styling of the navigation items in the hamburger menu
+  - They should be right aligned
+  - The font size should be 1.5rem
+  - The padding should be 0.5rem, 1rem
+  - The icons should be 32px square
+  - There should be a 0.5rem right margin on the action icons
