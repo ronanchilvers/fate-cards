@@ -27,3 +27,4 @@
 
 ## 3 - Cards
 - [x] 3.1 - When width <=450px, card width should be 100% (2026-02-10 21:42)
+- [ ] 3.2 - For the Skills element, allow clicking the skill rating (+4, +3, etc) to roll the dice, automatically adding the skill rating to the end result.
