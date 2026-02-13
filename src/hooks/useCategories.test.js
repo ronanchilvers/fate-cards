@@ -232,4 +232,27 @@ describe('useCategories', () => {
     expect(result.current.isCategoryCollapsed('Renamed')).toBe(true)
     expect(result.current.isCategoryCollapsed(oldName)).toBe(false)
   })
+
+  it('should reject invalid category imports', () => {
+    const { result } = renderHook(() => useCategories())
+
+    let importResult
+    act(() => {
+      importResult = result.current.importCategories('not-an-array')
+    })
+
+    expect(importResult.success).toBe(false)
+    expect(importResult.warning).toBeDefined()
+  })
+
+  it('should handle deleting a non-existent category', () => {
+    const { result } = renderHook(() => useCategories())
+
+    let deleteResult
+    act(() => {
+      deleteResult = result.current.deleteCategory('Not a Category', 0)
+    })
+
+    expect(deleteResult.success).toBe(true)
+  })
 })
