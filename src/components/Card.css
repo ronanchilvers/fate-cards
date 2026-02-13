@@ -473,8 +473,16 @@
   margin-bottom: 6px;
 }
 
+.skill-name-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .skill-name-select {
   flex: 1;
+  width: 100%;
   padding: 6px 8px;
   border: 1px solid var(--gray-300);
   border-radius: var(--radius-sm);
@@ -487,6 +495,14 @@
 .skill-name-select:focus {
   outline: none;
   border-color: var(--gray-500);
+}
+
+.skill-name-custom {
+  cursor: text;
+}
+
+.skill-name-custom::placeholder {
+  color: var(--gray-500);
 }
 
 .add-skill-to-level-btn {

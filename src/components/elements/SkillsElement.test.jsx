@@ -171,6 +171,59 @@ describe('SkillsElement', () => {
     expect(select).toBeInTheDocument()
   })
 
+  it('should include custom option in the skill dropdown', () => {
+    render(<SkillsElement {...defaultProps} />)
+    expect(screen.getByRole('option', { name: 'Custom...' })).toBeInTheDocument()
+  })
+
+  it('should allow entering a custom skill name', () => {
+    const onUpdate = vi.fn()
+    const element = {
+      id: '1',
+      type: 'skills',
+      items: [{ name: 'Hacking', rating: 2 }]
+    }
+    render(<SkillsElement {...defaultProps} element={element} onUpdate={onUpdate} />)
+
+    fireEvent.change(screen.getByLabelText('Custom skill name'), {
+      target: { value: 'Hacking Pro' }
+    })
+
+    expect(onUpdate).toHaveBeenCalled()
+    const call = onUpdate.mock.calls[0][0]
+    expect(call.items[0].name).toBe('Hacking Pro')
+  })
+
+  it('should keep custom selection when the custom skill name is emptied', () => {
+    const onUpdate = vi.fn()
+    const element = {
+      id: '1',
+      type: 'skills',
+      items: [{ name: 'Hacking', rating: 2 }]
+    }
+    render(<SkillsElement {...defaultProps} element={element} onUpdate={onUpdate} />)
+
+    fireEvent.change(screen.getByLabelText('Custom skill name'), {
+      target: { value: '' }
+    })
+
+    expect(onUpdate).toHaveBeenCalled()
+    const call = onUpdate.mock.calls[0][0]
+    expect(call.items[0].name).toBe('')
+    expect(call.items[0].isCustom).toBe(true)
+  })
+
+  it('should render custom skill input when name is not in skills list', () => {
+    const element = {
+      id: '1',
+      type: 'skills',
+      items: [{ name: 'Hacking', rating: 2 }]
+    }
+    render(<SkillsElement {...defaultProps} element={element} />)
+    expect(screen.getByLabelText('Custom skill name')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Hacking')).toBeInTheDocument()
+  })
+
   it('should call onDelete when delete button clicked', () => {
     const onDelete = vi.fn()
     render(<SkillsElement {...defaultProps} onDelete={onDelete} />)

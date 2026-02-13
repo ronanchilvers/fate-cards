@@ -32,7 +32,8 @@ const normalizeSkillItems = (items) => {
     const rating = typeof item.rating === 'number' && !Number.isNaN(item.rating)
       ? item.rating
       : 0
-    acc.push({ name, rating })
+    const isCustom = typeof item.isCustom === 'boolean' ? item.isCustom : false
+    acc.push({ name, rating, isCustom })
     return acc
   }, [])
 }

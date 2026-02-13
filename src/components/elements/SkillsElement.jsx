@@ -1,6 +1,10 @@
 import ElementWrapper from './ElementWrapper'
 import Icon from '../icons/Icon'
 
+const CUSTOM_SKILL_VALUE = '__custom__'
+const CUSTOM_SKILL_LABEL = 'Custom...'
+const CUSTOM_SKILL_DEFAULT_NAME = 'Custom Skill'
+
 /**
  * Skills element renderer
  * Complex element managing skills by Fate skill ladder levels
@@ -120,24 +124,54 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
             </div>
             {levelSkills.map((skill, skillIndex) => {
               const globalIndex = items.findIndex(s => s === skill)
+              const skillOptions = skills || []
+              const isCustomSkill = Boolean(skill.isCustom) || (Boolean(skill.name) && !skillOptions.includes(skill.name))
+              const selectValue = isCustomSkill ? CUSTOM_SKILL_VALUE : (skill.name || '')
+              const customInputValue = skill.name || ''
               return (
                 <div key={skillIndex} className="skill-item">
-                  <select
-                    value={skill.name || ''}
-                    onChange={(e) => {
-                      const newItems = [...items]
-                      if (newItems[globalIndex]) {
-                        newItems[globalIndex] = { ...newItems[globalIndex], name: e.target.value }
+                  <div className="skill-name-field">
+                    <select
+                      value={selectValue}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        const newItems = [...items]
+                        if (!newItems[globalIndex]) return
+                        if (value === CUSTOM_SKILL_VALUE) {
+                          const customName = isCustomSkill && skill.name ? skill.name : CUSTOM_SKILL_DEFAULT_NAME
+                          newItems[globalIndex] = { ...newItems[globalIndex], name: customName, isCustom: true }
+                          onUpdate({ items: newItems })
+                          return
+                        }
+                        newItems[globalIndex] = { ...newItems[globalIndex], name: value, isCustom: false }
                         onUpdate({ items: newItems })
-                      }
-                    }}
-                    className="skill-name-select"
-                  >
-                    <option value="">Select skill...</option>
-                    {(skills || []).map(skillName => (
-                      <option key={skillName} value={skillName}>{skillName}</option>
-                    ))}
-                  </select>
+                      }}
+                      className="skill-name-select"
+                    >
+                      <option value="">Select skill...</option>
+                      {skillOptions.map(skillName => (
+                        <option key={skillName} value={skillName}>{skillName}</option>
+                      ))}
+                      <option value={CUSTOM_SKILL_VALUE}>{CUSTOM_SKILL_LABEL}</option>
+                    </select>
+                    {selectValue === CUSTOM_SKILL_VALUE && (
+                      <input
+                        type="text"
+                        value={customInputValue}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          const newItems = [...items]
+                          if (newItems[globalIndex]) {
+                            newItems[globalIndex] = { ...newItems[globalIndex], name: value, isCustom: true }
+                            onUpdate({ items: newItems })
+                          }
+                        }}
+                        className="skill-name-select skill-name-custom"
+                        placeholder="Custom skill"
+                        aria-label="Custom skill name"
+                      />
+                    )}
+                  </div>
                   <button
                     onClick={() => {
                       const newItems = items.filter((_, i) => i !== globalIndex)
