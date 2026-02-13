@@ -182,4 +182,59 @@ describe('useCards', () => {
       expect(duplicate.elements[index].id).not.toBe(origEl.id)
     })
   })
+
+  it('falls back to blank template when template key is invalid', () => {
+    const { result } = renderHook(() => useCards())
+    
+    act(() => {
+      result.current.addCardFromTemplate('PCs', 'not-a-template')
+    })
+
+    const newCard = result.current.cards.find(c => c.title === 'New Card')
+    expect(newCard).toBeDefined()
+    expect(newCard.elements).toEqual([])
+  })
+
+  it('returns warning for invalid import payloads', () => {
+    const { result } = renderHook(() => useCards())
+    
+    let importResult
+    act(() => {
+      importResult = result.current.importCards('not-an-array')
+    })
+
+    expect(importResult.success).toBe(false)
+    expect(importResult.warning).toBeDefined()
+  })
+
+  it('reports skipped cards during import', () => {
+    const { result } = renderHook(() => useCards())
+    const toImport = [
+      { id: 'a', title: 'Imported 1', category: 'PCs', elements: [] },
+      null,
+      { id: 'b', title: 'Imported 2', category: 'NPCs', elements: [] }
+    ]
+    
+    let importResult
+    act(() => {
+      importResult = result.current.importCards(toImport)
+    })
+
+    expect(importResult.success).toBe(true)
+    expect(importResult.count).toBe(2)
+    expect(importResult.skipped).toBe(1)
+    expect(importResult.warning).toContain('invalid cards')
+  })
+
+  it('preserves card color when moveCardToCategory receives invalid color', () => {
+    const { result } = renderHook(() => useCards())
+    const cardId = result.current.cards[0].id
+    const originalColor = result.current.cards[0].color
+    
+    act(() => {
+      result.current.moveCardToCategory(cardId, 'NPCs', 'not-a-color')
+    })
+
+    expect(result.current.cards[0].color).toBe(originalColor)
+  })
 })
