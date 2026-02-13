@@ -182,6 +182,76 @@ describe('normalizeCard - element normalization', () => {
       })
     })
   })
+
+  it('normalizes aspects elements to only include strings', () => {
+    const input = {
+      id: 'aspects-card',
+      elements: [
+        {
+          id: 'aspects-1',
+          type: ELEMENT_TYPES.ASPECTS,
+          items: ['One', 2, null, 'Two']
+        }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements[0].items).toEqual(['One', 'Two'])
+  })
+
+  it('normalizes consequences elements to ensure label and text are strings', () => {
+    const input = {
+      id: 'consequences-card',
+      elements: [
+        {
+          id: 'cons-1',
+          type: ELEMENT_TYPES.CONSEQUENCES,
+          items: [{ label: 123, text: null }]
+        }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements[0].items[0]).toEqual({ label: '', text: '' })
+  })
+
+  it('normalizes fate points with default values', () => {
+    const input = {
+      id: 'fate-card',
+      elements: [
+        { id: 'fp-1', type: ELEMENT_TYPES.FATE_POINTS, current: 'x', refresh: null }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements[0].current).toBe(0)
+    expect(result.elements[0].refresh).toBe(3)
+  })
+
+  it('normalizes game tools element dice array', () => {
+    const input = {
+      id: 'game-tools-card',
+      elements: [
+        { id: 'tools-1', type: ELEMENT_TYPES.GAME_TOOLS, dice: 'not-array' }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(result.elements[0].dice).toEqual([])
+  })
+
+  it('generates element id when missing', () => {
+    const input = {
+      id: 'id-card',
+      elements: [
+        { type: ELEMENT_TYPES.NOTE, text: 'Hello' }
+      ]
+    }
+
+    const result = normalizeCard(input)
+    expect(typeof result.elements[0].id).toBe('string')
+    expect(result.elements[0].id).not.toBe('')
+  })
 })
 
 describe('normalizeCards', () => {
