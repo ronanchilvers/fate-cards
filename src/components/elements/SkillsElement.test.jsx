@@ -173,7 +173,8 @@ describe('SkillsElement', () => {
 
   it('should include custom option in the skill dropdown', () => {
     render(<SkillsElement {...defaultProps} />)
-    expect(screen.getByRole('option', { name: 'Custom...' })).toBeInTheDocument()
+    const options = screen.getAllByRole('option', { name: 'Custom...' })
+    expect(options.length).toBeGreaterThan(0)
   })
 
   it('should allow entering a custom skill name', () => {

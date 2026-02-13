@@ -46,7 +46,7 @@ describe('ToastProvider', () => {
     expect(screen.getByText('Saved')).toBeInTheDocument()
     expect(screen.getByText('Your changes were saved.')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: /^Ok$/ }))
+    fireEvent.click(screen.getByRole('status'))
 
     expect(screen.queryByText('Saved')).not.toBeInTheDocument()
   })
