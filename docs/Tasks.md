@@ -43,3 +43,6 @@
 
 ## 5 - Modals
 - [x] 5.1 - In mobile mode, the footer form elements in modals (Add buttons, text inputs, etc) should stack vertically otherwise the overflow the right modal edge (2026-02-11 22:23)
+
+## 6 - Testing Coverage Improvements
+- [x] 6.1 - Expand unit test coverage per testing gaps plan (2026-02-13 23:34)
