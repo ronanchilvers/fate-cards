@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getPaleBackground, getMidToneBackground, getCategoryColor } from './colors'
+import { getPaleBackground, getMidToneBackground, getCategoryColor, normalizeColorToHex } from './colors'
 
 const rgbRegex = /^rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)$/
 const hexRegex = /^#[0-9a-f]{6}$/i
@@ -9,6 +9,29 @@ const parseRgb = (value) => {
   if (!match) return null
   return match.slice(1).map(Number)
 }
+
+describe('normalizeColorToHex', () => {
+  it('returns lowercase hex for hex input', () => {
+    expect(normalizeColorToHex('#AABBCC')).toBe('#aabbcc')
+  })
+
+  it('converts HSL to hex', () => {
+    expect(normalizeColorToHex('hsl(0, 100%, 50%)')).toBe('#ff0000')
+  })
+
+  it('returns null for invalid input', () => {
+    expect(normalizeColorToHex(null)).toBeNull()
+    expect(normalizeColorToHex(123)).toBeNull()
+    expect(normalizeColorToHex('red')).toBeNull()
+    expect(normalizeColorToHex('#fff')).toBeNull()
+    expect(normalizeColorToHex('#gggggg')).toBeNull()
+  })
+
+  it('handles edge HSL values', () => {
+    expect(normalizeColorToHex('hsl(360, 100%, 50%)')).toBe('#ff0000')
+    expect(normalizeColorToHex('hsl(0, 0%, 50%)')).toBe('#808080')
+  })
+})
 
 describe('getPaleBackground', () => {
   it('returns pale version of red', () => {
@@ -25,6 +48,16 @@ describe('getPaleBackground', () => {
     const result = getPaleBackground('#000000')
     expect(result).toBe('rgb(230, 230, 230)')
   })
+
+  it('accepts HSL input', () => {
+    const result = getPaleBackground('hsl(0, 100%, 50%)')
+    expect(result).toBe('rgb(255, 230, 230)')
+  })
+
+  it('falls back to default color on invalid input', () => {
+    const result = getPaleBackground('not-a-color')
+    expect(result).toBe('rgb(233, 234, 235)')
+  })
 })
 
 describe('getMidToneBackground', () => {
@@ -36,6 +69,16 @@ describe('getMidToneBackground', () => {
   it('returns mid-tone version of blue', () => {
     const result = getMidToneBackground('#0000ff')
     expect(result).toBe('rgb(128, 128, 255)')
+  })
+
+  it('accepts HSL input', () => {
+    const result = getMidToneBackground('hsl(0, 100%, 50%)')
+    expect(result).toBe('rgb(255, 128, 128)')
+  })
+
+  it('falls back to default color on invalid input', () => {
+    const result = getMidToneBackground('not-a-color')
+    expect(result).toBe('rgb(143, 148, 155)')
   })
 })
 
