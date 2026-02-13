@@ -33,57 +33,61 @@ Common commands:
 src/
 ├── App.jsx                  — Top-level state, import/export, routing, layout
 ├── App.css                  — Global app styles
+├── App.test.jsx             — App-level tests
+├── App.import.test.jsx      — Import validation tests for App module
 ├── index.css                — Base/reset styles
 ├── main.jsx                 — React entry point
 ├── constants.js             — Shared constants (storage keys, element types, theme modes)
 ├── components/
-│   ├── Card.jsx / Card.css  — Card editor and element rendering
-│   ├── ErrorBoundary.jsx    — React error boundary
-│   ├── FateDiceRoller.jsx / .css  — 3D Fate dice roller (Three.js + cannon-es)
-│   ├── FloatingDiceButton.jsx / .css — Floating button to trigger dice rolls
-│   ├── elements/            — Individual card element components
+│   ├── Card.jsx / Card.css / Card.test.jsx  — Card editor and element rendering
+│   ├── ErrorBoundary.jsx / .test.jsx        — React error boundary
+│   ├── FateDiceRoller.jsx / .css / .test.jsx  — 3D Fate dice roller (Three.js + cannon-es)
+│   ├── FloatingDiceButton.jsx / .css / .test.jsx — Floating button to trigger dice rolls
+│   ├── elements/            — Individual card element components (each has a .test.jsx)
 │   │   ├── index.js         — Barrel export + element type→component registry
-│   │   ├── ElementWrapper.jsx
-│   │   ├── HighConceptElement.jsx
-│   │   ├── TroubleElement.jsx
-│   │   ├── AspectsElement.jsx
-│   │   ├── SkillsElement.jsx
-│   │   ├── InventoryElement.jsx
-│   │   ├── StressTracksElement.jsx
-│   │   ├── ConsequencesElement.jsx
-│   │   ├── NoteElement.jsx
-│   │   └── FatePointsElement.jsx
+│   │   ├── ElementWrapper.jsx / .test.jsx
+│   │   ├── HighConceptElement.jsx / .test.jsx
+│   │   ├── TroubleElement.jsx / .test.jsx
+│   │   ├── AspectsElement.jsx / .test.jsx
+│   │   ├── SkillsElement.jsx / .test.jsx
+│   │   ├── InventoryElement.jsx / .test.jsx
+│   │   ├── StressTracksElement.jsx / .test.jsx
+│   │   ├── ConsequencesElement.jsx / .test.jsx
+│   │   ├── NoteElement.jsx / .test.jsx
+│   │   └── FatePointsElement.jsx / .test.jsx
 │   ├── icons/               — Custom icon component and icon map (lucide-react)
-│   │   ├── Icon.jsx
-│   │   └── iconMap.js
+│   │   ├── Icon.jsx / Icon.test.jsx
+│   │   └── iconMap.js / iconMap.test.js
 │   ├── modals/              — Modal dialogs
 │   │   ├── index.js         — Barrel export
 │   │   ├── ModalBase.css
-│   │   ├── TemplateModal.jsx / .css
-│   │   ├── CategoryModal.jsx
-│   │   ├── SkillsAdminModal.jsx
-│   │   └── SkillLevelsAdminModal.jsx
+│   │   ├── TemplateModal.jsx / .css / .test.jsx
+│   │   ├── CategoryModal.jsx / .test.jsx
+│   │   ├── SkillsAdminModal.jsx / .test.jsx
+│   │   └── SkillLevelsAdminModal.jsx / .test.jsx
 │   └── toast/               — Toast notification system
 │       ├── Toast.css
-│       ├── ToastContainer.jsx
-│       └── ToastProvider.jsx
+│       ├── ToastContainer.jsx / .test.jsx
+│       └── ToastProvider.jsx / .test.jsx
 ├── hooks/                   — Custom React hooks (all state management)
 │   ├── index.js             — Barrel export
-│   ├── useLocalStorage.js   — localStorage persistence
-│   ├── useTheme.js          — Dark/light/auto theme
-│   ├── useCards.js           — Card CRUD and ordering
-│   ├── useCategories.js     — Category management
-│   ├── useSkills.js         — Skill definitions
-│   ├── useSkillLevels.js    — Skill level (ladder) management
-│   └── useToast.js          — Toast notification hook
+│   ├── integration.test.js  — Cross-hook integration tests
+│   ├── useLocalStorage.js / .test.js   — localStorage persistence
+│   ├── useTheme.js / .test.js          — Dark/light/auto theme
+│   ├── useCards.js / .test.js          — Card CRUD and ordering
+│   ├── useCategories.js / .test.js     — Category management
+│   ├── useSkills.js / .test.js         — Skill definitions
+│   ├── useSkillLevels.js / .test.js    — Skill level (ladder) management
+│   └── useToast.js / .test.jsx         — Toast notification hook
 ├── utils/                   — Pure utility functions
-│   ├── cardSchema.js        — Card validation and normalization
-│   ├── colors.js            — Color utilities (category colors)
-│   └── storage.js           — Safe JSON localStorage helpers
+│   ├── cardSchema.js / .test.js        — Card validation and normalization
+│   ├── colors.js / .test.js            — Color utilities (category colors)
+│   └── storage.js / .test.js           — Safe JSON localStorage helpers
 ├── data/                    — Default data and factories
-│   ├── defaults.js          — Default cards, categories, skills, skill levels
-│   ├── cardTemplates.js     — Card template factory functions
-│   └── elementFactories.js  — Element creation factories
+│   ├── __snapshots__/        — Snapshot test outputs
+│   ├── defaults.js / defaults.test.js / defaults.snapshot.test.js
+│   ├── cardTemplates.js / cardTemplates.test.js
+│   └── elementFactories.js / elementFactories.test.js
 └── test/                    — Test infrastructure
     ├── setup.js             — Vitest setup (jsdom, Testing Library matchers)
     └── importValidation.test.js — Cross-module import validation tests
@@ -95,9 +99,17 @@ docs/                        — Documentation
 └── review/                  — Code quality and security review documents
 
 example-designs/             — Reference screenshots (do not edit unless asked)
+public/                      — Static assets
+dist/                        — Build output (generated)
 .github/workflows/           — CI/CD pipelines
 ├── deploy.yml               — GitHub Pages deployment (pushes to master)
 └── tests.yml                — Unit tests on pull requests
+AGENTS.md                    — Agent instructions for this repo
+DEPLOY.md                    — Deployment notes
+index.html                   — App HTML shell + CSP
+package.json                 — Project metadata and scripts
+package-lock.json            — NPM lockfile
+vite.config.js               — Vite and Vitest config
 ```
 
 ### Key conventions
