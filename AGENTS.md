@@ -1,6 +1,5 @@
 # Fate Cards — Agents Instructions
 
-
 ## Commands (run early when relevant)
 Some important points first:
 - Use of `npq-hero` instead of `npm` is preferred
@@ -17,8 +16,9 @@ Common commands:
 - Run tests (coverage): `npq-hero run test:coverage`
 - Deploy to GitHub Pages: `npq-hero run deploy`
 
-
 ## Project knowledge
+
+When investigating, analyzing or reviewing the project use the project-memory skill, if it's available, to persist discovered project knowledge.
 
 ### Tech stack
 - **React 18** with **Vite 7** (JavaScript, ESM)
