@@ -18,7 +18,11 @@ Common commands:
 
 ## Project knowledge
 
-When investigating, analyzing or reviewing the project use the project-memory skill, if it's available, to persist discovered project knowledge.
+### Project Memory
+Follow these guidelines if the project-memory skill is available:
+- When investigating, analyzing or reviewing the project use the project-memory skill to persist discovered project knowledge with brief memory entries
+- When working on the project use the project-memory skill to recall relevant project context before making changes
+- Also when making concrete decisions about the codebase, write a brief memory (decision, rationale and pointers)
 
 ### Tech stack
 - **React 18** with **Vite 7** (JavaScript, ESM)
