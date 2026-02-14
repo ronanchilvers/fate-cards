@@ -137,7 +137,7 @@ function StressTracksElement({ element, isLocked, onUpdate, onDelete, showDragHa
               <div
                 key={boxIndex}
                 className={`stress-box ${box.checked ? 'checked' : ''} ${isLocked ? 'locked' : ''}`}
-                onClick={() => !isLocked && handleToggleBox(trackIndex, boxIndex)}
+                onClick={() => handleToggleBox(trackIndex, boxIndex)}
               >
                 {!isLocked ? (
                   <input

@@ -156,14 +156,14 @@ describe('StressTracksElement', () => {
     expect(spans.length).toBeGreaterThan(0)
   })
 
-  it('should not allow box toggle when locked', () => {
+  it('should allow box toggle when locked', () => {
     const onUpdate = vi.fn()
     render(<StressTracksElement {...defaultProps} isLocked={true} onUpdate={onUpdate} />)
     
     const stressBoxes = document.querySelectorAll('.stress-box')
     fireEvent.click(stressBoxes[0])
     
-    expect(onUpdate).not.toHaveBeenCalled()
+    expect(onUpdate).toHaveBeenCalled()
   })
 
   it('should show delete button when unlocked', () => {
