@@ -5,6 +5,10 @@ const CUSTOM_SKILL_VALUE = '__custom__'
 const CUSTOM_SKILL_LABEL = 'Custom...'
 const CUSTOM_SKILL_DEFAULT_NAME = 'Custom Skill'
 
+const formatSignedValue = (value) => {
+  return value > 0 ? `+${value}` : `${value}`
+}
+
 /**
  * Skills element renderer
  * Complex element managing skills by Fate skill ladder levels
@@ -19,9 +23,46 @@ const CUSTOM_SKILL_DEFAULT_NAME = 'Custom Skill'
  * @param {boolean} props.showDragHandle - Whether to show drag handle
  * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
-function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps, onRollDice }) {
+function SkillsElement({
+  element,
+  skills = [],
+  skillLevels = [],
+  isLocked,
+  onUpdate,
+  onDelete,
+  showDragHandle,
+  dragHandleProps,
+  onToggleRollModifier,
+  isRollModifierActive,
+  cardId
+}) {
   // Defensive: ensure items is an array
   const items = element.items || []
+  const canToggleModifiers = typeof onToggleRollModifier === 'function' && typeof isRollModifierActive === 'function'
+  const safeCardId = cardId || 'card'
+  const safeElementId = element?.id || 'skills'
+
+  const getSkillModifier = (skill, index) => {
+    const rawName = typeof skill?.name === 'string' ? skill.name.trim() : ''
+    if (!rawName) return null
+    const numericRating = Number(skill?.rating)
+    const modifierValue = Number.isFinite(numericRating) ? numericRating : 0
+
+    return {
+      id: `skill:${safeCardId}:${safeElementId}:${index}`,
+      label: rawName,
+      value: modifierValue,
+      source: 'skills',
+      cardId: safeCardId,
+      elementId: safeElementId,
+      itemIndex: index
+    }
+  }
+
+  const itemsWithIndex = items.map((skill, index) => ({
+    skill,
+    index
+  }))
   
   // Build formatted skill levels
   const allSkillLevels = (skillLevels || []).map(level => {
@@ -35,7 +76,7 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
   })
 
   // Get unique rating levels that exist in items
-  const existingRatings = [...new Set(items.map(skill => skill.rating || 0))].sort((a, b) => b - a)
+  const existingRatings = [...new Set(itemsWithIndex.map(({ skill }) => skill.rating || 0))].sort((a, b) => b - a)
   const existingLevels = existingRatings
     .map(rating => allSkillLevels.find(level => level.value === rating))
     .filter(Boolean)
@@ -43,7 +84,7 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
   // Group skills by rating
   const skillsByRating = {}
   existingRatings.forEach(rating => {
-    skillsByRating[rating] = items.filter(skill => skill.rating === rating)
+    skillsByRating[rating] = itemsWithIndex.filter(({ skill }) => skill.rating === rating)
   })
 
   if (isLocked) {
@@ -65,21 +106,35 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
               <div className="skill-level-heading">
                 <Icon name="aspectBullet" className="aspect-bullet" size={12} aria-hidden="true" />
                 <span className="skill-level-name">{level.label}</span>
-                {onRollDice ? (
-                  <button
-                    className="skill-level-rating clickable"
-                    onClick={() => onRollDice(level.value)}
-                    title={`Roll dice with ${level.ratingLabel} skill bonus`}
-                    aria-label={`Roll dice with ${level.displayLabel}`}
-                  >
-                    {level.ratingLabel}
-                  </button>
-                ) : (
-                  <span className="skill-level-rating">{level.ratingLabel}</span>
-                )}
+                <span className="skill-level-rating">{level.ratingLabel}</span>
               </div>
               <div className="skill-level-list">
-                {levelSkills.map(skill => skill.name || '---').join(', ')}
+                {!canToggleModifiers
+                  ? levelSkills.map(({ skill }) => skill.name || '---').join(', ')
+                  : levelSkills.map(({ skill, index }) => {
+                    const modifier = getSkillModifier(skill, index)
+                    const skillName = skill.name || '---'
+                    if (!modifier) {
+                      return (
+                        <span key={`empty-${safeElementId}-${index}`} className="skill-modifier-chip is-empty">
+                          {skillName}
+                        </span>
+                      )
+                    }
+
+                    const isActive = isRollModifierActive(modifier.id)
+                    return (
+                      <button
+                        key={modifier.id}
+                        type="button"
+                        className={`skill-modifier-chip ${isActive ? 'is-active' : ''}`}
+                        onClick={() => onToggleRollModifier(modifier)}
+                        aria-pressed={isActive}
+                      >
+                        {skillName}
+                      </button>
+                    )
+                  })}
               </div>
             </div>
           )
@@ -122,12 +177,14 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
                 <Icon name="delete" size={14} aria-hidden="true" />
               </button>
             </div>
-            {levelSkills.map((skill, skillIndex) => {
-              const globalIndex = items.findIndex(s => s === skill)
+            {levelSkills.map(({ skill, index: globalIndex }, skillIndex) => {
               const skillOptions = skills || []
               const isCustomSkill = Boolean(skill.isCustom) || (Boolean(skill.name) && !skillOptions.includes(skill.name))
               const selectValue = isCustomSkill ? CUSTOM_SKILL_VALUE : (skill.name || '')
               const customInputValue = skill.name || ''
+              const modifier = getSkillModifier(skill, globalIndex)
+              const isModifierActive = modifier ? isRollModifierActive?.(modifier.id) : false
+              const modifierValueLabel = modifier ? formatSignedValue(modifier.value) : ''
               return (
                 <div key={skillIndex} className="skill-item">
                   <div className="skill-name-field">
@@ -172,6 +229,23 @@ function SkillsElement({ element, skills = [], skillLevels = [], isLocked, onUpd
                       />
                     )}
                   </div>
+                  {canToggleModifiers && (
+                    <button
+                      type="button"
+                      className={`skill-modifier-toggle ${isModifierActive ? 'is-active' : ''}`}
+                      onClick={() => {
+                        if (modifier) {
+                          onToggleRollModifier(modifier)
+                        }
+                      }}
+                      disabled={!modifier}
+                      aria-pressed={Boolean(isModifierActive)}
+                      aria-label={modifier ? `Toggle ${modifier.label} modifier` : 'Modifier unavailable until skill is named'}
+                      title={modifier ? `Toggle ${modifier.label} ${modifierValueLabel}` : 'Enter a skill name to enable modifier'}
+                    >
+                      {modifier ? modifierValueLabel : '+0'}
+                    </button>
+                  )}
                   <button
                     onClick={() => {
                       const newItems = items.filter((_, i) => i !== globalIndex)

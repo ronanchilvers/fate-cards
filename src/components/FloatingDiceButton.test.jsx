@@ -79,4 +79,19 @@ describe('FloatingDiceButton', () => {
     })
     expect(button.className).not.toContain('is-pressed')
   })
+
+  it('renders stacked modifiers above the button', () => {
+    render(
+      <FloatingDiceButton
+        modifiers={[
+          { id: 'm1', label: 'Stealth', value: 2 },
+          { id: 'm2', label: 'Trouble', value: 2 }
+        ]}
+      />
+    )
+
+    expect(screen.getByText('Stealth')).toBeInTheDocument()
+    expect(screen.getByText('Trouble')).toBeInTheDocument()
+    expect(screen.getAllByText('+2')).toHaveLength(2)
+  })
 })

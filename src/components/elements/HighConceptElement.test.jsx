@@ -31,9 +31,10 @@ describe('HighConceptElement', () => {
     expect(onUpdate).toHaveBeenCalledWith({ text: 'New Concept' })
   })
 
-  it('should disable input when locked', () => {
+  it('should render locked text when locked', () => {
     render(<HighConceptElement {...defaultProps} isLocked={true} />)
-    expect(screen.getByDisplayValue('Test Concept')).toBeDisabled()
+    expect(screen.getByText('Test Concept')).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('Test Concept')).not.toBeInTheDocument()
   })
 
   it('should hide delete button when locked', () => {
@@ -104,12 +105,42 @@ describe('HighConceptElement', () => {
   it('should prevent input changes when locked', () => {
     const onUpdate = vi.fn()
     render(<HighConceptElement {...defaultProps} isLocked={true} onUpdate={onUpdate} />)
-    
-    const input = screen.getByDisplayValue('Test Concept')
-    fireEvent.change(input, { target: { value: 'Should not update' } })
-    
-    // onUpdate will not be called because input is disabled and change won't fire
-    // but we test that the input is disabled
-    expect(input).toBeDisabled()
+
+    expect(screen.queryByDisplayValue('Test Concept')).not.toBeInTheDocument()
+    expect(onUpdate).not.toHaveBeenCalled()
+  })
+
+  it('toggles locked high concept modifier when callbacks are provided', () => {
+    const onToggleRollModifier = vi.fn()
+    const isRollModifierActive = vi.fn().mockReturnValue(false)
+    render(
+      <HighConceptElement
+        {...defaultProps}
+        isLocked={true}
+        cardId="card-1"
+        onToggleRollModifier={onToggleRollModifier}
+        isRollModifierActive={isRollModifierActive}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Test Concept' }))
+    expect(onToggleRollModifier).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'high-concept:card-1:1',
+      label: 'Test Concept',
+      value: 2
+    }))
+  })
+
+  it('shows unlocked high concept modifier button as active when selected', () => {
+    render(
+      <HighConceptElement
+        {...defaultProps}
+        cardId="card-1"
+        onToggleRollModifier={vi.fn()}
+        isRollModifierActive={(id) => id === 'high-concept:card-1:1'}
+      />
+    )
+
+    expect(screen.getByRole('button', { name: /toggle Test Concept modifier/i })).toHaveClass('is-active')
   })
 })

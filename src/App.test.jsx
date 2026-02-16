@@ -12,10 +12,24 @@ vi.mock('./hooks', () => ({
 }))
 
 vi.mock('./components/Card', () => ({
-  default: ({ card, onDelete }) => (
-    <button type="button" onClick={() => onDelete(card.id)} aria-label={`Delete ${card.title}`}>
-      Delete card
-    </button>
+  default: ({ card, onDelete, onToggleRollModifier, isRollModifierActive }) => (
+    <div>
+      <button type="button" onClick={() => onDelete(card.id)} aria-label={`Delete ${card.title}`}>
+        Delete card
+      </button>
+      <button
+        type="button"
+        onClick={() => onToggleRollModifier?.({
+          id: `card-mod:${card.id}`,
+          label: card.title,
+          value: 1
+        })}
+        aria-label={`Toggle modifier ${card.id}`}
+      >
+        Toggle modifier
+      </button>
+      {isRollModifierActive?.(`card-mod:${card.id}`) ? <span>Modifier Active</span> : null}
+    </div>
   )
 }))
 
@@ -24,11 +38,22 @@ vi.mock('./components/icons/Icon', () => ({
 }))
 
 vi.mock('./components/FateDiceRoller', () => ({
-  default: () => null
+  default: ({ onResult }) => (
+    <button type="button" onClick={() => onResult?.(1)} aria-label="Emit Dice Result">
+      Emit Dice Result
+    </button>
+  )
 }))
 
 vi.mock('./components/FloatingDiceButton', () => ({
-  default: () => null
+  default: ({ onClick, disabled, modifiers = [] }) => (
+    <div>
+      <button type="button" onClick={onClick} disabled={disabled} aria-label="Roll Fate Dice">
+        Roll Fate Dice
+      </button>
+      <span>Active modifiers: {modifiers.length}</span>
+    </div>
+  )
 }))
 
 vi.mock('./components/modals', () => ({
@@ -323,5 +348,26 @@ describe('App', () => {
     expect(window.alert).toHaveBeenCalledWith(
       `Import file is too large. Maximum size is ${maxSizeMb} MB.`
     )
+  })
+
+  it('includes selected modifiers in dice toast and resets them after result', async () => {
+    const { toast } = createHooks()
+    render(<App />)
+
+    expect(screen.getByText('Active modifiers: 0')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle modifier card-1' }))
+    expect(screen.getByText('Modifier Active')).toBeInTheDocument()
+    expect(screen.getByText('Active modifiers: 1')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Roll Fate Dice' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Emit Dice Result' }))
+
+    expect(toast.diceResult).toHaveBeenCalledWith(expect.objectContaining({
+      breakdown: '+1 + +1',
+      total: '+2'
+    }))
+    expect(screen.getByText('Active modifiers: 0')).toBeInTheDocument()
+    expect(screen.queryByText('Modifier Active')).not.toBeInTheDocument()
   })
 })

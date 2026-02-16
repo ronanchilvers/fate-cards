@@ -31,9 +31,10 @@ describe('TroubleElement', () => {
     expect(onUpdate).toHaveBeenCalledWith({ text: 'New Trouble' })
   })
 
-  it('should disable input when locked', () => {
+  it('should render locked text when locked', () => {
     render(<TroubleElement {...defaultProps} isLocked={true} />)
-    expect(screen.getByDisplayValue('Test Trouble')).toBeDisabled()
+    expect(screen.getByText('Test Trouble')).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('Test Trouble')).not.toBeInTheDocument()
   })
 
   it('should hide delete button when locked', () => {
@@ -104,13 +105,9 @@ describe('TroubleElement', () => {
   it('should prevent input changes when locked', () => {
     const onUpdate = vi.fn()
     render(<TroubleElement {...defaultProps} isLocked={true} onUpdate={onUpdate} />)
-    
-    const input = screen.getByDisplayValue('Test Trouble')
-    fireEvent.change(input, { target: { value: 'Should not update' } })
-    
-    // onUpdate will not be called because input is disabled and change won't fire
-    // but we test that the input is disabled
-    expect(input).toBeDisabled()
+
+    expect(screen.queryByDisplayValue('Test Trouble')).not.toBeInTheDocument()
+    expect(onUpdate).not.toHaveBeenCalled()
   })
 
   it('should update on prop change', () => {
@@ -124,5 +121,38 @@ describe('TroubleElement', () => {
       />
     )
     expect(screen.getByDisplayValue('Updated Trouble')).toBeInTheDocument()
+  })
+
+  it('toggles locked trouble modifier when callbacks are provided', () => {
+    const onToggleRollModifier = vi.fn()
+    render(
+      <TroubleElement
+        {...defaultProps}
+        isLocked={true}
+        cardId="card-1"
+        onToggleRollModifier={onToggleRollModifier}
+        isRollModifierActive={() => false}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Test Trouble' }))
+    expect(onToggleRollModifier).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'trouble:card-1:1',
+      label: 'Test Trouble',
+      value: 2
+    }))
+  })
+
+  it('shows unlocked trouble modifier button as active when selected', () => {
+    render(
+      <TroubleElement
+        {...defaultProps}
+        cardId="card-1"
+        onToggleRollModifier={vi.fn()}
+        isRollModifierActive={(id) => id === 'trouble:card-1:1'}
+      />
+    )
+
+    expect(screen.getByRole('button', { name: /toggle Test Trouble modifier/i })).toHaveClass('is-active')
   })
 })

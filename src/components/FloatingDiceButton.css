@@ -1,38 +1,68 @@
-.floating-dice-button {
+.floating-dice-control {
   position: fixed;
   bottom: 24px;
   right: 24px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.floating-modifier-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.floating-modifier-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+  max-width: 368px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+}
+
+.floating-modifier-label {
+  line-height: 1.1;
+  color: var(--slate-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.floating-modifier-value {
+  font-weight: 700;
+  color: var(--slate-100);
+  flex-shrink: 0;
+}
+
+.floating-dice-button {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  border: none;
-  background: var(--slate-700);
-  color: white;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--slate-100);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-              0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+              0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
   z-index: 10;
   padding: 0;
 }
 
-.dark-mode .floating-dice-button {
-  background: var(--slate-200);
-  color: var(--slate-900);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
-              0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
 .floating-dice-button:hover:not(.is-disabled) {
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-              0 3px 6px rgba(0, 0, 0, 0.15);
-}
-
-.dark-mode .floating-dice-button:hover:not(.is-disabled) {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
               0 3px 6px rgba(0, 0, 0, 0.25);
 }
@@ -45,12 +75,8 @@
 }
 
 .floating-dice-button:focus-visible {
-  outline: 2px solid var(--slate-500);
+  outline: 2px solid var(--slate-400);
   outline-offset: 2px;
-}
-
-.dark-mode .floating-dice-button:focus-visible {
-  outline-color: var(--slate-400);
 }
 
 .floating-dice-button.is-disabled {
@@ -67,9 +93,12 @@
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
-  .floating-dice-button {
+  .floating-dice-control {
     bottom: 20px;
     right: 20px;
+  }
+
+  .floating-dice-button {
     width: 52px;
     height: 52px;
   }
@@ -82,9 +111,12 @@
 
 /* Small mobile */
 @media (max-width: 480px) {
-  .floating-dice-button {
+  .floating-dice-control {
     bottom: 16px;
     right: 16px;
+  }
+
+  .floating-dice-button {
     width: 48px;
     height: 48px;
   }

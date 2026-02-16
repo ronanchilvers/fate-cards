@@ -324,4 +324,62 @@ describe('SkillsElement', () => {
     const skillLevelGroups = document.querySelectorAll('.skill-level-group')
     expect(skillLevelGroups.length).toBeGreaterThan(0)
   })
+
+  it('does not render click-to-roll rating button in locked view', () => {
+    render(<SkillsElement {...defaultProps} isLocked={true} />)
+    expect(screen.queryByRole('button', { name: '+2' })).not.toBeInTheDocument()
+  })
+
+  it('toggles locked skill modifier when callbacks are provided', () => {
+    const onToggleRollModifier = vi.fn()
+    render(
+      <SkillsElement
+        {...defaultProps}
+        isLocked={true}
+        cardId="card-1"
+        onToggleRollModifier={onToggleRollModifier}
+        isRollModifierActive={() => false}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Athletics' }))
+    expect(onToggleRollModifier).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'skill:card-1:1:0',
+      label: 'Athletics',
+      value: 2
+    }))
+  })
+
+  it('uses the skill level value for modifier payloads', () => {
+    const onToggleRollModifier = vi.fn()
+    render(
+      <SkillsElement
+        {...defaultProps}
+        isLocked={true}
+        cardId="card-1"
+        onToggleRollModifier={onToggleRollModifier}
+        isRollModifierActive={() => false}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Stealth' }))
+    expect(onToggleRollModifier).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'skill:card-1:1:1',
+      label: 'Stealth',
+      value: 1
+    }))
+  })
+
+  it('shows unlocked skill modifier toggle as active when selected', () => {
+    render(
+      <SkillsElement
+        {...defaultProps}
+        cardId="card-1"
+        onToggleRollModifier={vi.fn()}
+        isRollModifierActive={(id) => id === 'skill:card-1:1:0'}
+      />
+    )
+
+    expect(screen.getByRole('button', { name: /toggle Athletics modifier/i })).toHaveClass('is-active')
+  })
 })

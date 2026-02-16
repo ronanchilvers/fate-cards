@@ -21,6 +21,17 @@ import {
 } from './hooks'
 import { FILE_CONSTRAINTS, STORAGE_KEYS } from './constants'
 
+const DEFAULT_ROLL_MODIFIER = 2
+
+const formatSignedValue = (value) => {
+  return value > 0 ? `+${value}` : `${value}`
+}
+
+const normalizeModifierValue = (value) => {
+  const numericValue = Number(value)
+  return Number.isFinite(numericValue) ? numericValue : DEFAULT_ROLL_MODIFIER
+}
+
 function App() {
   // Custom hooks for state management
   const theme = useTheme()
@@ -41,8 +52,8 @@ function App() {
   const [diceRollId, setDiceRollId] = useState(0)
   const [isDiceRolling, setIsDiceRolling] = useState(false)
   const [diceDismissId, setDiceDismissId] = useState(0)
-  const [pendingSkillBonus, setPendingSkillBonus] = useState(null)
-  const pendingSkillBonusRef = useRef(null)
+  const [selectedRollModifiers, setSelectedRollModifiers] = useState([])
+  const activeRollModifiersRef = useRef([])
 
   // Template modal state
   // File input ref for import
@@ -70,6 +81,10 @@ function App() {
 
     return { cardsByCategory: byCategory, cardCounts: counts }
   }, [cardsHook.cards])
+
+  const selectedRollModifierIds = useMemo(() => {
+    return new Set(selectedRollModifiers.map((modifier) => modifier.id))
+  }, [selectedRollModifiers])
 
   const openTemplateMenu = () => {
     setShowTemplateMenu(true)
@@ -226,43 +241,75 @@ function App() {
     localStorage.removeItem(STORAGE_KEYS.LAST_EXPORT_FILENAME)
   }
 
-  const handleRollDice = (skillBonus = null) => {
+  const toggleRollModifier = useCallback((modifier) => {
+    const modifierId = typeof modifier?.id === 'string' ? modifier.id.trim() : ''
+    if (!modifierId) return
+
+    const label = typeof modifier?.label === 'string' && modifier.label.trim()
+      ? modifier.label.trim()
+      : 'Modifier'
+
+    const normalizedModifier = {
+      ...modifier,
+      id: modifierId,
+      label,
+      value: normalizeModifierValue(modifier?.value)
+    }
+
+    setSelectedRollModifiers((current) => {
+      const exists = current.some((item) => item.id === modifierId)
+      if (exists) {
+        return current.filter((item) => item.id !== modifierId)
+      }
+      return [...current, normalizedModifier]
+    })
+  }, [])
+
+  const isRollModifierActive = useCallback((modifierId) => {
+    if (typeof modifierId !== 'string' || !modifierId) return false
+    return selectedRollModifierIds.has(modifierId)
+  }, [selectedRollModifierIds])
+
+  const handleRollDice = () => {
     if (isDiceRolling) return
+
+    activeRollModifiersRef.current = [...selectedRollModifiers]
+
     setIsDiceRolling(true)
-    pendingSkillBonusRef.current = skillBonus
-    setPendingSkillBonus(skillBonus)
     setDiceRollId((current) => current + 1)
     setShowMobileMenu(false)
   }
 
   const handleDiceResult = useCallback((diceTotal) => {
     const diceValue = Number.isFinite(diceTotal) ? diceTotal : 0
-    const skillBonus = pendingSkillBonusRef.current ?? 0
-    const finalTotal = diceValue + skillBonus
-    
-    const diceLabel = diceValue > 0 ? `+${diceValue}` : `${diceValue}`
-    const bonusLabel = skillBonus > 0 ? `+${skillBonus}` : `${skillBonus}`
-    const finalLabel = finalTotal > 0 ? `+${finalTotal}` : `${finalTotal}`
-    
-    let breakdown = ''
-    let total = ''
-    
-    if (skillBonus !== null && skillBonus !== 0) {
-      breakdown = `${diceLabel} + ${bonusLabel}`
-    }
-    total = finalLabel
-    
+    const modifiers = activeRollModifiersRef.current
+    const modifiersTotal = modifiers.reduce((sum, modifier) => {
+      const modifierValue = normalizeModifierValue(modifier?.value)
+      return sum + modifierValue
+    }, 0)
+    const finalTotal = diceValue + modifiersTotal
+
+    const diceLabel = formatSignedValue(diceValue)
+    const finalLabel = formatSignedValue(finalTotal)
+    const modifierLabels = modifiers.map((modifier) => {
+      const modifierValue = normalizeModifierValue(modifier?.value)
+      return formatSignedValue(modifierValue)
+    })
+    const breakdown = modifierLabels.length > 0
+      ? [diceLabel, ...modifierLabels].join(' + ')
+      : ''
+
     toast.diceResult({
       breakdown,
-      total,
+      total: finalLabel,
       duration: 10000,
       onDismiss: () => {
         setDiceDismissId((current) => current + 1)
-        pendingSkillBonusRef.current = null
       }
     })
-    
-    pendingSkillBonusRef.current = null
+
+    activeRollModifiersRef.current = []
+    setSelectedRollModifiers([])
   }, [toast])
 
   const handleDeleteCategory = async (categoryName) => {
@@ -375,6 +422,7 @@ function App() {
         onClick={handleRollDice}
         disabled={isDiceRolling}
         isDark={theme.isDark}
+        modifiers={selectedRollModifiers}
       />
       {categoriesHook.categories.map(category => {
         const cardsForCategory = cardsByCategory.get(category) || []
@@ -429,7 +477,8 @@ function App() {
                           skills={skillsHook.skills}
                           skillLevels={skillLevelsHook.skillLevels}
                         categories={categoriesHook.categories}
-                          onRollDice={handleRollDice}
+                          onToggleRollModifier={toggleRollModifier}
+                          isRollModifierActive={isRollModifierActive}
                       />
                     ))
                   )}

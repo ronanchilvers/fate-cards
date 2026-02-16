@@ -65,10 +65,11 @@ describe('AspectsElement', () => {
     expect(screen.queryByRole('button', { name: /delete aspect/i })).not.toBeInTheDocument()
   })
 
-  it('should disable inputs when locked', () => {
+  it('should render plain locked text when locked', () => {
     render(<AspectsElement {...defaultProps} isLocked={true} />)
-    expect(screen.getByDisplayValue('Aspect 1')).toBeDisabled()
-    expect(screen.getByDisplayValue('Aspect 2')).toBeDisabled()
+    expect(screen.getByText('Aspect 1')).toBeInTheDocument()
+    expect(screen.getByText('Aspect 2')).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('Aspect 1')).not.toBeInTheDocument()
   })
 
   it('should render title in header', () => {
@@ -155,5 +156,41 @@ describe('AspectsElement', () => {
     const { container } = render(<AspectsElement {...defaultProps} />)
     const aspectItems = container.querySelectorAll('.aspect-item')
     expect(aspectItems.length).toBe(2)
+  })
+
+  it('toggles locked aspect modifier when callbacks are provided', () => {
+    const onToggleRollModifier = vi.fn()
+    const isRollModifierActive = vi.fn().mockReturnValue(false)
+    render(
+      <AspectsElement
+        {...defaultProps}
+        isLocked={true}
+        cardId="card-1"
+        onToggleRollModifier={onToggleRollModifier}
+        isRollModifierActive={isRollModifierActive}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Aspect 1' }))
+
+    expect(onToggleRollModifier).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'aspect:card-1:1:0',
+      label: 'Aspect 1',
+      value: 2
+    }))
+  })
+
+  it('shows unlocked aspect modifier button as active when selected', () => {
+    const isRollModifierActive = vi.fn().mockImplementation((id) => id === 'aspect:card-1:1:0')
+    render(
+      <AspectsElement
+        {...defaultProps}
+        cardId="card-1"
+        onToggleRollModifier={vi.fn()}
+        isRollModifierActive={isRollModifierActive}
+      />
+    )
+
+    expect(screen.getByRole('button', { name: /toggle Aspect 1 modifier/i })).toHaveClass('is-active')
   })
 })

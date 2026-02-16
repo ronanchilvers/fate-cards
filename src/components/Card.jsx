@@ -7,7 +7,17 @@ import { ELEMENT_COMPONENTS } from './elements'
 import { ELEMENT_TYPES } from '../constants'
 import Icon from './icons/Icon'
 
-function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, categories, onRollDice }) {
+function Card({
+  card,
+  onUpdate,
+  onDelete,
+  onDuplicate,
+  skills,
+  skillLevels,
+  categories,
+  onToggleRollModifier,
+  isRollModifierActive
+}) {
   const [showElementMenu, setShowElementMenu] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [isLocked, setIsLocked] = useState(card.locked || false)
@@ -299,7 +309,9 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         onDelete={() => deleteElement(element.id)}
         skills={skills}
         skillLevels={skillLevels}
-        onRollDice={onRollDice}
+        cardId={card.id}
+        onToggleRollModifier={onToggleRollModifier}
+        isRollModifierActive={isRollModifierActive}
         showDragHandle={!isLocked}
         dragHandleProps={!isLocked ? {
           onMouseDown: () => {
@@ -410,7 +422,7 @@ function Card({ card, onUpdate, onDelete, onDuplicate, skills, skillLevels, cate
         )}
 
         <div className="card-body">
-          <div className="card-elements" style={{ color: card.color }}>
+          <div className="card-elements" style={{ color: card.color, '--card-accent-color': card.color }}>
             {card.elements.map(element => (
               <div
                 key={element.id}
