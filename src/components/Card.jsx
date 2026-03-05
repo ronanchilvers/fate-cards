@@ -7,6 +7,38 @@ import { ELEMENT_COMPONENTS } from './elements'
 import { ELEMENT_TYPES } from '../constants'
 import Icon from './icons/Icon'
 
+const THREE_COLUMN_MIN_ELEMENTS = 3
+const TWO_COLUMN_MIN_ELEMENTS = 2
+
+const getCardLayoutClassName = (layout, elementCount) => {
+  const classes = ['card']
+
+  if (layout === '2-column') {
+    classes.push('two-column')
+    return classes.join(' ')
+  }
+
+  if (layout === '3-column') {
+    if (elementCount >= THREE_COLUMN_MIN_ELEMENTS) {
+      classes.push('three-column', 'three-column-ready')
+    } else if (elementCount >= TWO_COLUMN_MIN_ELEMENTS) {
+      classes.push('three-column')
+    }
+
+    return classes.join(' ')
+  }
+
+  if (layout === 'auto') {
+    classes.push('auto-column')
+
+    if (elementCount >= THREE_COLUMN_MIN_ELEMENTS) {
+      classes.push('auto-three-column')
+    }
+  }
+
+  return classes.join(' ')
+}
+
 function Card({
   card,
   onUpdate,
@@ -332,9 +364,12 @@ function Card({
     )
   }
 
+  const elementCount = Array.isArray(card.elements) ? card.elements.length : 0
+  const cardClassName = getCardLayoutClassName(card.layout, elementCount)
+
   return (
     <>
-      <div className={`card ${card.layout === '2-column' ? 'two-column' : card.layout === 'auto' ? 'auto-column' : ''}`} style={{ borderColor: card.color, backgroundColor: getPaleBackground(card.color) }}>
+      <div className={cardClassName} style={{ borderColor: card.color, backgroundColor: getPaleBackground(card.color) }}>
         <div className="card-header" style={{ backgroundColor: card.color }}>
           <div className="card-header-left">
             {!isLocked && (
@@ -536,6 +571,7 @@ function Card({
                   <option value="auto">Auto</option>
                   <option value="single-column">1 Column</option>
                   <option value="2-column">2 Columns</option>
+                  <option value="3-column">3 Columns</option>
                 </select>
               </div>
 

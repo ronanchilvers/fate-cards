@@ -220,7 +220,7 @@ export function normalizeCard(card) {
   const color = normalizedColor || '#1f2937'
 
   // Ensure layout is one of the allowed values (default: 'auto')
-  const allowedLayouts = ['auto', 'single-column', '2-column']
+  const allowedLayouts = ['auto', 'single-column', '2-column', '3-column']
   const layout = allowedLayouts.includes(card.layout)
     ? card.layout
     : 'auto'

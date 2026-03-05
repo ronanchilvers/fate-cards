@@ -86,6 +86,7 @@ describe('normalizeCard - default values', () => {
     expect(normalizeCard({ layout: 'auto' }).layout).toBe('auto')
     expect(normalizeCard({ layout: 'single-column' }).layout).toBe('single-column')
     expect(normalizeCard({ layout: '2-column' }).layout).toBe('2-column')
+    expect(normalizeCard({ layout: '3-column' }).layout).toBe('3-column')
   })
 
   it('defaults locked to false', () => {
