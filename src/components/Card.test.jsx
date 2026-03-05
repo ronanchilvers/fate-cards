@@ -120,6 +120,27 @@ describe('Card', () => {
     )
   })
 
+  it('includes a 3 Columns layout option in settings', () => {
+    render(<Card {...baseProps} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Card settings' }))
+
+    expect(screen.getByRole('option', { name: '3 Columns' })).toBeInTheDocument()
+  })
+
+  it('saves the selected 3-column layout from settings', () => {
+    render(<Card {...baseProps} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Card settings' }))
+    fireEvent.change(screen.getByDisplayValue('Auto'), { target: { value: '3-column' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+    expect(baseProps.onUpdate).toHaveBeenCalledWith(
+      'card-1',
+      expect.objectContaining({ layout: '3-column' })
+    )
+  })
+
   it('renders elements and deletes an element', () => {
     const cardWithElement = {
       ...baseCard,
@@ -135,5 +156,39 @@ describe('Card', () => {
       'card-1',
       expect.objectContaining({ elements: [] })
     )
+  })
+
+  it('does not mark 3-column cards as three-column ready with fewer than three elements', () => {
+    const cardWithTwoElements = {
+      ...baseCard,
+      layout: '3-column',
+      elements: [
+        { id: 'el-1', type: ELEMENT_TYPES.NOTE, text: '' },
+        { id: 'el-2', type: ELEMENT_TYPES.NOTE, text: '' }
+      ]
+    }
+
+    render(<Card {...baseProps} card={cardWithTwoElements} />)
+
+    const cardNode = screen.getByText('Test Card').closest('.card')
+    expect(cardNode).toHaveClass('three-column')
+    expect(cardNode).not.toHaveClass('three-column-ready')
+  })
+
+  it('marks auto cards with at least three elements as three-column eligible', () => {
+    const cardWithThreeElements = {
+      ...baseCard,
+      elements: [
+        { id: 'el-1', type: ELEMENT_TYPES.NOTE, text: '' },
+        { id: 'el-2', type: ELEMENT_TYPES.NOTE, text: '' },
+        { id: 'el-3', type: ELEMENT_TYPES.NOTE, text: '' }
+      ]
+    }
+
+    render(<Card {...baseProps} card={cardWithThreeElements} />)
+
+    const cardNode = screen.getByText('Test Card').closest('.card')
+    expect(cardNode).toHaveClass('auto-column')
+    expect(cardNode).toHaveClass('auto-three-column')
   })
 })
