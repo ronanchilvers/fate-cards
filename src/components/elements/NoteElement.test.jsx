@@ -76,10 +76,10 @@ describe('NoteElement', () => {
     expect(textarea).toHaveClass('element-textarea')
   })
 
-  it('should have 4 rows', () => {
+  it('should have 1 row as minimum', () => {
     render(<NoteElement {...defaultProps} />)
     const textarea = screen.getByDisplayValue('Test note')
-    expect(textarea).toHaveAttribute('rows', '4')
+    expect(textarea).toHaveAttribute('rows', '1')
   })
 
   it('should allow input when not locked', () => {

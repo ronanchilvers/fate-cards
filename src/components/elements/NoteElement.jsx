@@ -1,8 +1,9 @@
+import { useEffect, useRef } from 'react'
 import ElementWrapper from './ElementWrapper'
 
 /**
  * Note element renderer
- * Multi-line text area for notes
+ * Multi-line text area for notes that auto-expands to fit content
  * 
  * @param {Object} props
  * @param {Object} props.element - Element data {id, type, text}
@@ -13,8 +14,22 @@ import ElementWrapper from './ElementWrapper'
  * @param {Object} props.dragHandleProps - Props applied to drag handle button
  */
 function NoteElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dragHandleProps }) {
+  const textareaRef = useRef(null)
+
+  const autoResize = () => {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = el.scrollHeight + 'px'
+  }
+
+  useEffect(() => {
+    autoResize()
+  }, [element.text])
+
   const handleTextChange = (e) => {
     onUpdate({ text: e.target.value })
+    autoResize()
   }
 
   return (
@@ -26,11 +41,12 @@ function NoteElement({ element, isLocked, onUpdate, onDelete, showDragHandle, dr
       dragHandleProps={dragHandleProps}
     >
       <textarea
+        ref={textareaRef}
         value={element.text || ''}
         onChange={handleTextChange}
         placeholder="Enter notes..."
         className="element-textarea"
-        rows="4"
+        rows="1"
         disabled={isLocked}
       />
     </ElementWrapper>
