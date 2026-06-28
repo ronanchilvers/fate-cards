@@ -783,6 +783,12 @@
   background: transparent;
 }
 
+.dark-mode .card-element.locked .element-input:disabled,
+.dark-mode .card-element.locked .element-textarea:disabled,
+.dark-mode .card-element.locked .consequence-text-locked:disabled {
+  color: var(--slate-100);
+}
+
 .dark-mode .skill-level-section,
 .dark-mode .add-level-section {
   border-color: rgba(226, 232, 240, 0.2);
