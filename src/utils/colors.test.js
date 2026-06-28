@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { getPaleBackground, getMidToneBackground, getCategoryColor, normalizeColorToHex } from './colors'
+import {
+  getDarkCardBackground,
+  getDarkFrameBackground,
+  getDarkSubtitleBackground,
+  getPaleBackground,
+  getMidToneBackground,
+  getCategoryColor,
+  normalizeColorToHex
+} from './colors'
 
 const rgbRegex = /^rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)$/
 const hexRegex = /^#[0-9a-f]{6}$/i
@@ -79,6 +87,19 @@ describe('getMidToneBackground', () => {
   it('falls back to default color on invalid input', () => {
     const result = getMidToneBackground('not-a-color')
     expect(result).toBe('rgb(143, 148, 155)')
+  })
+})
+
+describe('dark card color helpers', () => {
+  it('returns dark card surfaces that retain the source hue', () => {
+    expect(getDarkCardBackground('#c53030')).toBe('rgb(48, 28, 43)')
+    expect(getDarkFrameBackground('#c53030')).toBe('rgb(121, 38, 45)')
+    expect(getDarkSubtitleBackground('#c53030')).toBe('rgb(77, 32, 44)')
+  })
+
+  it('accepts HSL input and falls back on invalid input', () => {
+    expect(getDarkCardBackground('hsl(0, 100%, 50%)')).toBe('rgb(58, 19, 34)')
+    expect(getDarkFrameBackground('not-a-color')).toBe('rgb(24, 33, 50)')
   })
 })
 
