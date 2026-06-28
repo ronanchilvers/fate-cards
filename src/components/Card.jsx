@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import './Card.css'
 import './modals/ModalBase.css'
-import { getPaleBackground, getMidToneBackground, normalizeColorToHex } from '../utils/colors'
+import {
+  getDarkCardBackground,
+  getDarkFrameBackground,
+  getDarkSubtitleBackground,
+  getMidToneBackground,
+  getPaleBackground,
+  normalizeColorToHex
+} from '../utils/colors'
 import { createElementByType } from '../data/elementFactories'
 import { ELEMENT_COMPONENTS } from './elements'
 import { ELEMENT_TYPES } from '../constants'
@@ -366,11 +373,19 @@ function Card({
 
   const elementCount = Array.isArray(card.elements) ? card.elements.length : 0
   const cardClassName = getCardLayoutClassName(card.layout, elementCount)
+  const cardStyle = {
+    '--card-frame-color': card.color,
+    '--card-background': getPaleBackground(card.color),
+    '--card-subtitle-background': getMidToneBackground(card.color),
+    '--card-dark-frame-color': getDarkFrameBackground(card.color),
+    '--card-dark-background': getDarkCardBackground(card.color),
+    '--card-dark-subtitle-background': getDarkSubtitleBackground(card.color)
+  }
 
   return (
     <>
-      <div className={cardClassName} style={{ borderColor: card.color, backgroundColor: getPaleBackground(card.color) }}>
-        <div className="card-header" style={{ backgroundColor: card.color }}>
+      <div className={cardClassName} style={cardStyle}>
+        <div className="card-header">
           <div className="card-header-left">
             {!isLocked && (
               <button 
@@ -451,7 +466,7 @@ function Card({
       )}
 
         {card.subtitle && (
-          <div className="card-subtitle-bar" style={{ backgroundColor: getMidToneBackground(card.color) }}>
+          <div className="card-subtitle-bar">
             {card.subtitle}
           </div>
         )}

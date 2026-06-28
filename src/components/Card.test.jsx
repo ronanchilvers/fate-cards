@@ -66,12 +66,22 @@ describe('Card', () => {
     vi.clearAllMocks()
   })
 
-  it('renders title, subtitle, and placeholder when empty', () => {
+  it('renders title, subtitle, placeholder, and card theme variables when empty', () => {
     render(<Card {...baseProps} />)
 
     expect(screen.getByText('Test Card')).toBeInTheDocument()
     expect(screen.getByText('Subtitle')).toBeInTheDocument()
     expect(screen.getByText('Click the Add Element button to add elements to this card')).toBeInTheDocument()
+
+    const cardNode = screen.getByText('Test Card').closest('.card')
+    expect(cardNode).toHaveStyle({
+      '--card-frame-color': '#c53030',
+      '--card-background': 'rgb(249, 234, 234)',
+      '--card-subtitle-background': 'rgb(226, 152, 152)',
+      '--card-dark-frame-color': 'rgb(121, 38, 45)',
+      '--card-dark-background': 'rgb(48, 28, 43)',
+      '--card-dark-subtitle-background': 'rgb(77, 32, 44)'
+    })
   })
 
   it('calls onDelete and onDuplicate when header actions are clicked', () => {

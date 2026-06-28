@@ -110,15 +110,14 @@ export const normalizeColorToHex = (color) => {
  * @param {string} color - Hex or HSL color string (e.g., '#c53030' or 'hsl(10, 60%, 40%)')
  * @returns {string} RGB color string
  */
+const mixRgb = ({ r, g, b }, target, colorWeight) => {
+  const targetWeight = 1 - colorWeight
+  return `rgb(${Math.round(r * colorWeight + target.r * targetWeight)}, ${Math.round(g * colorWeight + target.g * targetWeight)}, ${Math.round(b * colorWeight + target.b * targetWeight)})`
+}
+
 export function getPaleBackground(color) {
   const rgb = parseColorToRgb(color) || parseHexColor(DEFAULT_FALLBACK_COLOR)
-  const { r, g, b } = rgb
-  
-  const paleR = Math.round(r * 0.1 + 255 * 0.9)
-  const paleG = Math.round(g * 0.1 + 255 * 0.9)
-  const paleB = Math.round(b * 0.1 + 255 * 0.9)
-  
-  return `rgb(${paleR}, ${paleG}, ${paleB})`
+  return mixRgb(rgb, { r: 255, g: 255, b: 255 }, 0.1)
 }
 
 /**
@@ -128,13 +127,22 @@ export function getPaleBackground(color) {
  */
 export function getMidToneBackground(color) {
   const rgb = parseColorToRgb(color) || parseHexColor(DEFAULT_FALLBACK_COLOR)
-  const { r, g, b } = rgb
-  
-  const midR = Math.round(r * 0.5 + 255 * 0.5)
-  const midG = Math.round(g * 0.5 + 255 * 0.5)
-  const midB = Math.round(b * 0.5 + 255 * 0.5)
-  
-  return `rgb(${midR}, ${midG}, ${midB})`
+  return mixRgb(rgb, { r: 255, g: 255, b: 255 }, 0.5)
+}
+
+export function getDarkCardBackground(color) {
+  const rgb = parseColorToRgb(color) || parseHexColor(DEFAULT_FALLBACK_COLOR)
+  return mixRgb(rgb, { r: 15, g: 23, b: 42 }, 0.18)
+}
+
+export function getDarkFrameBackground(color) {
+  const rgb = parseColorToRgb(color) || parseHexColor(DEFAULT_FALLBACK_COLOR)
+  return mixRgb(rgb, { r: 15, g: 23, b: 42 }, 0.58)
+}
+
+export function getDarkSubtitleBackground(color) {
+  const rgb = parseColorToRgb(color) || parseHexColor(DEFAULT_FALLBACK_COLOR)
+  return mixRgb(rgb, { r: 15, g: 23, b: 42 }, 0.34)
 }
 
 /**

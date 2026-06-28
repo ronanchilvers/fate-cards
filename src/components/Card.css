@@ -1,7 +1,7 @@
 .card {
   width: 350px;
-  background-color: var(--white);
-  border: 3px solid;
+  background-color: var(--card-background, var(--white));
+  border: 3px solid var(--card-frame-color, currentColor);
   border-radius: var(--radius-lg);
   overflow: visible;
   position: relative;
@@ -81,6 +81,7 @@
   align-items: center;
   padding: 12px 16px;
   color: white;
+  background-color: var(--card-frame-color, currentColor);
   position: relative;
 }
 
@@ -150,6 +151,7 @@
   padding: 10px 16px;
   font-size: 0.9rem;
   color: var(--slate-800);
+  background-color: var(--card-subtitle-background, var(--slate-100));
   font-weight: 500;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -160,6 +162,27 @@
   font-size: 0.9rem;
   text-align: center;
   padding: 20px;
+}
+
+
+.dark-mode .card {
+  background-color: var(--card-dark-background, var(--slate-800));
+  border-color: var(--card-dark-frame-color, var(--slate-700));
+  color: var(--slate-100);
+}
+
+.dark-mode .card-header {
+  background-color: var(--card-dark-frame-color, var(--slate-700));
+}
+
+.dark-mode .card-subtitle-bar {
+  background-color: var(--card-dark-subtitle-background, var(--slate-700));
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+  color: var(--slate-100);
+}
+
+.dark-mode .card-placeholder {
+  color: var(--slate-300);
 }
 
 /* Element Menu */
@@ -264,6 +287,12 @@
   padding: 12px;
   background-color: rgba(255, 255, 255, 0.5);
 }
+
+.dark-mode .card-element {
+  background-color: rgba(15, 23, 42, 0.36);
+  border-color: rgba(226, 232, 240, 0.2);
+}
+
 
 .card-element.locked {
   border: none;
@@ -708,6 +737,86 @@
   outline: none;
   border-style: solid;
   border-color: var(--blue-700);
+}
+
+
+.dark-mode .element-header h4,
+.dark-mode .skill-level-name,
+.dark-mode .skill-level-header h5,
+.dark-mode .stress-track label,
+.dark-mode .consequence-item label,
+.dark-mode .consequence-label,
+.dark-mode .fate-points-controls span {
+  color: var(--slate-200);
+}
+
+.dark-mode .aspect-locked-text,
+.dark-mode .aspect-modifier-chip,
+.dark-mode .skill-modifier-chip,
+.dark-mode .single-modifier-chip,
+.dark-mode .single-modifier-text,
+.dark-mode .skill-level-list,
+.dark-mode .inventory-name {
+  color: var(--slate-100);
+}
+
+.dark-mode .aspect-modifier-toggle,
+.dark-mode .skill-modifier-toggle,
+.dark-mode .single-modifier-toggle,
+.dark-mode .skill-level-rating {
+  color: var(--slate-300);
+}
+
+.dark-mode .element-input,
+.dark-mode .element-textarea,
+.dark-mode .skill-name-select,
+.dark-mode .stress-track-name-input,
+.dark-mode .consequence-label-input,
+.dark-mode .refresh-input {
+  background: var(--slate-800);
+  border-color: var(--slate-600);
+  color: var(--slate-100);
+}
+
+.dark-mode .card-element.locked .element-input,
+.dark-mode .card-element.locked .element-textarea {
+  background: transparent;
+}
+
+.dark-mode .skill-level-section,
+.dark-mode .add-level-section {
+  border-color: rgba(226, 232, 240, 0.2);
+}
+
+.dark-mode .element-drag-handle,
+.dark-mode .add-item-btn,
+.dark-mode .add-skill-to-level-btn,
+.dark-mode .add-level-select,
+.dark-mode .stress-control-btn,
+.dark-mode .add-stress-track-btn,
+.dark-mode .stress-box,
+.dark-mode .fate-points-controls button {
+  background: var(--slate-800);
+  border-color: var(--slate-600);
+  color: var(--slate-200);
+}
+
+.dark-mode .add-item-btn:hover,
+.dark-mode .add-skill-to-level-btn:hover,
+.dark-mode .add-level-select:hover,
+.dark-mode .stress-control-btn:hover:not(:disabled),
+.dark-mode .add-stress-track-btn:hover,
+.dark-mode .stress-box:hover {
+  background-color: var(--slate-700);
+  border-color: var(--slate-500);
+  color: var(--slate-100);
+}
+
+.dark-mode .stress-box.checked,
+.dark-mode .stress-box.locked.checked:hover {
+  background-color: var(--slate-200);
+  border-color: var(--slate-200);
+  color: var(--slate-900);
 }
 
 /* Stress Tracks */
